@@ -1,0 +1,2780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zAmp Checklist & Exchange Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #18325B 0%, #465B7C 50%, #48667A 100%);
+            padding: 30px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            z-index: 1000;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, transparent 0%, rgba(232, 145, 124, 0.3) 50%, rgba(232, 145, 124, 0.5) 100%);
+            transform: skewY(-10deg);
+        }
+
+        .logo {
+            color: #48667A;
+            font-size: 11pt;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 32pt;
+            font-weight: normal;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .revision {
+            color: #e0e0e0;
+            font-size: 9pt;
+            position: relative;
+            z-index: 1;
+        }
+
+        .zamp-image {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: auto;
+            z-index: 2;
+            border-radius: 15px;
+        }
+
+        /* Sidebar Navigation */
+        .content-wrapper {
+            display: flex;
+            padding-top: 190px;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #18325B;
+            min-height: 100vh;
+            position: fixed;
+            top: 190px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            color: white;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+            transition: all 0.3s;
+            font-size: 10pt;
+        }
+
+        .nav-item:hover {
+            background: #2a4570;
+            border-left-color: #E8917C;
+        }
+
+        .nav-item.active {
+            background: #8B6347;
+            border-left-color: #E8917C;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            margin-left: 200px;
+            min-height: 100vh;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(90deg, #48667A 0%, #5c7a94 100%);
+            color: white;
+            padding: 15px 20px;
+            font-size: 18pt;
+            margin: -40px -40px 30px -40px;
+        }
+
+        /* Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #18325B;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 10pt;
+        }
+
+        .form-group label .required {
+            color: #D2232A;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #919396;
+            border-radius: 3px;
+            font-size: 10pt;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Checkbox and Radio Styles */
+        .checkbox-group, .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .checkbox-label, .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Note Box */
+        .note-box {
+            background: #FFF9F0;
+            border-left: 4px solid #F60000;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .note-box .note-title {
+            color: #F60000;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .note-box .note-text {
+            color: #58595B;
+            font-size: 9pt;
+        }
+
+        /* Checklist Table */
+        .checklist-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .checklist-table thead {
+            background: #E6E7E8;
+        }
+
+        .checklist-table th {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #919396;
+            font-weight: bold;
+            font-size: 14pt;
+        }
+
+        .checklist-table th.checkbox-col {
+            width: 60px;
+            text-align: center;
+            font-size: 9pt;
+        }
+
+        .checklist-table td {
+            padding: 10px;
+            border: 1px solid #919396;
+        }
+
+        .checklist-table tbody tr:nth-child(even) {
+            background: #F9FAFB;
+        }
+
+        .checklist-table tbody tr:nth-child(odd) {
+            background: white;
+        }
+
+        .checklist-table td.checkbox-cell {
+            text-align: center;
+        }
+
+        .checklist-table td.description {
+            font-size: 9pt;
+        }
+
+        .checklist-table td.description strong {
+            font-weight: bold;
+        }
+
+        .checklist-table td.description ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .checklist-table td.description li {
+            font-style: italic;
+            margin: 3px 0;
+        }
+
+        .checklist-table td.text-input {
+            padding: 5px;
+        }
+
+        .checklist-table input[type="text"] {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 5px;
+            font-size: 9pt;
+        }
+
+        /* Image Upload Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .image-upload-box {
+            border: 1px solid #BFBFBF;
+        }
+
+        .image-upload-box .image-header {
+            background: #636466;
+            color: white;
+            padding: 5px 10px;
+            font-size: 8pt;
+            border-bottom: 1px solid #BFBFBF;
+        }
+
+        .image-upload-box .image-area {
+            height: 200px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 12pt;
+            border-bottom: 1px solid #BFBFBF;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: relative;
+        }
+
+        .image-upload-box .image-area:hover {
+            background: #f5f5f5;
+        }
+
+        .image-upload-box .image-area .upload-text {
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-upload-box .image-area .preview-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+        .image-upload-box .image-caption {
+            padding: 8px;
+            border-left: 5px solid #18325B;
+            background: #f9f9f9;
+        }
+
+        /* Review Checklist */
+        .review-list {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        .review-list li {
+            margin: 10px 0;
+            color: #333;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 12pt;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4C799B;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a5f7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 121, 155, 0.3);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .language-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-lang {
+            padding: 8px 20px;
+            border: none;
+            font-size: 8pt;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            color: white;
+        }
+
+        .btn-english {
+            background: #48667A;
+        }
+
+        .btn-french {
+            background: #E8917C;
+        }
+
+        /* Approval Table */
+        .approval-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .approval-table td {
+            padding: 15px;
+            border: 1px solid #919396;
+        }
+
+        .approval-table tr:nth-child(odd) {
+            background: #F9FAFB;
+        }
+
+        .approval-table tr:nth-child(even) {
+            background: white;
+        }
+
+        .approval-table td:first-child {
+            width: 70%;
+        }
+
+        .approval-table .checkbox-cell {
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Print styles */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                padding: 20px;
+            }
+            .section {
+                display: block !important;
+                page-break-after: always;
+            }
+            .btn {
+                display: none;
+            }
+        }
+
+        /* Image Modal Styles */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .image-modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .image-modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .image-modal-close:hover {
+            color: #E8917C;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+            .nav-item {
+                display: inline-block;
+                padding: 10px 15px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>zAmp Checklist & Exchange Form</h1>
+            <div class="revision">Rev: 11/07/2025</div>
+            <img src="https://neuroptimal.com/wp-content/themes/porto-child/header/25yr_logo-400x200_cropped.png" alt="NeurOptimal 25 Year Logo" style="position: absolute; right: 40px; top: 50%; transform: translateY(-50%); height: 80px; width: auto; z-index: 2;">
+        </div>
+
+        <div class="content-wrapper">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <div class="nav-item active" onclick="showSection('client-info')">Client Information</div>
+                <div class="nav-item" onclick="showSection('checklist')">Checklist</div>
+                <div class="nav-item" onclick="showSection('image-upload')">Image Upload</div>
+                <div class="nav-item" onclick="showSection('review')">Review & Submit</div>
+                <div class="nav-item" onclick="showSection('repair-approval')">Repair Approval</div>
+                <div class="nav-item" onclick="showSection('micro-pcb')">Micro PCB</div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- CLIENT INFORMATION SECTION -->
+                <div id="client-info" class="section active">
+                    <div class="section-header">CLIENT INFORMATION</div>
+
+                    <!-- Demo Auto Fill Button -->
+                    <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                        <button type="button" onclick="demoAutoFill()" style="background: #ffc107; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11pt;">
+                            🔧 DEMO AUTO FILL (Testing Only)
+                        </button>
+                        <span style="margin-left: 10px; color: #856404; font-style: italic;">Click to populate form with test data</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name<span class="required">*</span></label>
+                            <input type="text" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description<span class="required">*</span></label>
+                            <input type="text" name="description" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email<span class="required">*</span></label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Warranty Expiration Date<span class="required">*</span></label>
+                            <input type="date" name="warranty_date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Origin Date<span class="required">*</span></label>
+                            <input type="date" name="origin_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>System Model<span class="required">*</span></label>
+                            <select name="system_model" required>
+                                <option value="">Select System Model</option>
+                                <option value="ASUS EXPERTBOOK B3402FVA">ASUS EXPERTBOOK B3402FVA</option>
+                                <option value="ASUS S500CA-DS51T-CA">ASUS S500CA-DS51T-CA</option>
+                                <option value="ASUS S500CA-DS71T-CA">ASUS S500CA-DS71T-CA</option>
+                                <option value="ASUS S550CA-QW51-CB">ASUS S550CA-QW51-CB</option>
+                                <option value="ASUS S551LA-DS51T-CA">ASUS S551LA-DS51T-CA</option>
+                                <option value="ASUS S551LA-QS52T-CB">ASUS S551LA-QS52T-CB</option>
+                                <option value="ASUS TP500LA-DB51T-CA">ASUS TP500LA-DB51T-CA</option>
+                                <option value="ASUS TP500LA-WH51T(WX)">ASUS TP500LA-WH51T(WX)</option>
+                                <option value="ASUS TP500LA-WH71T (WX)">ASUS TP500LA-WH71T (WX)</option>
+                                <option value="ASUS TP500LN-DB51T-CA">ASUS TP500LN-DB51T-CA</option>
+                                <option value="ASUS TP501UA-SS51T">ASUS TP501UA-SS51T</option>
+                                <option value="ASUS TP550LA-QB52T-CB">ASUS TP550LA-QB52T-CB</option>
+                                <option value="ASUS Zen AiO Pro Z240">ASUS Zen AiO Pro Z240</option>
+                                <option value="Surface Book 2 i5 8GB">Surface Book 2 i5 8GB</option>
+                                <option value="Surface Book 2.5 i5 8GB">Surface Book 2.5 i5 8GB</option>
+                                <option value="Surface Book 2.5 i7 8GB">Surface Book 2.5 i7 8GB</option>
+                                <option value="Surface Laptop Go 2 i5 8GB">Surface Laptop Go 2 i5 8GB</option>
+                                <option value="Surface Laptop Go 3 i5 8GB">Surface Laptop Go 3 i5 8GB</option>
+                                <option value="Surface Laptop i7 8GB">Surface Laptop i7 8GB</option>
+                                <option value="Surface Pro 10 CU5 8GB">Surface Pro 10 CU5 8GB</option>
+                                <option value="Surface Pro 3 i5 8GB">Surface Pro 3 i5 8GB</option>
+                                <option value="Surface Pro 4 i5 4GB">Surface Pro 4 i5 4GB</option>
+                                <option value="Surface Pro 4 i5 8GB">Surface Pro 4 i5 8GB</option>
+                                <option value="Surface Pro 4 i7 8GB">Surface Pro 4 i7 8GB</option>
+                                <option value="Surface Pro 5 i5 4GB">Surface Pro 5 i5 4GB</option>
+                                <option value="Surface Pro 5 i5 8GB">Surface Pro 5 i5 8GB</option>
+                                <option value="Surface Pro 5 i7 8GB">Surface Pro 5 i7 8GB</option>
+                                <option value="Surface Pro 6 i5 8GB">Surface Pro 6 i5 8GB</option>
+                                <option value="Surface Pro 6 i7 8GB">Surface Pro 6 i7 8GB</option>
+                                <option value="Surface Pro 7 i5 8GB">Surface Pro 7 i5 8GB</option>
+                                <option value="Surface Pro 7 i7 16GB">Surface Pro 7 i7 16GB</option>
+                                <option value="Surface Pro 7+ i5 8GB">Surface Pro 7+ i5 8GB</option>
+                                <option value="Surface Pro 7+ i7 16GB">Surface Pro 7+ i7 16GB</option>
+                                <option value="Surface Pro 9 i5 8GB">Surface Pro 9 i5 8GB</option>
+                            </select>
+                            <div class="checkbox-group" style="margin-top: 10px;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="usb_cable" value="1">
+                                    <span>USB Cable</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="addon_adapter" value="1">
+                                    <span>AddOn Adapter</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label>Notes<span class="required">*</span></label>
+                            <textarea name="notes" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="note-box">
+                        <div class="note-title">Note:</div>
+                        <div class="note-text">
+                            All repaired zAmps will be shipped with a USB cable.<br>
+                            SP9 and SP10 systems will also include an Add-On USB-C adapter.
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>System ID<span class="required">*</span></label>
+                            <input type="text" name="system_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label>zAmp#<span class="required">*</span></label>
+                            <input type="text" name="zamp_number" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>FM Ticket #<span class="required">*</span></label>
+                            <div style="display: flex; align-items: center;">
+                                <span style="padding: 8px 12px; background: #e0e0e0; border: 1px solid #919396; border-right: none; border-radius: 3px 0 0 3px; font-weight: bold;">TS</span>
+                                <input type="text" name="tech_ticket" required style="border-radius: 0 3px 3px 0; flex: 1;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date<span class="required">*</span></label>
+                            <input type="date" name="date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>PASS Status<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="pass_status" value="pass_reg" required>
+                                <span>PASS Reg.</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="pass_status" value="pass_ent" required>
+                                <span>PASS Ent.</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="pass_status" value="non_pass" required>
+                                <span>Non-PASS</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Technician<span class="required">*</span></label>
+                        <select name="technician" required>
+                            <option value="">Select Technician</option>
+                            <option value="Mark-Evan Chan-Taw">Mark-Evan Chan-Taw</option>
+                            <option value="Jackson Boyd">Jackson Boyd</option>
+                            <option value="Zack Killingsworth">Zack Killingsworth</option>
+                            <option value="Peter Czarnecki">Peter Czarnecki</option>
+                            <option value="Chris Seferiadis">Chris Seferiadis</option>
+                            <option value="John Plevritis">John Plevritis</option>
+                            <option value="Hank Johnson">Hank Johnson</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CHECKLIST SECTION -->
+                <div id="checklist" class="section">
+                    <div class="section-header">CHECKLIST</div>
+
+                    <!-- Replacement Eligibility -->
+                    <table class="checklist-table replacement-eligibility">
+                        <thead>
+                            <tr>
+                                <th>Replacement Eligibility</th>
+                                <th class="checkbox-col">Yes</th>
+                                <th class="checkbox-col">No</th>
+                                <th class="checkbox-col">N/A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <!-- zAmp & USB Cable Verification -->
+                    <table class="checklist-table">
+                        <thead>
+                            <tr>
+                                <th>zAmp & USB Cable Verification</th>
+                                <th class="checkbox-col">Yes</th>
+                                <th class="checkbox-col">No</th>
+                                <th class="checkbox-col">N/A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="description">zAmp serial number matches the system in FileMaker?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_1" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_1" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_1" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description"><strong>Photos:</strong> USB cable & zAmp w/ serial emailed to support inbox</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_2" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_2" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_2" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Any physical damage (broken clip, damaged port)?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_3" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_3" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_3" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Does the USB port on the system have damage or debris?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_4" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_4" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_4" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB cable firmly connected to zAmp and system?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_5" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_5" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_5" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">
+                                    Is the USB icon on cable and serial number on zAmp both facing outward for correct connection?
+                                    <ul>
+                                        <li>If the client can see <strong>MONOPRICE</strong> written on cable, connection is incorrect</li>
+                                    </ul>
+                                </td>
+                                <td class="checkbox-cell"><input type="radio" name="question_6" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_6" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_6" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">
+                                    Confirm whether the Monoprice USB cable included with the NeurOptimal bundle is 6ft or 15ft.
+                                    <ul>
+                                        <li>If the client is a renter, verify the cable length (6ft or 15ft) with the equipment owner via email or phone.</li>
+                                    </ul>
+                                </td>
+                                <td class="checkbox-cell"><input type="radio" name="question_7" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_7" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_7" value="na"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- zAmp Flatline Check -->
+                    <table class="checklist-table">
+                        <thead>
+                            <tr>
+                                <th>zAmp Flatline Check</th>
+                                <th class="checkbox-col">Yes</th>
+                                <th class="checkbox-col">No</th>
+                                <th class="checkbox-col">N/A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="description">zAmp flatlined? (Take screenshot and attach to checklist)</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_8" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_8" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_8" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Was zAmp unplugged for 15 minutes before retest?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_9" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_9" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_9" value="na"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Connection Troubleshooting -->
+                    <table class="checklist-table">
+                        <thead>
+                            <tr>
+                                <th>Connection Troubleshooting</th>
+                                <th class="checkbox-col">Yes</th>
+                                <th class="checkbox-col">No</th>
+                                <th class="checkbox-col">N/A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="description">Tried spare USB cable?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_10" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_10" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_10" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Tried a different zAmp?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_11" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_11" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_11" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Tried zAmp with another system?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_12" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_12" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_12" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Reinstalled zAmp driver via Maintenance Tool?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_13" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_13" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_13" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">
+                                    <strong>12001 Wiggle Test:</strong><br>
+                                    For zAmps displaying the 12001 "disconnected" error code, try gently wiggling the USB cable at both the zAmp and the system to identify where the disconnection is occurring.
+                                </td>
+                                <td class="checkbox-cell"><input type="radio" name="question_14" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_14" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_14" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Age of USB cable<span class="required">*</span></td>
+                                <td colspan="3" style="padding: 5px;">
+                                    <input type="date" name="usb_age" style="width: 100%; padding: 8px 12px; border: 1px solid #919396; border-radius: 3px; font-size: 9pt;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="description">Last successful session date confirmed<span class="required">*</span></td>
+                                <td colspan="3" style="padding: 5px;">
+                                    <input type="date" name="last_session" style="width: 100%; padding: 8px 12px; border: 1px solid #919396; border-radius: 3px; font-size: 9pt;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB port tested with another device (e.g., flash drive, external HD)</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_15" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_15" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_15" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB cable plugged into USB hub?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_16" value="yes" class="usb-hub-yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_16" value="no" class="usb-hub-no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_16" value="na" class="usb-hub-na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB cable plugged into Surface dock?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_17" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_17" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_17" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB cable plugged into USB port on power adapter? (Surface)</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_18" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_18" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_18" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">USB cable connected directly to Surface device?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_19" value="yes" class="surface-usb-yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_19" value="no" class="surface-usb-no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_19" value="na" class="surface-usb-na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Using an extension cable?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_20" value="yes" class="extension-cable-yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_20" value="no" class="extension-cable-no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_20" value="na" class="extension-cable-na"></td>
+                            </tr>
+                            <tr class="sb2-only" style="display: none;">
+                                <td class="description">Tried second USB port? (SB2)</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_21" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_21" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_21" value="na"></td>
+                            </tr>
+                            <tr class="sb2-only" style="display: none;">
+                                <td class="description">Disconnected/reconnected keyboard? (SB2)</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_22" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_22" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_22" value="na"></td>
+                            </tr>
+                            <tr class="asus-only" style="display: none;">
+                                <td class="description">Is the USB cable connected to a USB 3.0 port on the ASUS system? Please note that ASUS machines often include both USB 2.0 and 3.0 ports.</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_23" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_23" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_23" value="na"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Session Start Checks -->
+                    <table class="checklist-table">
+                        <thead>
+                            <tr>
+                                <th>Session Start Checks</th>
+                                <th class="checkbox-col">Yes</th>
+                                <th class="checkbox-col">No</th>
+                                <th class="checkbox-col">N/A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="description">Are sessions started correctly by client?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_24" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_24" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_24" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Green LED turns on when session starts?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_25" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_25" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_25" value="na"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">zAmp makes a "click" sound when activated?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_26" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_26" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_26" value="na"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- IMAGE UPLOAD SECTION -->
+                <div id="image-upload" class="section">
+                    <div class="section-header">IMAGE UPLOAD</div>
+
+                    <div class="image-grid">
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 1</div>
+                            <div class="image-area" id="image-area-1" onclick="document.getElementById('image-input-1').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-1" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_1" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 2</div>
+                            <div class="image-area" id="image-area-2" onclick="document.getElementById('image-input-2').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-2" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_2" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 3</div>
+                            <div class="image-area" id="image-area-3" onclick="document.getElementById('image-input-3').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-3" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_3" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 4</div>
+                            <div class="image-area" id="image-area-4" onclick="document.getElementById('image-input-4').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-4" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_4" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 5</div>
+                            <div class="image-area" id="image-area-5" onclick="document.getElementById('image-input-5').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-5" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_5" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+
+                        <div class="image-upload-box">
+                            <div class="image-header">IMAGE 6</div>
+                            <div class="image-area" id="image-area-6" onclick="document.getElementById('image-input-6').click()">
+                                <span class="upload-text">Click to upload or drag image here</span>
+                                <img class="preview-image" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" id="image-input-6" accept="image/*" style="display: none;">
+                            <div class="image-caption">
+                                <input type="text" name="image_caption_6" placeholder="Image caption" style="width: 100%; border: none; background: transparent;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REVIEW AND SUBMIT SECTION -->
+                <div id="review" class="section">
+                    <div class="section-header">REVIEW AND SUBMIT</div>
+
+                    <h3 style="font-size: 14pt; margin-bottom: 15px;">Review all the information in the document carefully before submitting.</h3>
+                    <p style="margin-bottom: 15px;">Verify the following:</p>
+
+                    <ul class="review-list">
+                        <li>Is all the client information correct?</li>
+                        <li>Are all checklist items completed?</li>
+                        <li>Did the client send the requested zAmp pictures, and did you include screenshots if needed?</li>
+                        <li>Does the client need a loaner zAmp?</li>
+                        <li>Is the zAmp covered under Zengar's 30-day warranty policy?</li>
+                        <li>Has the zAmp been already repaired, and is the client returning to ZenConnect for the same issue?</li>
+                    </ul>
+
+                    <h3 style="font-size: 14pt; margin: 30px 0 15px 0;">Select items that apply:</h3>
+
+                    <table class="approval-table">
+                        <tr>
+                            <td>Was zAmp purchased within the first 90 days?</td>
+                            <td class="checkbox-cell" style="text-align: center;">
+                                <label style="display: inline-block; margin-right: 15px;">
+                                    <input type="radio" name="zamp_90days" value="yes" style="margin-right: 5px;">Yes
+                                </label>
+                                <label style="display: inline-block;">
+                                    <input type="radio" name="zamp_90days" value="no" style="margin-right: 5px;">No
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>zAmp was previously repaired within the 90-day warranty exchange period and is now experiencing the same issue again. <strong>Requires Review.</strong></td>
+                            <td class="checkbox-cell" style="text-align: center;">
+                                <label style="display: inline-block; margin-right: 15px;">
+                                    <input type="radio" name="zamp_previously_repaired" value="yes" style="margin-right: 5px;">Yes
+                                </label>
+                                <label style="display: inline-block;">
+                                    <input type="radio" name="zamp_previously_repaired" value="no" style="margin-right: 5px;">No
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="approval-table" style="margin-top: 30px;">
+                        <tr>
+                            <td>Emailed client about new zAmp Advanced Exchange policy<span class="required">*</span></td>
+                            <td class="checkbox-cell"><input type="checkbox" name="emailed_advanced_exchange"></td>
+                            <td style="width: 150px;">
+                                <div class="language-buttons">
+                                    <button class="btn-lang btn-english" type="button" onclick="sendAdvancedExchangeEmail('english')">ENGLISH</button>
+                                    <button class="btn-lang btn-french" type="button" onclick="sendAdvancedExchangeEmail('french')">FRENCH</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" type="button" onclick="technicianSubmit()">Technician Submit</button>
+                    </div>
+                </div>
+
+                <!-- REPAIR APPROVAL SECTION -->
+                <div id="repair-approval" class="section">
+                    <div class="section-header">REPAIR APPROVAL</div>
+
+                    <p style="font-size: 14pt; margin-bottom: 20px;">
+                        This section is for authorized staff to review and approve zAmp repairs. 
+                        After approval, the authorized person will email the client with the next 
+                        steps, depending on their zAmp warranty status.
+                    </p>
+
+                    <div class="form-group" style="margin: 30px 0;">
+                        <label>Approval Date:</label>
+                        <input type="date" name="approval_date" style="max-width: 300px;">
+                    </div>
+
+                    <div class="form-group" style="margin: 30px 0;">
+                        <label>Approved by<span class="required">*</span>:</label>
+                        <table class="approval-table" style="max-width: 500px;">
+                            <tr>
+                                <td>Hank Johnson</td>
+                                <td class="checkbox-cell"><input type="checkbox" name="approved_by_hank"></td>
+                            </tr>
+                            <tr>
+                                <td>John Plevritis</td>
+                                <td class="checkbox-cell"><input type="checkbox" name="approved_by_john"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <table class="approval-table">
+                        <tr>
+                            <td>Within First 90 days</td>
+                            <td class="checkbox-cell"><input type="checkbox" id="approval-90days"></td>
+                            <td style="width: 150px;">
+                                <div class="language-buttons">
+                                    <button class="btn-lang btn-english" type="button" onclick="sendWithin90DaysEmail('english')">ENGLISH</button>
+                                    <button class="btn-lang btn-french" type="button" onclick="sendWithin90DaysEmail('french')">FRENCH</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="approval-table">
+                        <tr>
+                            <td>After 90 days</td>
+                            <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
+                            <td style="width: 150px;">
+                                <div class="language-buttons">
+                                    <button class="btn-lang btn-english" type="button" onclick="sendAfter90DaysEmail('english')">ENGLISH</button>
+                                    <button class="btn-lang btn-french" type="button" onclick="sendAfter90DaysEmail('french')">FRENCH</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="approval-table">
+                        <tr>
+                            <td>After 90 days Expired zAmp warranty - System covered under PASS</td>
+                            <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
+                            <td style="width: 150px;">
+                                <div class="language-buttons">
+                                    <button class="btn-lang btn-english" type="button" onclick="sendPASSCoveredEmail('english')">ENGLISH</button>
+                                    <button class="btn-lang btn-french" type="button" onclick="sendPASSCoveredEmail('french')">FRENCH</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="approval-table">
+                        <tr>
+                            <td>Expired zAmp warranty - System NOT covered under PASS</td>
+                            <td class="checkbox-cell"><input type="checkbox" id="approval-not-covered"></td>
+                            <td style="width: 150px;">
+                                <div class="language-buttons">
+                                    <button class="btn-lang btn-english" type="button" onclick="sendOutOfWarrantyEmail('english')">ENGLISH</button>
+                                    <button class="btn-lang btn-french" type="button" onclick="sendOutOfWarrantyEmail('french')">FRENCH</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" type="button" onclick="approverSubmit()" style="background: #4C799B; border-color: #4C799B;">Approver Submit</button>
+                    </div>
+                </div>
+
+                <!-- MICRO PCB SECTION -->
+                <div id="micro-pcb" class="section">
+                    <div class="section-header">MICRO PCB: REPAIR REPORT</div>
+
+                    <div style="background: #E6E7E8; padding: 30px; margin-bottom: 30px; text-align: center;">
+                        <p style="font-size: 14pt;">This section is reserved for employees of MicroPCB</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Repair<span class="required">*</span>:</label>
+                        <input type="date" name="repair_date" style="max-width: 300px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Components Changed:</label>
+                        <textarea name="components_changed" style="min-height: 120px;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>MicroPCB Warranty<span class="required">*</span>:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="micro_warranty" value="yes">
+                                <span>YES</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="micro_warranty" value="no">
+                                <span>NO</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <textarea name="micro_notes" style="min-height: 120px;"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-success" type="button" onclick="microPcbSubmit()">MicroPCB Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal for Surface USB Connection -->
+    <div id="surfaceUsbModal" class="image-modal">
+        <div class="image-modal-content">
+            <span class="image-modal-close" onclick="closeSurfaceUsbModal()">&times;</span>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23f0f0f0' width='800' height='600'/%3E%3Ctext x='400' y='250' font-family='Arial' font-size='24' fill='%2318325B' text-anchor='middle'%3EUSB Cable Connection Guide%3C/text%3E%3Ctext x='400' y='290' font-family='Arial' font-size='16' fill='%23666' text-anchor='middle'%3EEnsure USB cable is firmly connected to both:%3C/text%3E%3Ctext x='400' y='330' font-family='Arial' font-size='18' fill='%2318325B' text-anchor='middle' font-weight='bold'%3E1. zAmp device%3C/text%3E%3Ctext x='400' y='370' font-family='Arial' font-size='18' fill='%2318325B' text-anchor='middle' font-weight='bold'%3E2. Computer system%3C/text%3E%3Crect x='150' y='400' width='200' height='100' fill='%2348667A' rx='10'/%3E%3Ctext x='250' y='455' font-family='Arial' font-size='14' fill='white' text-anchor='middle'%3EzAmp Device%3C/text%3E%3Crect x='450' y='400' width='200' height='100' fill='%2318325B' rx='10'/%3E%3Ctext x='550' y='455' font-family='Arial' font-size='14' fill='white' text-anchor='middle'%3EComputer%3C/text%3E%3Cline x1='350' y1='450' x2='450' y2='450' stroke='%23E8917C' stroke-width='4'/%3E%3Ctext x='400' y='440' font-family='Arial' font-size='12' fill='%23E8917C' text-anchor='middle' font-weight='bold'%3EUSB Cable%3C/text%3E%3C/svg%3E" alt="USB Connection Guide" class="image-modal-image">
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function closeSurfaceUsbModal() {
+            document.getElementById('surfaceUsbModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('surfaceUsbModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Show/hide AddOn Adapter, SB2 rows, and ASUS rows based on system model selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const systemModelSelect = document.querySelector('select[name="system_model"]');
+            const addonAdapterContainer = document.querySelector('.checkbox-label:has(input[name="addon_adapter"])');
+            const sb2Rows = document.querySelectorAll('.sb2-only');
+            const asusRows = document.querySelectorAll('.asus-only');
+            const originDateInput = document.querySelector('input[name="origin_date"]');
+            const replacementEligibilityTable = document.querySelector('.replacement-eligibility');
+
+            function updateVisibility() {
+                const selectedValue = systemModelSelect.value;
+
+                // AddOn Adapter visibility
+                const showAddonModels = [
+                    'Surface Pro 10 CU5 8GB',
+                    'Surface Pro 9 i5 8GB'
+                ];
+
+                if (addonAdapterContainer) {
+                    if (showAddonModels.includes(selectedValue)) {
+                        addonAdapterContainer.style.display = 'flex';
+                    } else {
+                        addonAdapterContainer.style.display = 'none';
+                        addonAdapterContainer.querySelector('input').checked = false;
+                    }
+                }
+                
+                // SB2 rows visibility
+                const sb2Models = [
+                    'Surface Book 2 i5 8GB',
+                    'Surface Book 2.5 i5 8GB',
+                    'Surface Book 2.5 i7 8GB'
+                ];
+                
+                sb2Rows.forEach(row => {
+                    if (sb2Models.includes(selectedValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                        // Uncheck checkboxes when hidden
+                        row.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    }
+                });
+                
+                // ASUS rows visibility
+                const asusModels = [
+                    'ASUS EXPERTBOOK B3402FVA',
+                    'ASUS S500CA-DS51T-CA',
+                    'ASUS S500CA-DS71T-CA',
+                    'ASUS S550CA-QW51-CB',
+                    'ASUS S551LA-DS51T-CA',
+                    'ASUS S551LA-QS52T-CB',
+                    'ASUS TP500LA-DB51T-CA',
+                    'ASUS TP500LA-WH51T(WX)',
+                    'ASUS TP500LA-WH71T (WX)',
+                    'ASUS TP500LN-DB51T-CA',
+                    'ASUS TP501UA-SS51T',
+                    'ASUS TP550LA-QB52T-CB',
+                    'ASUS Zen AiO Pro Z240'
+                ];
+
+                const isAsusSelected = asusModels.includes(selectedValue);
+
+                asusRows.forEach(row => {
+                    if (isAsusSelected) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                        // Uncheck radio buttons when hidden
+                        row.querySelectorAll('input[type="radio"]').forEach(rb => rb.checked = false);
+                    }
+                });
+
+                // Hide all rows containing "surface" when ASUS is selected
+                const allChecklistRows = document.querySelectorAll('.checklist-table tbody tr');
+                allChecklistRows.forEach(row => {
+                    const description = row.querySelector('.description');
+                    if (description) {
+                        const text = description.textContent.toLowerCase();
+                        if (text.includes('surface')) {
+                            if (isAsusSelected) {
+                                row.style.display = 'none';
+                                // Uncheck radio buttons when hidden
+                                row.querySelectorAll('input[type="radio"]').forEach(rb => rb.checked = false);
+                            } else if (!row.classList.contains('asus-only')) {
+                                // Show surface rows if not ASUS selected (unless it's an asus-only row)
+                                row.style.display = '';
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Check Origin Date and show/hide Replacement Eligibility
+            function checkOriginDate() {
+                if (!originDateInput || !replacementEligibilityTable) return;
+                
+                const originDate = originDateInput.value;
+                if (!originDate) {
+                    // If no date selected, hide the section
+                    replacementEligibilityTable.style.display = 'none';
+                    return;
+                }
+                
+                const selectedDate = new Date(originDate);
+                const today = new Date();
+                
+                // Calculate the difference in days
+                const diffTime = today - selectedDate;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                // Show if 104 days or less, hide if more than 104 days
+                if (diffDays <= 104) {
+                    replacementEligibilityTable.style.display = '';
+                } else {
+                    replacementEligibilityTable.style.display = 'none';
+                    // Uncheck checkboxes when hidden
+                    replacementEligibilityTable.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                }
+            }
+            
+            if (systemModelSelect) {
+                // Initially hide AddOn Adapter
+                if (addonAdapterContainer) {
+                    addonAdapterContainer.style.display = 'none';
+                }
+                
+                // Set up event listener
+                systemModelSelect.addEventListener('change', updateVisibility);
+                
+                // Run initial check
+                updateVisibility();
+            }
+            
+            if (originDateInput) {
+                // Set up event listener for origin date changes
+                originDateInput.addEventListener('change', checkOriginDate);
+                originDateInput.addEventListener('input', checkOriginDate);
+
+                // Run initial check
+                checkOriginDate();
+            }
+
+            // Hide Session Start Checks if zAmp flatlined is checked YES
+            const flatlineYesRadio = document.querySelector('input[name="question_8"][value="yes"]');
+            const sessionStartChecksTable = Array.from(document.querySelectorAll('.checklist-table')).find(table => {
+                const header = table.querySelector('thead th');
+                return header && header.textContent.trim() === 'Session Start Checks';
+            });
+
+            function updateSessionStartChecks() {
+                if (flatlineYesRadio && sessionStartChecksTable) {
+                    if (flatlineYesRadio.checked) {
+                        sessionStartChecksTable.style.display = 'none';
+                        // Uncheck all radio buttons in the hidden section
+                        sessionStartChecksTable.querySelectorAll('input[type="radio"]').forEach(rb => rb.checked = false);
+                    } else {
+                        sessionStartChecksTable.style.display = '';
+                    }
+                }
+            }
+
+            // Add event listeners to all question_8 radio buttons
+            document.querySelectorAll('input[name="question_8"]').forEach(radio => {
+                radio.addEventListener('change', updateSessionStartChecks);
+            });
+
+            // Run initial check
+            updateSessionStartChecks();
+
+            // USB Hub reminder popup
+            const usbHubYesCheckboxes = document.querySelectorAll('.usb-hub-yes');
+            usbHubYesCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        alert('⚠️ REMINDER: Make sure the power cord is connected');
+                    }
+                });
+            });
+            
+            // Extension Cable reminder popup
+            const extensionCableYesCheckboxes = document.querySelectorAll('.extension-cable-yes');
+            extensionCableYesCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        alert('⚠️ REMINDER: Remove the extension cable');
+                    }
+                });
+            });
+            
+            // Surface USB Connection image modal
+            const surfaceUsbYesCheckboxes = document.querySelectorAll('.surface-usb-yes');
+            surfaceUsbYesCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        document.getElementById('surfaceUsbModal').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Image upload functionality
+            for (let i = 1; i <= 6; i++) {
+                const imageInput = document.getElementById(`image-input-${i}`);
+                const imageArea = document.getElementById(`image-area-${i}`);
+                const previewImage = imageArea.querySelector('.preview-image');
+                const uploadText = imageArea.querySelector('.upload-text');
+                
+                if (imageInput && imageArea) {
+                    // Handle file selection
+                    imageInput.addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                previewImage.src = event.target.result;
+                                previewImage.style.display = 'block';
+                                uploadText.style.display = 'none';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                    
+                    // Handle drag and drop
+                    imageArea.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.style.background = '#e8f4f8';
+                    });
+                    
+                    imageArea.addEventListener('dragleave', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.style.background = 'white';
+                    });
+                    
+                    imageArea.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.style.background = 'white';
+                        
+                        const file = e.dataTransfer.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                previewImage.src = event.target.result;
+                                previewImage.style.display = 'block';
+                                uploadText.style.display = 'none';
+                            };
+                            reader.readAsDataURL(file);
+                            
+                            // Update the file input
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            imageInput.files = dataTransfer.files;
+                        }
+                    });
+                }
+            }
+        });
+        
+        // Function to send Advanced Exchange email
+        function sendAdvancedExchangeEmail(language) {
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
+            
+            // Remind user to check From address
+            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
+            
+            // Extract first name (everything before the first space)
+            const firstName = fullName.split(' ')[0];
+            
+            let subject, body;
+            
+            if (language === 'french') {
+                // French email
+                subject = 'Options de remplacement zAmp – Garantie avec échange anticipé';
+                
+                body = `Bonjour ${firstName},
+
+Merci d'avoir contacté Zengar®. Nous comprenons combien il est important que votre système fonctionne de manière optimale, et nous vous remercions pour le temps que vous avez consacré à votre récent ZenConnect. D'après le diagnostic réalisé, votre zAmp doit être remplacé. Un membre de notre équipe vous contactera dans les 24 heures pour vous guider dans les prochaines étapes et répondre à toutes vos questions.
+
+En attendant, vous trouverez ci-dessous les informations concernant la du Garantie avec échange anticipé zAmp, conçue pour simplifier et accélérer le processus de remplacement.
+Ce message est fourni à titre informatif uniquement et ne vous engage à aucune décision immédiate.
+
+Scénarios de remplacement :
+
+1. Dans les 90 jours suivant l'achat
+   • Vous recevrez un zAmp neuf, sans frais
+   • L'expédition aller-retour est prépayée
+
+2. Après 90 jours et pendant la période de garantie initiale
+   • Vous êtes admissible à un échange anticipé avec un zAmp remis à neuf certifié, sans frais
+   • L'expédition est entièrement couverte, et votre garantie se poursuit sans interruption
+
+3. Garantie expirée, système couvert par PASS
+   • Si votre système est couvert par un abonnement PASS actif, le zAmp est également considéré comme couvert par la garantie
+   • Vous recevrez un zAmp remis à neuf certifié dans le cadre de la Garantie avec échange anticipé du zAmp, avec expédition aller-retour prépayée
+
+4. Garantie expirée, système non couvert par PASS
+   • Trois options s'offrent à vous :
+     1. Adhérer à PASS pour accéder au remplacement par un zAmp remis à neuf certifié dans le cadre de la Garantie avec échange anticipé du zAmp. Votre zAmp reste couvert tant que votre adhésion PASS est active
+     2. Échange hors garantie – Achetez un zAmp remis à neuf certifié pour 799 $ USD. L'expédition aller-retour est incluse. Retournez votre zAmp d'origine dans un délai de 15 jours à l'aide de l'étiquette de retour fournie. Des frais supplémentaires peuvent s'appliquer si l'unité n'est pas retournée
+     3. Acheter un zAmp neuf – 1 950 $ USD
+        Si vous préférez une unité neuve, vous pouvez l'acheter directement ici : https://www.neuroptimal.com/shop/zamp
+
+Si vous avez des questions avant que nous vous contactions, n'hésitez pas à nous écrire. Nous sommes là pour vous accompagner à chaque étape et vous garantir un remplacement sans souci.
+
+Cordialement,
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+                
+            } else {
+                // English email
+                subject = 'zAmp Replacement Options – Advanced Exchange Program';
+                
+                body = `Dear ${firstName},
+
+Thank you for reaching out to Zengar®. We understand how important it is to keep your system running smoothly, and we appreciate the time you took for your recent ZenConnect.
+
+Based on your diagnosis, your zAmp requires replacement. A member of our team will contact you within the next 24 hours to guide you through the next steps and answer any questions you may have.
+
+In the meantime, we've outlined details below about our zAmp Advanced Exchange Program, designed to simplify and accelerate the replacement process. This message is provided for your information only and does not require you to make a choice.
+
+Replacement Scenarios:
+
+1. Within 90 days of purchase
+   • You will receive a brand-new zAmp at no cost
+   • Prepaid round-trip shipping is included
+
+2. After 90 days and within your original warranty period
+   • You are eligible for an Advanced Exchange with a Certified Restored zAmp at no cost
+   • Shipping is fully covered, and your warranty continues uninterrupted
+
+3. Warranty expired, system covered under PASS
+   • If your system is covered by an active PASS membership, the zAmp is also considered under warranty
+   • You will receive a Certified Restored zAmp through the Advanced Exchange Program with prepaid round-trip shipping
+
+4. Warranty expired, system not covered under PASS
+   • You have three options:
+     1. Join PASS on your system to access Certified Restored zAmp replacements through the Advanced Exchange Program. Your zAmp remains under warranty as long as your PASS membership is active
+     2. Out-of-Warranty Exchange – Purchase a Certified Restored zAmp for $799 USD. Round-trip shipping applies. Return your original zAmp within 15 days using the provided return label. Additional charges may apply if the original unit is not returned
+     3. Purchase a Brand-New zAmp – $1,950 USD
+        If you prefer a new unit, you can purchase directly here: https://www.neuroptimal.com/shop/zamp
+
+If you have any questions before we reach out, please don't hesitate to contact us. We are here to support you at every step and ensure a smooth replacement process.
+
+Kind regards,
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+            }
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+        }
+        
+        // Function to send Within 90 Days email
+        function sendWithin90DaysEmail(language) {
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
+            
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
+            
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
+            
+            // Remind user to check From address
+            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
+            
+            // Extract first name (everything before the first space)
+            const firstName = fullName.split(' ')[0];
+            
+            let subject, body;
+            
+            if (language === 'french') {
+                // French email
+                subject = `zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp dans les 90 jours`;
+                
+                body = `Bonjour ${firstName},
+
+Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans les 90 premiers jours de garantie. Vous êtes donc éligible à un remplacement neuf gratuit Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+
+Le lien ci-dessous contient toutes les instructions et les éléments nécessaires pour compléter votre demande.
+
+Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+
+Cordialement,
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+                
+            } else {
+                // English email
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement Within 90 Days`;
+                
+                body = `Hello ${firstName},
+
+Good news! Your zAmp# ${zampNumber} is still within the first 90 days of warranty, you're eligible for a brand-new replacement. Please click on this link to link for detailed instructions and everything you need to initiate the exchange: Advanced Exchange Program.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+            }
+            
+            // BCC addresses
+            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
+            
+            // Create mailto link with BCC
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+        }
+        
+        // Function to send After 90 Days email
+        function sendAfter90DaysEmail(language) {
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
+            
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
+            
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
+            
+            // Remind user to check From address
+            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
+            
+            // Extract first name (everything before the first space)
+            const firstName = fullName.split(' ')[0];
+            
+            let subject, body;
+            
+            if (language === 'french') {
+                // French email
+                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp après 90 jours et dans la période de garantie originale`;
+                
+                body = `Bonjour ${firstName},
+
+Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans sa période de garantie originale. Vous êtes donc éligible à un remplacement par un zAmp remis à neuf certifié. Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+
+Le lien ci-dessous contient des instructions détaillées ainsi que tout ce dont vous avez besoin pour soumettre votre demande d'échange.
+
+Cordialement,
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+                
+            } else {
+                // English email
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement after 90 days and within original warranty`;
+                
+                body = `Hello ${firstName},
+
+Good news! Your zAmp# ${zampNumber} is still within its warranty period, making you eligible for a Certified Restored zAmp replacement. Please click on this link to start the process: Advanced Exchange Program.
+
+The link includes detailed instructions and everything you need to complete your exchange request.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+            }
+            
+            // BCC addresses
+            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
+            
+            // Create mailto link with BCC
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+        }
+        
+        // Function to send PASS Covered email
+        function sendPASSCoveredEmail(language) {
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
+            
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
+            
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
+            
+            // Remind user to check From address
+            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
+            
+            // Extract first name (everything before the first space)
+            const firstName = fullName.split(' ')[0];
+            
+            let subject, body;
+            
+            if (language === 'french') {
+                // French email
+                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : Remplacement de zAmp - Garantie PASS prolongée`;
+                
+                body = `Bonjour ${firstName},
+
+Bonne nouvelle ! Comme votre système est couvert par PASS, le zAmp# ${zampNumber} associé reste sous garantie tant qu'il est couvert par un abonnement PASS actif. Vous êtes donc admissible à un remplacement par un zAmp remis à neuf et certifié, offert dans le cadre. Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+
+Ce lien contient toutes les instructions détaillées pour finaliser votre demande d'échange. Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+
+Cordialement,
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+                
+            } else {
+                // English email
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement - PASS Extended Warranty`;
+                
+                body = `Hello ${firstName},
+
+Good news! Since your system is covered under PASS, the associated zAmp# ${zampNumber} remains under warranty as long as it is covered by an active PASS membership. This means you are eligible for a replacement with a Certified Restored zAmp. Please click on this link to start the process: Advanced Exchange Program.
+
+This link includes detailed instructions and everything you need to complete your exchange request.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+            }
+            
+            // BCC addresses
+            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
+            
+            // Create mailto link with BCC
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+        }
+        
+        // Function to send Out of Warranty email
+        function sendOutOfWarrantyEmail(language) {
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
+            
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
+            
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
+            
+            // Remind user to check From address
+            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
+            
+            // Extract first name (everything before the first space)
+            const firstName = fullName.split(' ')[0];
+            
+            let subject, body;
+            
+            if (language === 'french') {
+                // French email
+                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : zAmp hors garantie - Options de remplacement`;
+                
+                body = `Bonjour ${firstName},
+
+Votre zAmp# ${zampNumber} n'est plus sous garantie. Voici vos trois options de remplacement. Veuillez cliquer sur le lien approprié ci-dessous pour commencer le processus :
+
+1. Adhérez à PASS sur le système associé au zAmp défectueux pour bénéficier d'avantages exclusifs, y compris la couverture prolongée de votre zAmp, le rendant admissible à notre programme d'échange anticipé. Le zAmp reste sous garantie tant qu'il est couvert par une adhésion PASS active.
+
+2. Échange hors garantie – 799 $ US
+   Recevez un zAmp remis à neuf certifié via notre programme d'échange anticipé. Des frais d'expédition aller-retour s'appliquent. Vous devez retourner votre zAmp d'origine dans un délai de 15 jours. Une étiquette de retour est incluse. Des frais supplémentaires peuvent s'appliquer si le zAmp n'est pas retourné.
+
+3. Achat d'un zAmp neuf – 1 950 $ US
+   Si vous préférez un nouvel appareil, vous pouvez acheter un remplacement.
+
+Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+
+Cordialement,
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+                
+            } else {
+                // English email
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: Out of Warranty zAmp - Replacement Options`;
+                
+                body = `Hello ${firstName},
+
+Your zAmp# ${zampNumber} is no longer under warranty. Here are your three options for replacement.
+
+Please click on the appropriate link below to start the process:
+
+1. Join PASS on the system associated with the defective zAmp, to access exclusive benefits, including extended warranty coverage on your zAmp, making it eligible for our Advanced Exchange Program. Your zAmp remains under warranty for as long as it remains covered by an active PASS membership.
+
+2. Out-of-Warranty Exchange – $799 USD
+   Receive a Certified Restored zAmp through our Advanced Exchange Program. Round-trip shipping costs apply. You must return your original zAmp within 15 days. Includes a return label. Additional charges may apply if the original zAmp is not returned.
+
+3. Purchase a Brand-New zAmp – $1,950 USD
+   If you prefer a new device, you can purchase a replacement.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780
+
+Loaners & Exchanges | Zengar Institute Inc.
+866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
+            }
+            
+            // BCC addresses
+            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
+            
+            // Create mailto link with BCC
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+        }
+        
+        // Function to handle Technician Submit with validation
+        function technicianSubmit() {
+            const errors = [];
+            
+            // CLIENT INFORMATION VALIDATION
+            const fullName = document.querySelector('input[name="full_name"]').value.trim();
+            const description = document.querySelector('input[name="description"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const warrantyDate = document.querySelector('input[name="warranty_date"]').value;
+            const originDate = document.querySelector('input[name="origin_date"]').value;
+            const systemModel = document.querySelector('select[name="system_model"]').value;
+            const systemId = document.querySelector('input[name="system_id"]').value.trim();
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value.trim();
+            const techTicket = document.querySelector('input[name="tech_ticket"]').value.trim();
+            const date = document.querySelector('input[name="date"]').value;
+            const passStatus = document.querySelector('input[name="pass_status"]:checked');
+            const technician = document.querySelector('select[name="technician"]').value;
+            
+            if (!fullName) errors.push('• Full Name');
+            if (!description) errors.push('• Description of Issue');
+            if (!email) errors.push('• Email');
+            if (!warrantyDate) errors.push('• Warranty Expiration Date');
+            if (!originDate) errors.push('• Origin Date');
+            if (!systemModel) errors.push('• System Model');
+            if (!systemId) errors.push('• System ID');
+            if (!zampNumber) errors.push('• zAmp#');
+            if (!techTicket) errors.push('• FM Ticket #');
+            if (!date) errors.push('• Date');
+            if (!passStatus) errors.push('• PASS Status');
+            if (!technician) errors.push('• Technician');
+
+            // CHECKLIST FIELDS VALIDATION
+            const usbAge = document.querySelector('input[name="usb_age"]').value;
+            const lastSession = document.querySelector('input[name="last_session"]').value;
+
+            if (!usbAge) errors.push('• Age of USB cable');
+            if (!lastSession) errors.push('• Last successful session date confirmed');
+
+            // CHECKLIST VALIDATION - Check mandatory sections only
+            const flatlineYesChecked = document.querySelector('input[name="question_8"][value="yes"]').checked;
+
+            const mandatorySections = [
+                'zAmp & USB Cable Verification',
+                'zAmp Flatline Check'
+            ];
+
+            // Only add Session Start Checks if flatline is NOT checked as YES
+            if (!flatlineYesChecked) {
+                mandatorySections.push('Session Start Checks');
+            }
+
+            const checklistSection = document.getElementById('checklist');
+            const allTables = checklistSection.querySelectorAll('table.checklist-table');
+            let uncheckedMandatory = [];
+
+            allTables.forEach(table => {
+                // Get the section name from the table header
+                const headerTh = table.querySelector('thead tr th');
+                if (!headerTh) return;
+
+                const sectionName = headerTh.textContent.trim();
+
+                // If this is a mandatory section, check all radio buttons in tbody
+                if (mandatorySections.includes(sectionName)) {
+                    const rows = table.querySelectorAll('tbody tr');
+
+                    rows.forEach(row => {
+                        // Skip hidden rows
+                        if (row.style.display === 'none') return;
+
+                        const radioButtons = row.querySelectorAll('input[type="radio"]');
+                        const description = row.querySelector('.description');
+
+                        // Check if at least one radio button is checked in this row
+                        let hasChecked = false;
+                        radioButtons.forEach(rb => {
+                            if (rb.checked) hasChecked = true;
+                        });
+
+                        if (!hasChecked && description) {
+                            const descText = description.textContent.trim().replace(/\s+/g, ' ');
+                            uncheckedMandatory.push(`  - [${sectionName}] ${descText.substring(0, 50)}...`);
+                        }
+                    });
+                }
+            });
+            
+            if (uncheckedMandatory.length > 0) {
+                errors.push(`• Mandatory Checklist items must have an option selected:\n${uncheckedMandatory.join('\n')}`);
+            }
+            
+            // REVIEW & SUBMIT VALIDATION
+            const zamp90days = document.querySelector('input[name="zamp_90days"]:checked');
+
+            if (!zamp90days) {
+                errors.push('• "Was zAmp purchased within the first 90 days?" (must select Yes or No)');
+            }
+
+            const zampPreviouslyRepaired = document.querySelector('input[name="zamp_previously_repaired"]:checked');
+
+            if (!zampPreviouslyRepaired) {
+                errors.push('• "zAmp was previously repaired within the 90-day warranty" (must select Yes or No)');
+            }
+
+            const emailedAdvancedExchange = document.querySelector('input[name="emailed_advanced_exchange"]').checked;
+
+            if (!emailedAdvancedExchange) {
+                errors.push('• "Emailed client about new zAmp Advanced Exchange policy" (must be checked)');
+            }
+
+            // IMAGE UPLOAD VALIDATION - Check for at least 2 uploaded images
+            let uploadedImages = 0;
+            for (let i = 1; i <= 6; i++) {
+                const imageInput = document.getElementById(`image-input-${i}`);
+                if (imageInput && imageInput.files && imageInput.files.length > 0) {
+                    uploadedImages++;
+                }
+            }
+            
+            if (uploadedImages < 2) {
+                errors.push(`• At least 2 images must be uploaded (currently: ${uploadedImages})`);
+            }
+            
+            // If there are errors, show alert and prevent submission
+            if (errors.length > 0) {
+                let errorMessage = '⚠️ FORM INCOMPLETE\n\nPlease complete the following required fields:\n\n';
+                errorMessage += errors.join('\n');
+                errorMessage += '\n\nAll fields must be completed before submitting.';
+                alert(errorMessage);
+                return false;
+            }
+            
+            // If all validations pass, generate HTML and prepare email
+            const ticketNum = techTicket ? `TS${techTicket}` : 'NoTicket';
+            const sanitizedSystemId = systemId.replace(/[^a-zA-Z0-9]/g, '_');
+            const htmlFilename = `zAmp_Checklist_${sanitizedSystemId}_zAmp${zampNumber}_${ticketNum}.html`;
+            
+            // Show processing message
+            alert('✅ Form validation successful!\n\nGenerating HTML file...');
+            
+            // Generate HTML
+            generateTechnicianHTML(htmlFilename, fullName, email, zampNumber, description, systemId, ticketNum);
+            
+            return true;
+        }
+        
+        // Function to generate HTML file for Technician Submit
+        function generateTechnicianHTML(htmlFilename, fullName, email, zampNumber, description, systemId, ticketNum) {
+            try {
+                // Clone the entire document
+                const clonedDoc = document.documentElement.cloneNode(true);
+                
+                // Copy all form field values to the clone
+                const originalInputs = document.querySelectorAll('input, textarea, select');
+                const clonedInputs = clonedDoc.querySelectorAll('input, textarea, select');
+                
+                originalInputs.forEach((original, index) => {
+                    const cloned = clonedInputs[index];
+                    if (!cloned) return;
+                    
+                    if (original.type === 'checkbox' || original.type === 'radio') {
+                        if (original.checked) {
+                            cloned.setAttribute('checked', 'checked');
+                        } else {
+                            cloned.removeAttribute('checked');
+                        }
+                    } else if (original.tagName === 'SELECT') {
+                        cloned.value = original.value;
+                        // Set selected attribute on the correct option
+                        const clonedOptions = cloned.querySelectorAll('option');
+                        clonedOptions.forEach(opt => {
+                            if (opt.value === original.value) {
+                                opt.setAttribute('selected', 'selected');
+                            } else {
+                                opt.removeAttribute('selected');
+                            }
+                        });
+                    } else if (original.tagName === 'TEXTAREA') {
+                        cloned.textContent = original.value;
+                    } else {
+                        cloned.setAttribute('value', original.value);
+                    }
+                });
+                
+                // Copy uploaded images
+                for (let i = 1; i <= 6; i++) {
+                    const originalInput = document.getElementById(`image-input-${i}`);
+                    const originalPreview = document.querySelector(`#image-area-${i} .preview-image`);
+                    const clonedPreview = clonedDoc.querySelector(`#image-area-${i} .preview-image`);
+                    
+                    if (originalPreview && clonedPreview && originalPreview.src && originalPreview.style.display !== 'none') {
+                        clonedPreview.src = originalPreview.src;
+                        clonedPreview.style.display = 'block';
+                        const clonedUploadText = clonedDoc.querySelector(`#image-area-${i} .upload-text`);
+                        if (clonedUploadText) clonedUploadText.style.display = 'none';
+                    }
+                }
+                
+                // Remove the sidebar navigation from clone
+                const sidebar = clonedDoc.querySelector('.sidebar');
+                if (sidebar) sidebar.remove();
+
+                // Remove demo button from clone
+                const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
+                if (demoButton) {
+                    const demoSection = demoButton.closest('div');
+                    if (demoSection) demoSection.remove();
+                }
+
+                // Remove all buttons from clone
+                const buttons = clonedDoc.querySelectorAll('button');
+                buttons.forEach(btn => btn.remove());
+
+                // Remove all scripts from clone to prevent functionality
+                const scripts = clonedDoc.querySelectorAll('script');
+                scripts.forEach(script => script.remove());
+                
+                // Show all sections in the clone
+                const sections = clonedDoc.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.classList.add('active');
+                    section.style.display = 'block';
+                });
+                
+                // Adjust main content styling for better layout
+                const mainContent = clonedDoc.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.width = '100%';
+                    mainContent.style.maxWidth = '100%';
+                }
+                
+                // Adjust body styling
+                const body = clonedDoc.querySelector('body');
+                if (body) {
+                    body.style.margin = '0';
+                    body.style.padding = '0';
+                }
+                
+                // Add print-friendly styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media print {
+                        body { margin: 0; padding: 20px; }
+                        .section { page-break-after: always; }
+                    }
+                    body { background: #f5f5f5; }
+                    .main-content { background: white; }
+                    .section-header {
+                        margin: 0 0 30px 0 !important;
+                    }
+                    .form-row {
+                        display: grid !important;
+                        grid-template-columns: 1fr 1fr !important;
+                        gap: 20px !important;
+                    }
+                    .form-row.full {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .image-grid {
+                        display: grid !important;
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 30px !important;
+                    }
+                    /* Override responsive media query for exported file */
+                    @media (max-width: 768px) {
+                        .form-row {
+                            grid-template-columns: 1fr 1fr !important;
+                        }
+                        .image-grid {
+                            grid-template-columns: repeat(2, 1fr) !important;
+                        }
+                    }
+                `;
+                const headElement = clonedDoc.querySelector('head');
+                if (headElement) {
+                    headElement.appendChild(style);
+                }
+                
+                // Get the HTML content
+                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+                
+                // Create a Blob and download
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = htmlFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Wait a moment for download
+                setTimeout(() => {
+                    // Prepare email
+                    const emailSubject = `zAmp Checklist: ${systemId || 'N/A'} | zAmp# ${zampNumber} | ${ticketNum}`;
+                    const emailBody = `Hi Guys,
+
+Attached is the checklist and information for the zAmp that needs to be exchanged. Thanks.
+
+Client Name: ${fullName}
+Client Email: ${email}
+zAmp#: ${zampNumber}
+Description of issue: ${description}
+
+----------------------
+
+ *Email sent to client about the zAmp Advanced Exchange Program*
+
+----------------------`;
+                    
+                    // Create mailto link
+                    const mailtoLink = `mailto:zampapprovals@neuroptimal.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                    
+                    // Open email client
+                    window.location.href = mailtoLink;
+                    
+                    // Show success message
+                    alert(`✅ HTML file generated successfully!\n\nFile: ${htmlFilename}\n\nIMPORTANT: The HTML file has been downloaded to your computer. Please attach it to the email that is opening.\n\nThe recipient can open this file in any web browser.`);
+                }, 500);
+                
+            } catch (error) {
+                console.error('Error generating HTML:', error);
+                alert('❌ Error generating HTML file. Please try again or contact support.');
+            }
+        }
+        
+        // Function to handle Approver Submit
+        async function approverSubmit() {
+            // Check if at least one approval option is checked
+            const approval90days = document.getElementById('approval-90days').checked;
+            const approvalAfter90 = document.getElementById('approval-after90').checked;
+            const approvalPassCovered = document.getElementById('approval-pass-covered').checked;
+            const approvalNotCovered = document.getElementById('approval-not-covered').checked;
+
+            if (!approval90days && !approvalAfter90 && !approvalPassCovered && !approvalNotCovered) {
+                alert('⚠️ APPROVAL REQUIRED\n\nPlease check one of the following approval options before submitting:\n\n• Within First 90 days\n• After 90 days\n• After 90 days Expired zAmp warranty - System covered under PASS\n• Expired zAmp warranty - System NOT covered under PASS');
+                return;
+            }
+
+            // Check if at least one approver is selected
+            const approvedByHank = document.querySelector('input[name="approved_by_hank"]').checked;
+            const approvedByJohn = document.querySelector('input[name="approved_by_john"]').checked;
+
+            if (!approvedByHank && !approvedByJohn) {
+                alert('⚠️ APPROVER REQUIRED\n\nPlease select at least one approver:\n\n• Hank Johnson\n• John Plevritis');
+                return;
+            }
+            
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
+            const description = document.querySelector('input[name="description"]').value;
+            const systemId = document.querySelector('input[name="system_id"]').value;
+            const techTicket = document.querySelector('input[name="tech_ticket"]').value;
+            
+            if (!fullName || !email || !zampNumber) {
+                alert('Please fill in Full Name, Email, and zAmp# fields before submitting.');
+                return;
+            }
+            
+            // Show processing message
+            const originalButton = event.target;
+            originalButton.disabled = true;
+            originalButton.textContent = 'Generating PDF...';
+            
+            try {
+                // Generate HTML filename
+                const ticketNum = techTicket ? `TS${techTicket}` : 'NoTicket';
+                const sanitizedName = fullName.replace(/[^a-zA-Z0-9]/g, '_');
+                const htmlFilename = `zAmp_Checklist_${ticketNum}_${sanitizedName}.html`;
+                
+                // Clone the entire document
+                const clonedDoc = document.documentElement.cloneNode(true);
+                
+                // Copy all form field values to the clone
+                const originalInputs = document.querySelectorAll('input, textarea, select');
+                const clonedInputs = clonedDoc.querySelectorAll('input, textarea, select');
+                
+                originalInputs.forEach((original, index) => {
+                    const cloned = clonedInputs[index];
+                    if (!cloned) return;
+                    
+                    if (original.type === 'checkbox' || original.type === 'radio') {
+                        if (original.checked) {
+                            cloned.setAttribute('checked', 'checked');
+                        } else {
+                            cloned.removeAttribute('checked');
+                        }
+                    } else if (original.tagName === 'SELECT') {
+                        cloned.value = original.value;
+                        // Set selected attribute on the correct option
+                        const clonedOptions = cloned.querySelectorAll('option');
+                        clonedOptions.forEach(opt => {
+                            if (opt.value === original.value) {
+                                opt.setAttribute('selected', 'selected');
+                            } else {
+                                opt.removeAttribute('selected');
+                            }
+                        });
+                    } else if (original.tagName === 'TEXTAREA') {
+                        cloned.textContent = original.value;
+                    } else {
+                        cloned.setAttribute('value', original.value);
+                    }
+                });
+                
+                // Copy uploaded images
+                for (let i = 1; i <= 6; i++) {
+                    const originalInput = document.getElementById(`image-input-${i}`);
+                    const originalPreview = document.querySelector(`#image-area-${i} .preview-image`);
+                    const clonedPreview = clonedDoc.querySelector(`#image-area-${i} .preview-image`);
+                    
+                    if (originalPreview && clonedPreview && originalPreview.src && originalPreview.style.display !== 'none') {
+                        clonedPreview.src = originalPreview.src;
+                        clonedPreview.style.display = 'block';
+                        const clonedUploadText = clonedDoc.querySelector(`#image-area-${i} .upload-text`);
+                        if (clonedUploadText) clonedUploadText.style.display = 'none';
+                    }
+                }
+                
+                // Remove the sidebar navigation from clone
+                const sidebar = clonedDoc.querySelector('.sidebar');
+                if (sidebar) sidebar.remove();
+
+                // Remove demo button from clone
+                const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
+                if (demoButton) {
+                    const demoSection = demoButton.closest('div');
+                    if (demoSection) demoSection.remove();
+                }
+
+                // Remove all buttons from clone
+                const buttons = clonedDoc.querySelectorAll('button');
+                buttons.forEach(btn => btn.remove());
+
+                // Remove all scripts from clone to prevent functionality
+                const scripts = clonedDoc.querySelectorAll('script');
+                scripts.forEach(script => script.remove());
+                
+                // Show all sections in the clone
+                const sections = clonedDoc.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.classList.add('active');
+                    section.style.display = 'block';
+                });
+                
+                // Adjust main content styling for better layout
+                const mainContent = clonedDoc.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.width = '100%';
+                    mainContent.style.maxWidth = '100%';
+                }
+                
+                // Adjust body styling
+                const body = clonedDoc.querySelector('body');
+                if (body) {
+                    body.style.margin = '0';
+                    body.style.padding = '0';
+                }
+                
+                // Add print-friendly styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media print {
+                        body { margin: 0; padding: 20px; }
+                        .section { page-break-after: always; }
+                    }
+                    body { background: #f5f5f5; }
+                    .main-content { background: white; }
+                    .section-header {
+                        margin: 0 0 30px 0 !important;
+                    }
+                    .form-row {
+                        display: grid !important;
+                        grid-template-columns: 1fr 1fr !important;
+                        gap: 20px !important;
+                    }
+                    .form-row.full {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .image-grid {
+                        display: grid !important;
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 30px !important;
+                    }
+                    /* Override responsive media query for exported file */
+                    @media (max-width: 768px) {
+                        .form-row {
+                            grid-template-columns: 1fr 1fr !important;
+                        }
+                        .image-grid {
+                            grid-template-columns: repeat(2, 1fr) !important;
+                        }
+                    }
+                `;
+                const headElement = clonedDoc.querySelector('head');
+                if (headElement) {
+                    headElement.appendChild(style);
+                }
+                
+                // Get the HTML content
+                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+                
+                // Create a Blob and download
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = htmlFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Wait a moment for download
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Prepare email
+                const emailSubject = `Approved zAmp Repair: ${systemId || 'N/A'} | zAmp# ${zampNumber} | ${ticketNum}`;
+                const emailBody = `Hi Loaners & Exchanges Team,
+
+The zAmp for this client has been approved for advanced exchange. Thanks
+
+Client Name: ${fullName}
+Client Email: ${email}
+zAmp#: ${zampNumber}
+Description of issue: ${description || 'N/A'}
+
+--------------------------------------------`;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:loaners-exchanges@neuroptimal.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                // Show success message
+                alert(`✅ HTML file generated successfully!\n\nFile: ${htmlFilename}\n\nIMPORTANT: The HTML file has been downloaded to your computer. Please attach it to the email that is opening.\n\nThe recipient can open this file in any web browser.`);
+                
+            } catch (error) {
+                console.error('Error generating HTML:', error);
+                alert('❌ Error generating HTML file. Please try again or contact support.');
+            } finally {
+                // Restore button
+                originalButton.disabled = false;
+                originalButton.textContent = 'Approver Submit';
+            }
+        }
+
+        // Function to handle MicroPCB Submit
+        function microPcbSubmit() {
+            try {
+                // Validation
+                const errors = [];
+
+                // Get the zAmp number from client information
+                const zampNumber = document.querySelector('input[name="zamp_number"]').value.trim();
+                const systemId = document.querySelector('input[name="system_id"]').value.trim();
+
+                if (!zampNumber) {
+                    errors.push('• zAmp# (in Client Information section)');
+                }
+
+                // Get MicroPCB section fields
+                const repairDate = document.querySelector('input[name="repair_date"]').value;
+                const microWarranty = document.querySelector('input[name="micro_warranty"]:checked');
+
+                if (!repairDate) {
+                    errors.push('• Date of Repair');
+                }
+
+                if (!microWarranty) {
+                    errors.push('• MicroPCB Warranty (must select YES or NO)');
+                }
+
+                // Show errors if any
+                if (errors.length > 0) {
+                    const errorMessage = '⚠️ REQUIRED FIELDS MISSING\n\nPlease complete the following required fields:\n\n' + errors.join('\n');
+                    alert(errorMessage);
+                    return;
+                }
+
+                // Generate HTML filename
+                const sanitizedSystemId = systemId ? systemId.replace(/[^a-zA-Z0-9]/g, '_') : 'NoSystemID';
+                const htmlFilename = `zAmp_MicroPCB_Repair_${sanitizedSystemId}_zAmp${zampNumber}.html`;
+
+                // Clone the entire document
+                const clonedDoc = document.documentElement.cloneNode(true);
+
+                // Copy all form field values to the clone
+                const originalInputs = document.querySelectorAll('input, textarea, select');
+                const clonedInputs = clonedDoc.querySelectorAll('input, textarea, select');
+
+                originalInputs.forEach((original, index) => {
+                    const cloned = clonedInputs[index];
+                    if (!cloned) return;
+
+                    if (original.type === 'checkbox' || original.type === 'radio') {
+                        if (original.checked) {
+                            cloned.setAttribute('checked', 'checked');
+                        } else {
+                            cloned.removeAttribute('checked');
+                        }
+                    } else if (original.tagName === 'SELECT') {
+                        cloned.value = original.value;
+                        const clonedOptions = cloned.querySelectorAll('option');
+                        clonedOptions.forEach(opt => {
+                            if (opt.value === original.value) {
+                                opt.setAttribute('selected', 'selected');
+                            } else {
+                                opt.removeAttribute('selected');
+                            }
+                        });
+                    } else if (original.tagName === 'TEXTAREA') {
+                        cloned.textContent = original.value;
+                    } else {
+                        cloned.setAttribute('value', original.value);
+                    }
+                });
+
+                // Remove the sidebar navigation from clone
+                const sidebar = clonedDoc.querySelector('.sidebar');
+                if (sidebar) sidebar.remove();
+
+                // Remove demo button from clone
+                const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
+                if (demoButton) {
+                    const demoSection = demoButton.closest('div');
+                    if (demoSection) demoSection.remove();
+                }
+
+                // Remove all buttons from clone
+                const buttons = clonedDoc.querySelectorAll('button');
+                buttons.forEach(btn => btn.remove());
+
+                // Remove all scripts from clone
+                const scripts = clonedDoc.querySelectorAll('script');
+                scripts.forEach(script => script.remove());
+
+                // Show all sections in the clone
+                const sections = clonedDoc.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.classList.add('active');
+                    section.style.display = 'block';
+                });
+
+                // Adjust main content styling
+                const mainContent = clonedDoc.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.width = '100%';
+                    mainContent.style.maxWidth = '100%';
+                }
+
+                // Adjust body styling
+                const body = clonedDoc.querySelector('body');
+                if (body) {
+                    body.style.margin = '0';
+                    body.style.padding = '0';
+                }
+
+                // Add print-friendly styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media print {
+                        body { margin: 0; padding: 20px; }
+                        .section { page-break-after: always; }
+                    }
+                    body { background: #f5f5f5; }
+                    .main-content { background: white; }
+                    .section-header {
+                        margin: 0 0 30px 0 !important;
+                    }
+                    .form-row {
+                        display: grid !important;
+                        grid-template-columns: 1fr 1fr !important;
+                        gap: 20px !important;
+                    }
+                    .form-row.full {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .image-grid {
+                        display: grid !important;
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 30px !important;
+                    }
+                    /* Override responsive media query for exported file */
+                    @media (max-width: 768px) {
+                        .form-row {
+                            grid-template-columns: 1fr 1fr !important;
+                        }
+                        .image-grid {
+                            grid-template-columns: repeat(2, 1fr) !important;
+                        }
+                    }
+                `;
+                const headElement = clonedDoc.querySelector('head');
+                if (headElement) {
+                    headElement.appendChild(style);
+                }
+
+                // Get the HTML content
+                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+
+                // Create a Blob and download
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = htmlFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // Wait a moment for download
+                setTimeout(() => {
+                    // Prepare email
+                    const emailSubject = `MicroPCB zAmp Repair: ${systemId || ''} | zAmp# ${zampNumber}`;
+                    const emailBody = `Hello,
+
+zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
+
+                    // Create mailto link with CC
+                    const mailtoLink = `mailto:loaners-exchanges@neuroptimal.com?cc=shipping@neuroptimal.com&subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+                    // Open email client
+                    window.location.href = mailtoLink;
+
+                    // Show success message
+                    alert(`✅ HTML file generated successfully!\n\nFile: ${htmlFilename}\n\nIMPORTANT: The HTML file has been downloaded to your computer. Please attach it to the email that is opening.\n\nThe recipient can open this file in any web browser.`);
+                }, 500);
+
+            } catch (error) {
+                console.error('Error generating HTML:', error);
+                alert('❌ Error generating HTML file. Please try again or contact support.');
+            }
+        }
+
+        // Demo Auto Fill Function (FOR TESTING ONLY)
+        function demoAutoFill() {
+            // Auto-fill all client information fields with test data
+            document.querySelector('input[name="full_name"]').value = 'John Anderson';
+            document.querySelector('input[name="description"]').value = 'zAmp connection issues - error code 12001';
+            document.querySelector('input[name="email"]').value = 'john.anderson@example.com';
+            document.querySelector('input[name="warranty_date"]').value = '2025-12-31';
+            document.querySelector('input[name="origin_date"]').value = '2024-10-15';
+            document.querySelector('select[name="system_model"]').value = 'Surface Pro 9 i5 8GB';
+            document.querySelector('textarea[name="notes"]').value = 'Client reports intermittent USB disconnections. Troubleshooting completed via ZenConnect session.';
+            document.querySelector('input[name="system_id"]').value = 'SYS-2024-0456';
+            document.querySelector('input[name="zamp_number"]').value = 'ZA-12345';
+            document.querySelector('input[name="tech_ticket"]').value = '789';
+            document.querySelector('input[name="date"]').value = new Date().toISOString().split('T')[0];
+            document.querySelector('input[name="pass_status"][value="pass_reg"]').checked = true;
+            document.querySelector('select[name="technician"]').value = 'Hank Johnson';
+            
+            // Trigger the system model change event to show/hide conditional elements
+            const event = new Event('change');
+            document.querySelector('select[name="system_model"]').dispatchEvent(event);
+            
+            alert('✅ Demo data loaded!\n\nAll Client Information fields have been populated with test data.');
+        }
+    </script>
+</body>
+</html>
