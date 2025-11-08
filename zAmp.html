@@ -670,13 +670,21 @@
                             <!-- SP9 Setup Image -->
                             <div id="sp9-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro 9 Setup Guide</h4>
-                                <img id="sp9-image" src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg" alt="Surface Pro 9 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <img id="sp9-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg"
+                                     onerror="this.onerror=null; this.src='Images/SP9  Setup.jpg';"
+                                     alt="Surface Pro 9 Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
                             <!-- SLG3 Setup Image -->
                             <div id="slg3-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Laptop Go 3 Setup Guide</h4>
-                                <img id="slg3-image" src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg" alt="Surface Laptop Go 3 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <img id="slg3-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg"
+                                     onerror="this.onerror=null; this.src='Images/SLG3.jpg';"
+                                     alt="Surface Laptop Go 3 Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
                         </div>
@@ -1034,13 +1042,19 @@
                         <!-- Sample Images Grid -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/zAmp%20verification" alt="Sample zAmp Verification" style="width: 100%; height: auto; border-radius: 4px; display: block;">
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/zAmp%20verification"
+                                     onerror="this.onerror=null; this.src='Images/zAmp verification';"
+                                     alt="Sample zAmp Verification"
+                                     style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
                                     Example 1: zAmp Serial Number Verification
                                 </div>
                             </div>
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Device%20manager%20sample.jpg" alt="Sample Device Manager" style="width: 100%; height: auto; border-radius: 4px; display: block;">
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Device%20manager%20sample.jpg"
+                                     onerror="this.onerror=null; this.src='Images/Device manager sample.jpg';"
+                                     alt="Sample Device Manager"
+                                     style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
                                     Example 2: Device Manager Screenshot
                                 </div>
@@ -1520,7 +1534,7 @@
                 checkOriginDate();
             }
 
-            // Add click handler and error handling for SP9 setup image
+            // Add click handler for SP9 setup image
             if (sp9SetupImage) {
                 const sp9Image = document.getElementById('sp9-image');
                 if (sp9Image) {
@@ -1528,24 +1542,16 @@
                     sp9Image.addEventListener('click', function() {
                         window.open(this.src, '_blank');
                     });
-                    // Add error handler for image loading
-                    sp9Image.addEventListener('error', function() {
-                        this.src = 'https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg';
-                    });
                 }
             }
 
-            // Add click handler and error handling for SLG3 setup image
+            // Add click handler for SLG3 setup image
             if (slg3SetupImage) {
                 const slg3Image = document.getElementById('slg3-image');
                 if (slg3Image) {
                     slg3Image.style.cursor = 'pointer';
                     slg3Image.addEventListener('click', function() {
                         window.open(this.src, '_blank');
-                    });
-                    // Add error handler for image loading
-                    slg3Image.addEventListener('error', function() {
-                        this.src = 'https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg';
                     });
                 }
             }
