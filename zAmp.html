@@ -1015,6 +1015,39 @@
                 <div id="image-upload" class="section">
                     <div class="section-header">IMAGE UPLOAD</div>
 
+                    <!-- Sample Image Reference -->
+                    <div style="margin-bottom: 25px; padding: 20px; background: linear-gradient(135deg, #f0f8ff 0%, #e0f2fe 100%); border-radius: 12px; border: 2px solid #4C799B; box-shadow: 0 4px 12px rgba(76, 121, 155, 0.1);">
+                        <h4 style="margin: 0 0 15px 0; color: #18325B; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 24px;">📷</span> Sample Image Reference
+                        </h4>
+                        <p style="margin: 0 0 15px 0; color: #475569; font-size: 13px; line-height: 1.6;">
+                            Please upload clear photos similar to the examples shown below. Required images include zAmp serial number verification and Device Manager screenshot.
+                        </p>
+                        <div style="background: white; padding: 8px 12px; border-radius: 6px; display: inline-block; margin-bottom: 20px;">
+                            <span style="color: #4C799B; font-weight: 600; font-size: 12px;">✓ Clear lighting</span>
+                            <span style="margin: 0 8px; color: #cbd5e1;">•</span>
+                            <span style="color: #4C799B; font-weight: 600; font-size: 12px;">✓ Readable text</span>
+                            <span style="margin: 0 8px; color: #cbd5e1;">•</span>
+                            <span style="color: #4C799B; font-weight: 600; font-size: 12px;">✓ Focused image</span>
+                        </div>
+
+                        <!-- Sample Images Grid -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <img src="Images/zAmp verification" alt="Sample zAmp Verification" style="width: 100%; height: auto; border-radius: 4px; display: block;">
+                                <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
+                                    Example 1: zAmp Serial Number Verification
+                                </div>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <img src="Images/Device manager sample.jpg" alt="Sample Device Manager" style="width: 100%; height: auto; border-radius: 4px; display: block;">
+                                <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
+                                    Example 2: Device Manager Screenshot
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="image-grid">
                         <div class="image-upload-box">
                             <div class="image-header">IMAGE 1</div>
