@@ -668,10 +668,16 @@
                                 </label>
                             </div>
                             <!-- SP9 Setup Image -->
-                            <div id="sp9-setup-image" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                            <div id="sp9-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro 9 Setup Guide</h4>
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg" alt="Surface Pro 9 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="window.open(this.src, '_blank')">
-                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to view full size</p>
+                                <img id="sp9-image" src="Images/SP9  Setup.jpg" alt="Surface Pro 9 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
+                            <!-- SLG3 Setup Image -->
+                            <div id="slg3-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Laptop Go 3 Setup Guide</h4>
+                                <img id="slg3-image" src="Images/SLG3.jpg" alt="Surface Laptop Go 3 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
                         </div>
                     </div>
@@ -1327,6 +1333,7 @@
             const originDateInput = document.querySelector('input[name="origin_date"]');
             const replacementEligibilityTable = document.querySelector('.replacement-eligibility');
             const sp9SetupImage = document.getElementById('sp9-setup-image');
+            const slg3SetupImage = document.getElementById('slg3-setup-image');
 
             function updateVisibility() {
                 const selectedValue = systemModelSelect.value;
@@ -1337,6 +1344,15 @@
                         sp9SetupImage.style.display = 'block';
                     } else {
                         sp9SetupImage.style.display = 'none';
+                    }
+                }
+
+                // SLG3 Setup Image visibility
+                if (slg3SetupImage) {
+                    if (selectedValue === 'Surface Laptop Go 3 i5 8GB') {
+                        slg3SetupImage.style.display = 'block';
+                    } else {
+                        slg3SetupImage.style.display = 'none';
                     }
                 }
 
@@ -1469,6 +1485,36 @@
 
                 // Run initial check
                 checkOriginDate();
+            }
+
+            // Add click handler and error handling for SP9 setup image
+            if (sp9SetupImage) {
+                const sp9Image = document.getElementById('sp9-image');
+                if (sp9Image) {
+                    sp9Image.style.cursor = 'pointer';
+                    sp9Image.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                    // Add error handler for image loading
+                    sp9Image.addEventListener('error', function() {
+                        this.src = 'https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg';
+                    });
+                }
+            }
+
+            // Add click handler and error handling for SLG3 setup image
+            if (slg3SetupImage) {
+                const slg3Image = document.getElementById('slg3-image');
+                if (slg3Image) {
+                    slg3Image.style.cursor = 'pointer';
+                    slg3Image.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                    // Add error handler for image loading
+                    slg3Image.addEventListener('error', function() {
+                        this.src = 'https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg';
+                    });
+                }
             }
 
             // Hide Session Start Checks if zAmp flatlined is checked YES
@@ -2224,9 +2270,9 @@ Loaners & Exchanges | Zengar Institute Inc.
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
 
-                // Remove SP9 setup image preview from clone
-                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
-                if (sp9SetupImage) sp9SetupImage.remove();
+                // Remove all elements with no-export class
+                const noExportElements = clonedDoc.querySelectorAll('.no-export');
+                noExportElements.forEach(el => el.remove());
 
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
@@ -2266,9 +2312,11 @@ Loaners & Exchanges | Zengar Institute Inc.
                     body.style.padding = '0';
                 }
                 
-                // Add print-friendly styles
-                const style = document.createElement('style');
-                style.textContent = `
+                // Get the HTML content first
+                let htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+
+                // Add print-friendly styles by injecting into HTML string
+                const styleTag = `<style>
                     @media print {
                         body { margin: 0; padding: 20px; }
                         .section { page-break-after: always; }
@@ -2300,14 +2348,10 @@ Loaners & Exchanges | Zengar Institute Inc.
                             grid-template-columns: repeat(2, 1fr) !important;
                         }
                     }
-                `;
-                const headElement = clonedDoc.querySelector('head');
-                if (headElement) {
-                    headElement.appendChild(style);
-                }
-                
-                // Get the HTML content
-                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+                </style>`;
+
+                // Inject the style tag before closing </head>
+                htmlContent = htmlContent.replace('</head>', styleTag + '</head>');
                 
                 // Create a Blob and download
                 const blob = new Blob([htmlContent], { type: 'text/html' });
@@ -2454,9 +2498,9 @@ Description of issue: ${description}
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
 
-                // Remove SP9 setup image preview from clone
-                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
-                if (sp9SetupImage) sp9SetupImage.remove();
+                // Remove all elements with no-export class
+                const noExportElements = clonedDoc.querySelectorAll('.no-export');
+                noExportElements.forEach(el => el.remove());
 
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
@@ -2496,9 +2540,11 @@ Description of issue: ${description}
                     body.style.padding = '0';
                 }
                 
-                // Add print-friendly styles
-                const style = document.createElement('style');
-                style.textContent = `
+                // Get the HTML content first
+                let htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+
+                // Add print-friendly styles by injecting into HTML string
+                const styleTag = `<style>
                     @media print {
                         body { margin: 0; padding: 20px; }
                         .section { page-break-after: always; }
@@ -2530,14 +2576,10 @@ Description of issue: ${description}
                             grid-template-columns: repeat(2, 1fr) !important;
                         }
                     }
-                `;
-                const headElement = clonedDoc.querySelector('head');
-                if (headElement) {
-                    headElement.appendChild(style);
-                }
-                
-                // Get the HTML content
-                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+                </style>`;
+
+                // Inject the style tag before closing </head>
+                htmlContent = htmlContent.replace('</head>', styleTag + '</head>');
                 
                 // Create a Blob and download
                 const blob = new Blob([htmlContent], { type: 'text/html' });
@@ -2660,9 +2702,9 @@ Description of issue: ${description || 'N/A'}
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
 
-                // Remove SP9 setup image preview from clone
-                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
-                if (sp9SetupImage) sp9SetupImage.remove();
+                // Remove all elements with no-export class
+                const noExportElements = clonedDoc.querySelectorAll('.no-export');
+                noExportElements.forEach(el => el.remove());
 
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
@@ -2702,9 +2744,11 @@ Description of issue: ${description || 'N/A'}
                     body.style.padding = '0';
                 }
 
-                // Add print-friendly styles
-                const style = document.createElement('style');
-                style.textContent = `
+                // Get the HTML content first
+                let htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+
+                // Add print-friendly styles by injecting into HTML string
+                const styleTag = `<style>
                     @media print {
                         body { margin: 0; padding: 20px; }
                         .section { page-break-after: always; }
@@ -2736,14 +2780,10 @@ Description of issue: ${description || 'N/A'}
                             grid-template-columns: repeat(2, 1fr) !important;
                         }
                     }
-                `;
-                const headElement = clonedDoc.querySelector('head');
-                if (headElement) {
-                    headElement.appendChild(style);
-                }
+                </style>`;
 
-                // Get the HTML content
-                const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+                // Inject the style tag before closing </head>
+                htmlContent = htmlContent.replace('</head>', styleTag + '</head>');
 
                 // Create a Blob and download
                 const blob = new Blob([htmlContent], { type: 'text/html' });
