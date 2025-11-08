@@ -667,6 +667,12 @@
                                     <span>AddOn Adapter</span>
                                 </label>
                             </div>
+                            <!-- SP9 Setup Image -->
+                            <div id="sp9-setup-image" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro 9 Setup Guide</h4>
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg" alt="Surface Pro 9 Setup" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="window.open(this.src, '_blank')">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to view full size</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1320,9 +1326,19 @@
             const asusRows = document.querySelectorAll('.asus-only');
             const originDateInput = document.querySelector('input[name="origin_date"]');
             const replacementEligibilityTable = document.querySelector('.replacement-eligibility');
+            const sp9SetupImage = document.getElementById('sp9-setup-image');
 
             function updateVisibility() {
                 const selectedValue = systemModelSelect.value;
+
+                // SP9 Setup Image visibility
+                if (sp9SetupImage) {
+                    if (selectedValue === 'Surface Pro 9 i5 8GB') {
+                        sp9SetupImage.style.display = 'block';
+                    } else {
+                        sp9SetupImage.style.display = 'none';
+                    }
+                }
 
                 // AddOn Adapter visibility
                 const showAddonModels = [
@@ -2208,6 +2224,10 @@ Loaners & Exchanges | Zengar Institute Inc.
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
 
+                // Remove SP9 setup image preview from clone
+                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
+                if (sp9SetupImage) sp9SetupImage.remove();
+
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
                 if (demoButton) {
@@ -2434,6 +2454,10 @@ Description of issue: ${description}
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
 
+                // Remove SP9 setup image preview from clone
+                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
+                if (sp9SetupImage) sp9SetupImage.remove();
+
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
                 if (demoButton) {
@@ -2635,6 +2659,10 @@ Description of issue: ${description || 'N/A'}
                 // Remove the sidebar navigation from clone
                 const sidebar = clonedDoc.querySelector('.sidebar');
                 if (sidebar) sidebar.remove();
+
+                // Remove SP9 setup image preview from clone
+                const sp9SetupImage = clonedDoc.getElementById('sp9-setup-image');
+                if (sp9SetupImage) sp9SetupImage.remove();
 
                 // Remove demo button from clone
                 const demoButton = clonedDoc.querySelector('button[onclick="demoAutoFill()"]');
