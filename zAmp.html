@@ -1049,6 +1049,10 @@
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
                                     Example 1: zAmp Serial Number Verification
                                 </div>
+                                <!-- Email Verification Request Button -->
+                                <button style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                    <span style="font-size: 14px;">📧</span> Send Verification Request Email
+                                </button>
                             </div>
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                 <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Device%20manager%20sample.jpg"
@@ -2106,7 +2110,84 @@ Loaners & Exchanges | Zengar Institute Inc.
             // Open default email client
             window.location.href = mailtoLink;
         }
-        
+
+        // Function to open verification email template
+        function openVerificationEmail() {
+            // Get the email from the form
+            const clientEmail = document.querySelector('input[name="email"]').value.trim();
+
+            if (!clientEmail) {
+                alert('⚠️ Please enter the client email address in the Client Information section first.');
+                return;
+            }
+
+            // Get the absolute path to the MSG template
+            // Note: This assumes the form is being run locally
+            const currentPath = window.location.pathname;
+            const baseDir = currentPath.substring(0, currentPath.lastIndexOf('/'));
+            const msgTemplatePath = baseDir + '/Templates/zAmp_Verification_Request_ENGLISH.msg';
+
+            // Create VBScript that opens the MSG template and sets the To field
+            const vbsScript = `' VBScript to open MSG template with client email
+Dim objOutlook, objMail, objFSO, msgPath
+
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+
+' Use absolute path to WhisperProject Templates folder
+msgPath = "c:\\WhisperProject\\Templates\\zAmp_Verification_Request_ENGLISH.msg"
+
+' Check if template exists
+If Not objFSO.FileExists(msgPath) Then
+    MsgBox "Template not found at: " & msgPath & vbCrLf & vbCrLf & "Please ensure the template exists in the Templates folder.", vbCritical, "Template Not Found"
+    WScript.Quit
+End If
+
+' Create Outlook application object
+Set objOutlook = CreateObject("Outlook.Application")
+
+' Open the MSG template
+Set objMail = objOutlook.CreateItemFromTemplate(msgPath)
+
+' Set the recipient email
+objMail.To = "${clientEmail}"
+
+' Get reference to the inspector (email window)
+Dim objInspector
+Set objInspector = objMail.GetInspector
+
+' Display the email
+objMail.Display
+
+' Keep the script running while the email window is open
+' This prevents the email from vanishing when you click Send
+Do While objInspector.IsOpen
+    WScript.Sleep 100
+Loop
+
+' Clean up
+Set objInspector = Nothing
+Set objMail = Nothing
+Set objOutlook = Nothing
+Set objFSO = Nothing
+`;
+
+            // Create and download the VBScript
+            const blob = new Blob([vbsScript], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Open_Verification_Email.vbs';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            // Show instructions
+            setTimeout(() => {
+                alert(`📧 VBScript Downloaded!\n\nTo send the verification email:\n\n1. Go to your Downloads folder\n2. Double-click: Open_Verification_Email.vbs\n3. Outlook will open with email ready\n   ✓ To: ${clientEmail}\n   ✓ Subject and body pre-filled\n4. Review and click Send\n\nNote: Windows may ask for permission to run the script.`);
+            }, 500);
+        }
+
         // Function to handle Technician Submit with validation
         function technicianSubmit() {
             const errors = [];
