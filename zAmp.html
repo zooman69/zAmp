@@ -3010,7 +3010,7 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
         function demoAutoFill() {
             // Auto-fill all client information fields with test data
             document.querySelector('input[name="full_name"]').value = 'John Anderson';
-            document.querySelector('input[name="description"]').value = 'zAmp connection issues - error code 12001';
+            document.querySelector('select[name="description"]').value = 'NO Code 12001 - zAmp Not Detected';
             document.querySelector('input[name="email"]').value = 'john.anderson@example.com';
             document.querySelector('input[name="warranty_date"]').value = '2025-12-31';
             document.querySelector('input[name="origin_date"]').value = '2024-10-15';
@@ -3022,11 +3022,11 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
             document.querySelector('input[name="date"]').value = new Date().toISOString().split('T')[0];
             document.querySelector('input[name="pass_status"][value="pass_reg"]').checked = true;
             document.querySelector('select[name="technician"]').value = 'Hank Johnson';
-            
+
             // Trigger the system model change event to show/hide conditional elements
             const event = new Event('change');
             document.querySelector('select[name="system_model"]').dispatchEvent(event);
-            
+
             alert('✅ Demo data loaded!\n\nAll Client Information fields have been populated with test data.');
         }
     </script>
