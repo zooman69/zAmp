@@ -148,10 +148,14 @@ $($languages[$lang].Body)
 
         $mail.HTMLBody = $htmlBody
 
-        # Add verification image if it exists
+        # Add verification image as embedded attachment
         if (Test-Path $imagePath) {
             $attachment = $mail.Attachments.Add($imagePath)
+            # Set the attachment as inline/embedded
             $attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "zAmpVerificationImage")
+
+            # Also add directly to HTML body with the embedded image
+            $mail.HTMLBody = $mail.HTMLBody.Replace("</body>", "<p><img src=`"cid:zAmpVerificationImage`" alt=`"zAmp Verification`" style=`"max-width: 100%; height: auto;`"></p></body>")
         }
 
         # Save as MSG file
