@@ -1050,7 +1050,7 @@
                                     Example 1: zAmp Serial Number Verification
                                 </div>
                                 <!-- Email Verification Request Button -->
-                                <button style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <button id="verificationEmailBtn" onclick="openVerificationEmail()" style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                     <span style="font-size: 14px;">📧</span> Send Verification Request Email
                                 </button>
                             </div>
@@ -2121,70 +2121,98 @@ Loaners & Exchanges | Zengar Institute Inc.
                 return;
             }
 
-            // Get the absolute path to the MSG template
-            // Note: This assumes the form is being run locally
-            const currentPath = window.location.pathname;
-            const baseDir = currentPath.substring(0, currentPath.lastIndexOf('/'));
-            const msgTemplatePath = baseDir + '/Templates/zAmp_Verification_Request_ENGLISH.msg';
+            // Create custom language selection dialog
+            showLanguageDialog(clientEmail);
+        }
 
-            // Create VBScript that opens the MSG template and sets the To field
-            const vbsScript = `' VBScript to open MSG template with client email
-Dim objOutlook, objMail, objFSO, msgPath
+        // Function to show custom language selection dialog
+        function showLanguageDialog(clientEmail) {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';
 
-Set objFSO = CreateObject("Scripting.FileSystemObject")
+            // Create dialog box
+            const dialog = document.createElement('div');
+            dialog.style.cssText = 'background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 400px; text-align: center;';
 
-' Use absolute path to WhisperProject Templates folder
-msgPath = "c:\\WhisperProject\\Templates\\zAmp_Verification_Request_ENGLISH.msg"
+            // Add title
+            const title = document.createElement('h3');
+            title.textContent = 'Select Email Language';
+            title.style.cssText = 'margin: 0 0 20px 0; color: #1e293b; font-size: 20px;';
+            dialog.appendChild(title);
 
-' Check if template exists
-If Not objFSO.FileExists(msgPath) Then
-    MsgBox "Template not found at: " & msgPath & vbCrLf & vbCrLf & "Please ensure the template exists in the Templates folder.", vbCritical, "Template Not Found"
-    WScript.Quit
-End If
+            // Add instruction text
+            const instruction = document.createElement('p');
+            instruction.textContent = 'Choose the language for the verification request email:';
+            instruction.style.cssText = 'margin: 0 0 25px 0; color: #64748b; font-size: 14px;';
+            dialog.appendChild(instruction);
 
-' Create Outlook application object
-Set objOutlook = CreateObject("Outlook.Application")
+            // Create button container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.cssText = 'display: flex; gap: 15px; justify-content: center;';
 
-' Open the MSG template
-Set objMail = objOutlook.CreateItemFromTemplate(msgPath)
+            // Create English button
+            const englishBtn = document.createElement('button');
+            englishBtn.innerHTML = '<span style="font-size: 24px; display: block; margin-bottom: 5px;">🇺🇸</span>English';
+            englishBtn.style.cssText = 'flex: 1; padding: 20px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
+            englishBtn.onmouseover = () => englishBtn.style.background = '#3d6179';
+            englishBtn.onmouseout = () => englishBtn.style.background = '#4C799B';
+            englishBtn.onclick = () => {
+                document.body.removeChild(overlay);
+                openTemplateWithLanguage(clientEmail, 'zAmp and USB Cable Verification - ENGLISH.msg', 'English');
+            };
 
-' Set the recipient email
-objMail.To = "${clientEmail}"
+            // Create French button
+            const frenchBtn = document.createElement('button');
+            frenchBtn.innerHTML = '<span style="font-size: 24px; display: block; margin-bottom: 5px;">🇨🇦</span>French';
+            frenchBtn.style.cssText = 'flex: 1; padding: 20px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
+            frenchBtn.onmouseover = () => frenchBtn.style.background = '#3d6179';
+            frenchBtn.onmouseout = () => frenchBtn.style.background = '#4C799B';
+            frenchBtn.onclick = () => {
+                document.body.removeChild(overlay);
+                openTemplateWithLanguage(clientEmail, 'zAmp and USB Cable Verification - FRENCH.msg', 'French');
+            };
 
-' Get reference to the inspector (email window)
-Dim objInspector
-Set objInspector = objMail.GetInspector
+            buttonContainer.appendChild(englishBtn);
+            buttonContainer.appendChild(frenchBtn);
+            dialog.appendChild(buttonContainer);
 
-' Display the email
-objMail.Display
+            // Add cancel button
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.style.cssText = 'margin-top: 15px; padding: 10px 20px; background: transparent; color: #64748b; border: none; cursor: pointer; font-size: 14px;';
+            cancelBtn.onclick = () => document.body.removeChild(overlay);
+            dialog.appendChild(cancelBtn);
 
-' Keep the script running while the email window is open
-' This prevents the email from vanishing when you click Send
-Do While objInspector.IsOpen
-    WScript.Sleep 100
-Loop
+            overlay.appendChild(dialog);
+            document.body.appendChild(overlay);
 
-' Clean up
-Set objInspector = Nothing
-Set objMail = Nothing
-Set objOutlook = Nothing
-Set objFSO = Nothing
-`;
+            // Close on overlay click
+            overlay.onclick = (e) => {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                }
+            };
+        }
 
-            // Create and download the VBScript
-            const blob = new Blob([vbsScript], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+        // Function to open template with selected language
+        function openTemplateWithLanguage(clientEmail, templateFileName, languageLabel) {
+            // Construct the path to the template
+            const templatePath = `Templates/${templateFileName}`;
+
+            // Create a link to open the .msg file directly
             const link = document.createElement('a');
-            link.href = url;
-            link.download = 'Open_Verification_Email.vbs';
+            link.href = templatePath;
+            link.target = '_blank';
+
+            // Trigger the download/open
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url);
 
             // Show instructions
             setTimeout(() => {
-                alert(`📧 VBScript Downloaded!\n\nTo send the verification email:\n\n1. Go to your Downloads folder\n2. Double-click: Open_Verification_Email.vbs\n3. Outlook will open with email ready\n   ✓ To: ${clientEmail}\n   ✓ Subject and body pre-filled\n4. Review and click Send\n\nNote: Windows may ask for permission to run the script.`);
+                alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add recipient: ${clientEmail}\n2. Review the content\n3. Click Send`);
             }, 500);
         }
 
