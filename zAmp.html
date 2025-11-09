@@ -2116,12 +2116,7 @@ Loaners & Exchanges | Zengar Institute Inc.
             // Get the email from the form
             const clientEmail = document.querySelector('input[name="email"]').value.trim();
 
-            if (!clientEmail) {
-                alert('⚠️ Please enter the client email address in the Client Information section first.');
-                return;
-            }
-
-            // Create custom language selection dialog
+            // Create custom language selection dialog (pass email even if empty)
             showLanguageDialog(clientEmail);
         }
 
@@ -2172,6 +2167,19 @@ Loaners & Exchanges | Zengar Institute Inc.
 
             dialog.appendChild(select);
 
+            // Add email input field
+            const emailLabel = document.createElement('label');
+            emailLabel.textContent = 'Client Email (optional):';
+            emailLabel.style.cssText = 'display: block; text-align: left; margin-bottom: 5px; color: #64748b; font-size: 14px;';
+            dialog.appendChild(emailLabel);
+
+            const emailInput = document.createElement('input');
+            emailInput.type = 'email';
+            emailInput.placeholder = 'Enter or paste client email address';
+            emailInput.value = clientEmail || '';
+            emailInput.style.cssText = 'width: 100%; padding: 12px; font-size: 14px; border: 2px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px; box-sizing: border-box;';
+            dialog.appendChild(emailInput);
+
             // Button container
             const buttonContainer = document.createElement('div');
             buttonContainer.style.cssText = 'display: flex; gap: 10px; justify-content: center;';
@@ -2189,8 +2197,9 @@ Loaners & Exchanges | Zengar Institute Inc.
                     return;
                 }
                 const langName = languages.find(l => l.file === selectedLang).name;
+                const finalEmail = emailInput.value.trim();
                 document.body.removeChild(overlay);
-                openTemplateWithLanguage(clientEmail, `zAmp and USB Cable Verification - ${selectedLang}.msg`, langName);
+                openTemplateWithLanguage(finalEmail, `zAmp and USB Cable Verification - ${selectedLang}.msg`, langName);
             };
 
             // Create Cancel button
@@ -2233,7 +2242,11 @@ Loaners & Exchanges | Zengar Institute Inc.
 
             // Show instructions
             setTimeout(() => {
-                alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add recipient: ${clientEmail}\n2. Review the content\n3. Click Send`);
+                if (clientEmail) {
+                    alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add recipient: ${clientEmail}\n2. Review the content\n3. Click Send`);
+                } else {
+                    alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add the recipient email address\n2. Review the content\n3. Click Send`);
+                }
             }, 500);
         }
 
