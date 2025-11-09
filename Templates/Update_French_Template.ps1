@@ -9,7 +9,7 @@ try {
     $msgPath = "c:\WhisperProject\zAmp\Templates\zAmp and USB Cable Verification - FRENCH.msg"
     $mail = $outlook.Session.OpenSharedItem($msgPath)
 
-    # Update subject
+    # Update subject - PowerShell natively supports Unicode
     $mail.Subject = "Vérification de l'image de zAmp et du câble USB"
 
     # Get current body to preserve any embedded images
@@ -25,18 +25,18 @@ try {
 <p>Bonjour,</p>
 <br>
 <br>
-<p>Afin de diagnostiquer avec pr&eacute;cision le probl&egrave;me de votre zAmp, veuillez fournir des photos claires des &eacute;l&eacute;ments suivants :</p>
+<p>Afin de diagnostiquer avec précision le problème de votre zAmp, veuillez fournir des photos claires des éléments suivants :</p>
 <br>
 <p>zAmp :<br>
-Une photo de l'arri&egrave;re du zAmp, montrant clairement le num&eacute;ro de s&eacute;rie ainsi que le c&acirc;ble USB branch&eacute; sur le zAmp.</p>
+Une photo de l'arrière du zAmp, montrant clairement le numéro de série ainsi que le câble USB branché sur le zAmp.</p>
 <br>
-<p>C&acirc;ble USB Monoprice :<br>
-Une photo en gros plan du c&acirc;ble USB Monoprice, mettant l'accent sur la section avec le logo &quot;Monoprice&quot;.</p>
+<p>Câble USB Monoprice :<br>
+Une photo en gros plan du câble USB Monoprice, mettant l'accent sur la section avec le logo "Monoprice".</p>
 <br>
-<p>Configuration du syst&egrave;me :<br>
-Une photo de votre configuration syst&egrave;me avec le c&acirc;ble USB connect&eacute; &agrave; la fois au zAmp et au syst&egrave;me.</p>
+<p>Configuration du système :<br>
+Une photo de votre configuration système avec le câble USB connecté à la fois au zAmp et au système.</p>
 <br>
-<p>Veuillez vous r&eacute;f&eacute;rer &agrave; l'image ci-dessous pour des exemples des photos demand&eacute;es. Une fois ces photos prises, envoyez-les &agrave; support@neuroptimal.com.</p>
+<p>Veuillez vous référer à l'image ci-dessous pour des exemples des photos demandées. Une fois ces photos prises, envoyez-les à support@neuroptimal.com.</p>
 <br>
 <br>
 "@
