@@ -15,7 +15,13 @@
       "Bash(start \"\" \"http://localhost:8080/zAmp.html\")",
       "Bash(git init:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git rm:*)",
+      "Bash(powershell:*)",
+      "Bash(start \"\" \"c:\\WhisperProject\\zAmp\\Templates\\zAmp and USB Cable Verification - ENGLISH.msg\")",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "ask": []
