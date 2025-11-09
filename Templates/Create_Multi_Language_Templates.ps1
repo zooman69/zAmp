@@ -48,29 +48,6 @@ Una foto della configurazione del sistema con il cavo USB collegato sia allo zAm
 <p>Grazie per la vostra collaborazione.</p>
 "@
     }
-    "HEBREW" = @{
-        Subject = "אימות תמונת zAmp וכבל USB"
-        Body = @"
-<p>שלום,</p>
-<br>
-<br>
-<p>כדי לאבחן במדויק את הבעיה של ה-zAmp שלך, אנא ספק תמונות ברורות של הפריטים הבאים:</p>
-<br>
-<p>zAmp:<br>
-תמונה של החלק האחורי של ה-zAmp, המציגה בבירור את המספר הסידורי ואת כבל ה-USB המחובר ל-zAmp.</p>
-<br>
-<p>כבל USB Monoprice:<br>
-תמונת תקריב של כבל ה-USB Monoprice, תוך התמקדות בחלק עם הלוגו &quot;Monoprice&quot;.</p>
-<br>
-<p>תצורת המערכת:<br>
-תמונה של תצורת המערכת שלך עם כבל ה-USB מחובר גם ל-zAmp וגם למערכת.</p>
-<br>
-<p>אנא עיין בתמונה למטה לדוגמאות של התמונות המבוקשות. לאחר שצילמת את התמונות הללו, שלח אותן אל support@neuroptimal.com.</p>
-<br>
-<br>
-<p>תודה על שיתוף הפעולה שלך.</p>
-"@
-    }
     "DUTCH" = @{
         Subject = "Verificatie van zAmp afbeelding en USB-kabel"
         Body = @"
