@@ -2549,6 +2549,20 @@ Loaners & Exchanges | Zengar Institute Inc.
                 setTimeout(() => {
                     // Prepare email
                     const emailSubject = `zAmp Checklist: ${systemId || 'N/A'} | zAmp# ${zampNumber} | ${ticketNum}`;
+
+                    // Create approval links for John and Hank
+                    const approvalSubject = `APPROVED: ${emailSubject}`;
+                    const approvalBody = `I approve this zAmp exchange.
+
+Client Name: ${fullName}
+Client Email: ${email}
+zAmp#: ${zampNumber}
+System ID: ${systemId}
+Ticket: ${ticketNum}`;
+
+                    const johnApprovalLink = `mailto:zampapprovals@neuroptimal.com?subject=${encodeURIComponent(approvalSubject)}&body=${encodeURIComponent(approvalBody + '\n\nApproved by: John')}`;
+                    const hankApprovalLink = `mailto:zampapprovals@neuroptimal.com?subject=${encodeURIComponent(approvalSubject)}&body=${encodeURIComponent(approvalBody + '\n\nApproved by: Hank')}`;
+
                     const emailBody = `Hi Guys,
 
 Attached is the checklist and information for the zAmp that needs to be exchanged. Thanks.
@@ -2562,11 +2576,17 @@ Description of issue: ${description}
 
  *Email sent to client about the zAmp Advanced Exchange Program*
 
-----------------------`;
-                    
+----------------------
+
+📧 1-CLICK APPROVAL:
+
+John, click here to approve: ${johnApprovalLink}
+
+Hank, click here to approve: ${hankApprovalLink}`;
+
                     // Create mailto link
                     const mailtoLink = `mailto:zampapprovals@neuroptimal.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-                    
+
                     // Open email client
                     window.location.href = mailtoLink;
                     
