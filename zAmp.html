@@ -2133,7 +2133,7 @@ Loaners & Exchanges | Zengar Institute Inc.
 
             // Create dialog box
             const dialog = document.createElement('div');
-            dialog.style.cssText = 'background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 400px; text-align: center;';
+            dialog.style.cssText = 'background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 500px; text-align: center;';
 
             // Add title
             const title = document.createElement('h3');
@@ -2141,48 +2141,69 @@ Loaners & Exchanges | Zengar Institute Inc.
             title.style.cssText = 'margin: 0 0 20px 0; color: #1e293b; font-size: 20px;';
             dialog.appendChild(title);
 
-            // Add instruction text
-            const instruction = document.createElement('p');
-            instruction.textContent = 'Choose the language for the verification request email:';
-            instruction.style.cssText = 'margin: 0 0 25px 0; color: #64748b; font-size: 14px;';
-            dialog.appendChild(instruction);
+            // Language options
+            const languages = [
+                { flag: '🇺🇸', name: 'English', file: 'ENGLISH' },
+                { flag: '🇨🇦', name: 'French', file: 'FRENCH' },
+                { flag: '🇪🇸', name: 'Spanish', file: 'SPANISH' },
+                { flag: '🇮🇹', name: 'Italian', file: 'ITALIAN' },
+                { flag: '🇮🇱', name: 'Hebrew', file: 'HEBREW' },
+                { flag: '🇳🇱', name: 'Dutch', file: 'DUTCH' },
+                { flag: '🇵🇹', name: 'Portuguese', file: 'PORTUGUESE' }
+            ];
 
-            // Create button container
+            // Create dropdown select
+            const select = document.createElement('select');
+            select.style.cssText = 'width: 100%; padding: 12px; font-size: 16px; border: 2px solid #4C799B; border-radius: 8px; margin-bottom: 20px; cursor: pointer; background: white;';
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Choose a language...';
+            select.appendChild(defaultOption);
+
+            // Add language options
+            languages.forEach(lang => {
+                const option = document.createElement('option');
+                option.value = lang.file;
+                option.textContent = `${lang.flag} ${lang.name}`;
+                select.appendChild(option);
+            });
+
+            dialog.appendChild(select);
+
+            // Button container
             const buttonContainer = document.createElement('div');
-            buttonContainer.style.cssText = 'display: flex; gap: 15px; justify-content: center;';
+            buttonContainer.style.cssText = 'display: flex; gap: 10px; justify-content: center;';
 
-            // Create English button
-            const englishBtn = document.createElement('button');
-            englishBtn.innerHTML = '<span style="font-size: 24px; display: block; margin-bottom: 5px;">🇺🇸</span>English';
-            englishBtn.style.cssText = 'flex: 1; padding: 20px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
-            englishBtn.onmouseover = () => englishBtn.style.background = '#3d6179';
-            englishBtn.onmouseout = () => englishBtn.style.background = '#4C799B';
-            englishBtn.onclick = () => {
+            // Create OK button
+            const okBtn = document.createElement('button');
+            okBtn.textContent = 'OK';
+            okBtn.style.cssText = 'padding: 12px 30px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
+            okBtn.onmouseover = () => okBtn.style.background = '#3d6179';
+            okBtn.onmouseout = () => okBtn.style.background = '#4C799B';
+            okBtn.onclick = () => {
+                const selectedLang = select.value;
+                if (!selectedLang) {
+                    alert('Please select a language');
+                    return;
+                }
+                const langName = languages.find(l => l.file === selectedLang).name;
                 document.body.removeChild(overlay);
-                openTemplateWithLanguage(clientEmail, 'zAmp and USB Cable Verification - ENGLISH.msg', 'English');
+                openTemplateWithLanguage(clientEmail, `zAmp and USB Cable Verification - ${selectedLang}.msg`, langName);
             };
 
-            // Create French button
-            const frenchBtn = document.createElement('button');
-            frenchBtn.innerHTML = '<span style="font-size: 24px; display: block; margin-bottom: 5px;">🇨🇦</span>French';
-            frenchBtn.style.cssText = 'flex: 1; padding: 20px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
-            frenchBtn.onmouseover = () => frenchBtn.style.background = '#3d6179';
-            frenchBtn.onmouseout = () => frenchBtn.style.background = '#4C799B';
-            frenchBtn.onclick = () => {
-                document.body.removeChild(overlay);
-                openTemplateWithLanguage(clientEmail, 'zAmp and USB Cable Verification - FRENCH.msg', 'French');
-            };
-
-            buttonContainer.appendChild(englishBtn);
-            buttonContainer.appendChild(frenchBtn);
-            dialog.appendChild(buttonContainer);
-
-            // Add cancel button
+            // Create Cancel button
             const cancelBtn = document.createElement('button');
             cancelBtn.textContent = 'Cancel';
-            cancelBtn.style.cssText = 'margin-top: 15px; padding: 10px 20px; background: transparent; color: #64748b; border: none; cursor: pointer; font-size: 14px;';
+            cancelBtn.style.cssText = 'padding: 12px 30px; background: #e5e7eb; color: #64748b; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; transition: all 0.2s;';
+            cancelBtn.onmouseover = () => cancelBtn.style.background = '#d1d5db';
+            cancelBtn.onmouseout = () => cancelBtn.style.background = '#e5e7eb';
             cancelBtn.onclick = () => document.body.removeChild(overlay);
-            dialog.appendChild(cancelBtn);
+
+            buttonContainer.appendChild(okBtn);
+            buttonContainer.appendChild(cancelBtn);
+            dialog.appendChild(buttonContainer);
 
             overlay.appendChild(dialog);
             document.body.appendChild(overlay);
