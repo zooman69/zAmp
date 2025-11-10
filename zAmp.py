@@ -671,7 +671,7 @@
                             <div id="sp9-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro 9 Setup Guide</h4>
                                 <img id="sp9-image"
-                                     src="Images/SP9  Setup.jpg"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg"
                                      alt="Surface Pro 9 Setup"
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
@@ -680,7 +680,7 @@
                             <div id="slg3-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Laptop Go 3 Setup Guide</h4>
                                 <img id="slg3-image"
-                                     src="Images/SLG3.jpg"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg"
                                      alt="Surface Laptop Go 3 Setup"
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
@@ -1040,7 +1040,7 @@
                         <!-- Sample Images Grid -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="Images/zAmp verification"
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/zAmp%20verification"
                                      alt="Sample zAmp Verification"
                                      style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
@@ -1052,7 +1052,7 @@
                                 </button>
                             </div>
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="Images/Device manager sample.jpg"
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Device%20manager%20sample.jpg"
                                      alt="Sample Device Manager"
                                      style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
