@@ -555,9 +555,172 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Language Selection Modal Pop-up */
+        .language-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .language-modal.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .language-modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .language-modal-header {
+            background: linear-gradient(135deg, #18325B 0%, #4C799B 100%);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .language-modal-body {
+            padding: 25px;
+        }
+
+        .language-dropdown {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4C799B;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #18325B;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .language-dropdown:hover {
+            border-color: #18325B;
+            box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3);
+        }
+
+        .language-dropdown:focus {
+            outline: none;
+            border-color: #18325B;
+            box-shadow: 0 0 0 3px rgba(76, 121, 155, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-send-btn {
+            flex: 1;
+            padding: 12px;
+            background: #4C799B;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .modal-send-btn:hover {
+            background: #18325B;
+        }
+
+        .modal-cancel-btn {
+            flex: 1;
+            padding: 12px;
+            background: #64748b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .modal-cancel-btn:hover {
+            background: #475569;
+        }
     </style>
 </head>
 <body>
+    <!-- Language Selection Modal Pop-up -->
+    <div id="languageModal" class="language-modal" onclick="closeModalOnOutsideClick(event)">
+        <div class="language-modal-content">
+            <div class="language-modal-header">
+                <span style="font-size: 24px;">🌍</span>
+                <h2>Select Email Language</h2>
+            </div>
+            <div class="language-modal-body">
+                <div id="clientEmailDisplay" style="margin-bottom: 15px; padding: 12px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 6px;">
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 5px; font-weight: 600;">Client Email:</div>
+                    <div id="clientEmailText" style="font-size: 14px; color: #18325B; font-weight: 600; word-break: break-all;"></div>
+                </div>
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ENGLISH">🇬🇧 English</option>
+                    <option value="FRENCH">🇫🇷 Français</option>
+                    <option value="SPANISH">🇪🇸 Español</option>
+                    <option value="ITALIAN">🇮🇹 Italiano</option>
+                    <option value="PORTUGUESE">🇵🇹 Português</option>
+                    <option value="DUTCH">🇳🇱 Nederlands</option>
+                </select>
+                <div class="modal-buttons">
+                    <button onclick="closeLanguageModal()" class="modal-cancel-btn">Cancel</button>
+                    <button onclick="sendVerificationEmailFromModal()" class="modal-send-btn">
+                        <span style="font-size: 14px;">📧</span> Send Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -1047,7 +1210,7 @@
                                     Example 1: zAmp Serial Number Verification
                                 </div>
                                 <!-- Email Verification Request Button -->
-                                <button id="verificationEmailBtn" onclick="openVerificationEmail()" style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <button id="verificationEmailBtn" onclick="openLanguageModal()" style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                     <span style="font-size: 14px;">📧</span> Send Verification Request Email
                                 </button>
                             </div>
@@ -2107,8 +2270,8 @@ Loaners & Exchanges | Zengar Institute Inc.
             window.location.href = mailtoLink;
         }
 
-        // Function to open verification email template
-        function openVerificationEmail() {
+        // Function to open language selection modal
+        function openLanguageModal() {
             // Get the email from the form
             const clientEmail = document.querySelector('input[name="email"]').value.trim();
 
@@ -2117,71 +2280,104 @@ Loaners & Exchanges | Zengar Institute Inc.
                 return;
             }
 
-            // Get the absolute path to the MSG template
-            // Note: This assumes the form is being run locally
-            const currentPath = window.location.pathname;
-            const baseDir = currentPath.substring(0, currentPath.lastIndexOf('/'));
-            const msgTemplatePath = baseDir + '/Templates/zAmp_Verification_Request_ENGLISH.msg';
+            // Display the client email in the modal
+            document.getElementById('clientEmailText').textContent = clientEmail;
 
-            // Create VBScript that opens the MSG template and sets the To field
-            const vbsScript = `' VBScript to open MSG template with client email
-Dim objOutlook, objMail, objFSO, msgPath
+            // Show the modal
+            const modal = document.getElementById('languageModal');
+            modal.classList.add('show');
+        }
 
-Set objFSO = CreateObject("Scripting.FileSystemObject")
+        // Function to close language selection modal
+        function closeLanguageModal() {
+            const modal = document.getElementById('languageModal');
+            modal.classList.remove('show');
+        }
 
-' Use absolute path to WhisperProject Templates folder
-msgPath = "c:\\WhisperProject\\Templates\\zAmp_Verification_Request_ENGLISH.msg"
+        // Function to close modal when clicking outside of it
+        function closeModalOnOutsideClick(event) {
+            const modal = document.getElementById('languageModal');
+            if (event.target === modal) {
+                closeLanguageModal();
+            }
+        }
 
-' Check if template exists
-If Not objFSO.FileExists(msgPath) Then
-    MsgBox "Template not found at: " & msgPath & vbCrLf & vbCrLf & "Please ensure the template exists in the Templates folder.", vbCritical, "Template Not Found"
-    WScript.Quit
-End If
+        // Function to send verification email from modal
+        function sendVerificationEmailFromModal() {
+            // Get the email from the form
+            const clientEmail = document.querySelector('input[name="email"]').value.trim();
 
-' Create Outlook application object
-Set objOutlook = CreateObject("Outlook.Application")
+            // Get selected language from dropdown
+            const languageDropdown = document.getElementById('languageDropdown');
+            const language = languageDropdown.value;
 
-' Open the MSG template
-Set objMail = objOutlook.CreateItemFromTemplate(msgPath)
+            // Close the modal
+            closeLanguageModal();
 
-' Set the recipient email
-objMail.To = "${clientEmail}"
+            // Map language to template filename
+            const templateFileName = `zAmp and USB Cable Verification - ${language}.msg`;
 
-' Get reference to the inspector (email window)
-Dim objInspector
-Set objInspector = objMail.GetInspector
+            // Get language name for display
+            const languageNames = {
+                'ENGLISH': 'English',
+                'FRENCH': 'Français',
+                'SPANISH': 'Español',
+                'ITALIAN': 'Italiano',
+                'PORTUGUESE': 'Português',
+                'DUTCH': 'Nederlands'
+            };
 
-' Display the email
-objMail.Display
+            // Download template from GitHub repository
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}`;
 
-' Keep the script running while the email window is open
-' This prevents the email from vanishing when you click Send
-Do While objInspector.IsOpen
-    WScript.Sleep 100
-Loop
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
 
-' Clean up
-Set objInspector = Nothing
-Set objMail = Nothing
-Set objOutlook = Nothing
-Set objFSO = Nothing
-`;
+                    // Trigger download
+                    link.click();
 
-            // Create and download the VBScript
-            const blob = new Blob([vbsScript], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'Open_Verification_Email.vbs';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+                    // Clean up
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    }, 100);
 
-            // Show instructions
-            setTimeout(() => {
-                alert(`📧 VBScript Downloaded!\n\nTo send the verification email:\n\n1. Go to your Downloads folder\n2. Double-click: Open_Verification_Email.vbs\n3. Outlook will open with email ready\n   ✓ To: ${clientEmail}\n   ✓ Subject and body pre-filled\n4. Review and click Send\n\nNote: Windows may ask for permission to run the script.`);
-            }, 500);
+                    // Show instructions
+                    setTimeout(() => {
+                        alert(`📧 Email Template Downloaded!\n\n` +
+                              `Language: ${languageNames[language]}\n` +
+                              `Client Email: ${clientEmail}\n\n` +
+                              `The template has been downloaded to your Downloads folder.\n\n` +
+                              `Next Steps:\n` +
+                              `1. Go to your Downloads folder\n` +
+                              `2. Double-click: ${templateFileName}\n` +
+                              `3. Classic Outlook will open with the template\n` +
+                              `4. Add the client email to the "To" field\n` +
+                              `5. Review and click Send\n\n` +
+                              `Note: The file opens in Classic Outlook, not New Outlook.`);
+                    }, 200);
+                })
+                .catch(error => {
+                    alert(`⚠️ Error Downloading Template\n\n` +
+                          `Could not download ${languageNames[language]} template from GitHub.\n\n` +
+                          `Error: ${error.message}\n\n` +
+                          `Please check your internet connection or contact support.`);
+                    console.error('Template download error:', error);
+                });
         }
 
         // Function to handle Technician Submit with validation

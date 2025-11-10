@@ -98,7 +98,7 @@ Uma foto da configura&ccedil;&atilde;o do seu sistema com o cabo USB conectado t
 
 try {
     $outlook = New-Object -ComObject Outlook.Application
-    $imagePath = "c:\WhisperProject\zAmp\Images\zAmp verification"
+    $imagePath = "c:\WhisperProject\Images\zAmp verification"
 
     foreach ($lang in $languages.Keys) {
         Write-Host "Creating $lang template..."
@@ -136,7 +136,7 @@ $($languages[$lang].Body)
         }
 
         # Save as MSG file
-        $savePath = "c:\WhisperProject\zAmp\Templates\zAmp and USB Cable Verification - $lang.msg"
+        $savePath = "c:\WhisperProject\Templates\zAmp and USB Cable Verification - $lang.msg"
         $mail.SaveAs($savePath, 3)
 
         Write-Host "  Created: $savePath"

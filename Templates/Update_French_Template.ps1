@@ -6,7 +6,7 @@ try {
     $outlook = New-Object -ComObject Outlook.Application
 
     # Open the French template
-    $msgPath = "c:\WhisperProject\zAmp\Templates\zAmp and USB Cable Verification - FRENCH.msg"
+    $msgPath = "c:\WhisperProject\Templates\zAmp and USB Cable Verification - FRENCH.msg"
     $mail = $outlook.Session.OpenSharedItem($msgPath)
 
     # Update subject - PowerShell natively supports Unicode

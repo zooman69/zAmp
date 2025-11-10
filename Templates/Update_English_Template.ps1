@@ -1,6 +1,6 @@
 # Update English Template with Open Sans 11pt font
 
-$templatePath = "c:\WhisperProject\zAmp\Templates\zAmp and USB Cable Verification - ENGLISH.msg"
+$templatePath = "c:\WhisperProject\Templates\zAmp and USB Cable Verification - ENGLISH.msg"
 
 # Create Outlook COM object
 $outlook = New-Object -ComObject Outlook.Application
@@ -45,7 +45,7 @@ A photo of your system setup with the USB cable connected to both the zAmp and t
 $mail.HTMLBody = $newBody
 
 # Add verification image
-$imagePath = "c:\WhisperProject\zAmp\Images\zAmp verification.png"
+$imagePath = "c:\WhisperProject\Images\zAmp verification"
 if (Test-Path $imagePath) {
     $attachment = $mail.Attachments.Add($imagePath)
     $attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "zAmpVerificationImage")
