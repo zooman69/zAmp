@@ -597,13 +597,8 @@
                             <input type="text" name="full_name" required>
                         </div>
                         <div class="form-group">
-                            <label>Error Code<span class="required">*</span></label>
-                            <select name="description" required>
-                                <option value="">Select error code...</option>
-                                <option value="NO Code 12002 - zAmp Connection Lost (Session)">NO Code 12002 - zAmp Connection Lost (Session)</option>
-                                <option value="NO Code 12001 - zAmp Not Detected">NO Code 12001 - zAmp Not Detected</option>
-                                <option value="N/A">N/A</option>
-                            </select>
+                            <label>Description<span class="required">*</span></label>
+                            <input type="text" name="description" required>
                         </div>
                     </div>
 
@@ -676,8 +671,7 @@
                             <div id="sp9-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro 9 Setup Guide</h4>
                                 <img id="sp9-image"
-                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SP9%20%20Setup.jpg"
-                                     onerror="this.onerror=null; this.src='Images/SP9  Setup.jpg';"
+                                     src="Images/SP9  Setup.jpg"
                                      alt="Surface Pro 9 Setup"
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
@@ -686,8 +680,7 @@
                             <div id="slg3-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Laptop Go 3 Setup Guide</h4>
                                 <img id="slg3-image"
-                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SLG3.jpg"
-                                     onerror="this.onerror=null; this.src='Images/SLG3.jpg';"
+                                     src="Images/SLG3.jpg"
                                      alt="Surface Laptop Go 3 Setup"
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
@@ -1047,21 +1040,19 @@
                         <!-- Sample Images Grid -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/zAmp%20verification"
-                                     onerror="this.onerror=null; this.src='Images/zAmp verification';"
+                                <img src="Images/zAmp verification"
                                      alt="Sample zAmp Verification"
                                      style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
                                     Example 1: zAmp Serial Number Verification
                                 </div>
                                 <!-- Email Verification Request Button -->
-                                <button id="verificationEmailBtn" onclick="openVerificationEmail()" style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <button style="width: 100%; margin-top: 10px; padding: 10px; background: #4C799B; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(76, 121, 155, 0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                     <span style="font-size: 14px;">📧</span> Send Verification Request Email
                                 </button>
                             </div>
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Device%20manager%20sample.jpg"
-                                     onerror="this.onerror=null; this.src='Images/Device manager sample.jpg';"
+                                <img src="Images/Device manager sample.jpg"
                                      alt="Sample Device Manager"
                                      style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
@@ -2121,136 +2112,75 @@ Loaners & Exchanges | Zengar Institute Inc.
             // Get the email from the form
             const clientEmail = document.querySelector('input[name="email"]').value.trim();
 
-            // Create custom language selection dialog (pass email even if empty)
-            showLanguageDialog(clientEmail);
-        }
+            if (!clientEmail) {
+                alert('⚠️ Please enter the client email address in the Client Information section first.');
+                return;
+            }
 
-        // Function to show custom language selection dialog
-        function showLanguageDialog(clientEmail) {
-            // Create overlay
-            const overlay = document.createElement('div');
-            overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+            // Get the absolute path to the MSG template
+            // Note: This assumes the form is being run locally
+            const currentPath = window.location.pathname;
+            const baseDir = currentPath.substring(0, currentPath.lastIndexOf('/'));
+            const msgTemplatePath = baseDir + '/Templates/zAmp_Verification_Request_ENGLISH.msg';
 
-            // Create dialog box
-            const dialog = document.createElement('div');
-            dialog.style.cssText = 'background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 500px; text-align: center;';
+            // Create VBScript that opens the MSG template and sets the To field
+            const vbsScript = `' VBScript to open MSG template with client email
+Dim objOutlook, objMail, objFSO, msgPath
 
-            // Add title
-            const title = document.createElement('h3');
-            title.textContent = 'Select Email Language';
-            title.style.cssText = 'margin: 0 0 20px 0; color: #1e293b; font-size: 20px;';
-            dialog.appendChild(title);
+Set objFSO = CreateObject("Scripting.FileSystemObject")
 
-            // Language options
-            const languages = [
-                { flag: '🇺🇸', name: 'English', file: 'ENGLISH' },
-                { flag: '🇨🇦', name: 'French', file: 'FRENCH' },
-                { flag: '🇪🇸', name: 'Spanish', file: 'SPANISH' },
-                { flag: '🇮🇹', name: 'Italian', file: 'ITALIAN' },
-                { flag: '🇳🇱', name: 'Dutch', file: 'DUTCH' },
-                { flag: '🇵🇹', name: 'Portuguese', file: 'PORTUGUESE' }
-            ];
+' Use absolute path to WhisperProject Templates folder
+msgPath = "c:\\WhisperProject\\Templates\\zAmp_Verification_Request_ENGLISH.msg"
 
-            // Create dropdown select
-            const select = document.createElement('select');
-            select.style.cssText = 'width: 100%; padding: 12px; font-size: 16px; border: 2px solid #4C799B; border-radius: 8px; margin-bottom: 20px; cursor: pointer; background: white;';
+' Check if template exists
+If Not objFSO.FileExists(msgPath) Then
+    MsgBox "Template not found at: " & msgPath & vbCrLf & vbCrLf & "Please ensure the template exists in the Templates folder.", vbCritical, "Template Not Found"
+    WScript.Quit
+End If
 
-            // Add default option
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Choose a language...';
-            select.appendChild(defaultOption);
+' Create Outlook application object
+Set objOutlook = CreateObject("Outlook.Application")
 
-            // Add language options
-            languages.forEach(lang => {
-                const option = document.createElement('option');
-                option.value = lang.file;
-                option.textContent = `${lang.flag} ${lang.name}`;
-                select.appendChild(option);
-            });
+' Open the MSG template
+Set objMail = objOutlook.CreateItemFromTemplate(msgPath)
 
-            dialog.appendChild(select);
+' Set the recipient email
+objMail.To = "${clientEmail}"
 
-            // Add email input field
-            const emailLabel = document.createElement('label');
-            emailLabel.textContent = 'Client Email (optional):';
-            emailLabel.style.cssText = 'display: block; text-align: left; margin-bottom: 5px; color: #64748b; font-size: 14px;';
-            dialog.appendChild(emailLabel);
+' Get reference to the inspector (email window)
+Dim objInspector
+Set objInspector = objMail.GetInspector
 
-            const emailInput = document.createElement('input');
-            emailInput.type = 'email';
-            emailInput.placeholder = 'Enter or paste client email address';
-            emailInput.value = clientEmail || '';
-            emailInput.style.cssText = 'width: 100%; padding: 12px; font-size: 14px; border: 2px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px; box-sizing: border-box;';
-            dialog.appendChild(emailInput);
+' Display the email
+objMail.Display
 
-            // Button container
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.cssText = 'display: flex; gap: 10px; justify-content: center;';
+' Keep the script running while the email window is open
+' This prevents the email from vanishing when you click Send
+Do While objInspector.IsOpen
+    WScript.Sleep 100
+Loop
 
-            // Create OK button
-            const okBtn = document.createElement('button');
-            okBtn.textContent = 'OK';
-            okBtn.style.cssText = 'padding: 12px 30px; background: #4C799B; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(76, 121, 155, 0.3); transition: all 0.2s;';
-            okBtn.onmouseover = () => okBtn.style.background = '#3d6179';
-            okBtn.onmouseout = () => okBtn.style.background = '#4C799B';
-            okBtn.onclick = () => {
-                const selectedLang = select.value;
-                if (!selectedLang) {
-                    alert('Please select a language');
-                    return;
-                }
-                const langName = languages.find(l => l.file === selectedLang).name;
-                const finalEmail = emailInput.value.trim();
-                document.body.removeChild(overlay);
-                openTemplateWithLanguage(finalEmail, `zAmp and USB Cable Verification - ${selectedLang}.msg`, langName);
-            };
+' Clean up
+Set objInspector = Nothing
+Set objMail = Nothing
+Set objOutlook = Nothing
+Set objFSO = Nothing
+`;
 
-            // Create Cancel button
-            const cancelBtn = document.createElement('button');
-            cancelBtn.textContent = 'Cancel';
-            cancelBtn.style.cssText = 'padding: 12px 30px; background: #e5e7eb; color: #64748b; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; transition: all 0.2s;';
-            cancelBtn.onmouseover = () => cancelBtn.style.background = '#d1d5db';
-            cancelBtn.onmouseout = () => cancelBtn.style.background = '#e5e7eb';
-            cancelBtn.onclick = () => document.body.removeChild(overlay);
-
-            buttonContainer.appendChild(okBtn);
-            buttonContainer.appendChild(cancelBtn);
-            dialog.appendChild(buttonContainer);
-
-            overlay.appendChild(dialog);
-            document.body.appendChild(overlay);
-
-            // Close on overlay click
-            overlay.onclick = (e) => {
-                if (e.target === overlay) {
-                    document.body.removeChild(overlay);
-                }
-            };
-        }
-
-        // Function to open template with selected language
-        function openTemplateWithLanguage(clientEmail, templateFileName, languageLabel) {
-            // Construct the path to the template
-            const templatePath = `Templates/${templateFileName}`;
-
-            // Create a link to open the .msg file directly
+            // Create and download the VBScript
+            const blob = new Blob([vbsScript], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.href = templatePath;
-            link.target = '_blank';
-
-            // Trigger the download/open
+            link.href = url;
+            link.download = 'Open_Verification_Email.vbs';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            URL.revokeObjectURL(url);
 
             // Show instructions
             setTimeout(() => {
-                if (clientEmail) {
-                    alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add recipient: ${clientEmail}\n2. Review the content\n3. Click Send`);
-                } else {
-                    alert(`📧 Opening ${languageLabel} Template\n\nThe email template will open in Outlook.\n\nPlease:\n1. Add the recipient email address\n2. Review the content\n3. Click Send`);
-                }
+                alert(`📧 VBScript Downloaded!\n\nTo send the verification email:\n\n1. Go to your Downloads folder\n2. Double-click: Open_Verification_Email.vbs\n3. Outlook will open with email ready\n   ✓ To: ${clientEmail}\n   ✓ Subject and body pre-filled\n4. Review and click Send\n\nNote: Windows may ask for permission to run the script.`);
             }, 500);
         }
 
@@ -3010,7 +2940,7 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
         function demoAutoFill() {
             // Auto-fill all client information fields with test data
             document.querySelector('input[name="full_name"]').value = 'John Anderson';
-            document.querySelector('select[name="description"]').value = 'NO Code 12001 - zAmp Not Detected';
+            document.querySelector('input[name="description"]').value = 'zAmp connection issues - error code 12001';
             document.querySelector('input[name="email"]').value = 'john.anderson@example.com';
             document.querySelector('input[name="warranty_date"]').value = '2025-12-31';
             document.querySelector('input[name="origin_date"]').value = '2024-10-15';
@@ -3022,11 +2952,11 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
             document.querySelector('input[name="date"]').value = new Date().toISOString().split('T')[0];
             document.querySelector('input[name="pass_status"][value="pass_reg"]').checked = true;
             document.querySelector('select[name="technician"]').value = 'Hank Johnson';
-
+            
             // Trigger the system model change event to show/hide conditional elements
             const event = new Event('change');
             document.querySelector('select[name="system_model"]').dispatchEvent(event);
-
+            
             alert('✅ Demo data loaded!\n\nAll Client Information fields have been populated with test data.');
         }
     </script>
