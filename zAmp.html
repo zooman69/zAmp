@@ -761,7 +761,14 @@
                         </div>
                         <div class="form-group">
                             <label>Description<span class="required">*</span></label>
-                            <input type="text" name="description" required>
+                            <select name="description" required>
+                                <option value="">Select Error Code</option>
+                                <option value="12001 - Disconnected">12001 - Disconnected</option>
+                                <option value="12002 - Connection Lost">12002 - Connection Lost</option>
+                                <option value="12003 - No Response">12003 - No Response</option>
+                                <option value="12004 - Communication Error">12004 - Communication Error</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1319,7 +1326,7 @@
                     <h3 style="font-size: 14pt; margin: 30px 0 15px 0;">Select items that apply:</h3>
 
                     <table class="approval-table">
-                        <tr>
+                        <tr id="zamp-90days-row">
                             <td>Was zAmp purchased within the first 90 days?</td>
                             <td class="checkbox-cell" style="text-align: center;">
                                 <label style="display: inline-block; margin-right: 15px;">
@@ -1649,29 +1656,42 @@
             
             // Check Origin Date and show/hide Replacement Eligibility
             function checkOriginDate() {
-                if (!originDateInput || !replacementEligibilityTable) return;
-                
+                const zamp90daysRow = document.getElementById('zamp-90days-row');
+
+                if (!originDateInput) return;
+
                 const originDate = originDateInput.value;
                 if (!originDate) {
-                    // If no date selected, hide the section
-                    replacementEligibilityTable.style.display = 'none';
+                    // If no date selected, hide the sections
+                    if (replacementEligibilityTable) replacementEligibilityTable.style.display = 'none';
+                    if (zamp90daysRow) zamp90daysRow.style.display = '';
                     return;
                 }
-                
+
                 const selectedDate = new Date(originDate);
                 const today = new Date();
-                
+
                 // Calculate the difference in days
                 const diffTime = today - selectedDate;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
+
                 // Show if 104 days or less, hide if more than 104 days
                 if (diffDays <= 104) {
-                    replacementEligibilityTable.style.display = '';
+                    if (replacementEligibilityTable) replacementEligibilityTable.style.display = '';
+                    // Show the 90-day question when within 104 days
+                    if (zamp90daysRow) zamp90daysRow.style.display = '';
                 } else {
-                    replacementEligibilityTable.style.display = 'none';
-                    // Uncheck checkboxes when hidden
-                    replacementEligibilityTable.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    if (replacementEligibilityTable) {
+                        replacementEligibilityTable.style.display = 'none';
+                        // Uncheck checkboxes when hidden
+                        replacementEligibilityTable.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    }
+                    // Hide the 90-day question when more than 104 days
+                    if (zamp90daysRow) {
+                        zamp90daysRow.style.display = 'none';
+                        // Uncheck radio buttons when hidden
+                        document.querySelectorAll('input[name="zamp_90days"]').forEach(rb => rb.checked = false);
+                    }
                 }
             }
             
@@ -2472,9 +2492,11 @@ Loaners & Exchanges | Zengar Institute Inc.
             }
             
             // REVIEW & SUBMIT VALIDATION
+            const zamp90daysRow = document.getElementById('zamp-90days-row');
             const zamp90days = document.querySelector('input[name="zamp_90days"]:checked');
 
-            if (!zamp90days) {
+            // Only validate if the row is visible
+            if (zamp90daysRow && zamp90daysRow.style.display !== 'none' && !zamp90days) {
                 errors.push('• "Was zAmp purchased within the first 90 days?" (must select Yes or No)');
             }
 
@@ -3136,7 +3158,7 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
         function demoAutoFill() {
             // Auto-fill all client information fields with test data
             document.querySelector('input[name="full_name"]').value = 'John Anderson';
-            document.querySelector('input[name="description"]').value = 'zAmp connection issues - error code 12001';
+            document.querySelector('select[name="description"]').value = '12001 - Disconnected';
             document.querySelector('input[name="email"]').value = 'john.anderson@example.com';
             document.querySelector('input[name="warranty_date"]').value = '2025-12-31';
             document.querySelector('input[name="origin_date"]').value = '2024-10-15';
