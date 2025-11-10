@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemibyJojo - With Auto Scroll</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        /* Inject custom scrolling styles into iframe */
+        #site-frame {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="site-frame" src="femibyjojo.html"></iframe>
+
+    <script>
+        // Wait for iframe to load, then inject custom CSS
+        window.addEventListener('load', function() {
+            const iframe = document.getElementById('site-frame');
+
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+                    // Create style element with scrolling CSS
+                    const style = iframeDoc.createElement('style');
+                    style.textContent = `
+                        /* Custom Left-to-Right Auto Scroll Animation - FAST */
+
+                        @keyframes scrollLeftToRight {
+                            0% {
+                                transform: translateX(0%);
+                            }
+                            100% {
+                                transform: translateX(100%);
+                            }
+                        }
+
+                        @keyframes scrollRightToLeft {
+                            0% {
+                                transform: translateX(0%);
+                            }
+                            100% {
+                                transform: translateX(-100%);
+                            }
+                        }
+
+                        /* Apply scroll to all images, divs, and content containers */
+                        img,
+                        [data-mesh-id] div,
+                        section > div,
+                        [class*="Image"],
+                        [class*="image"],
+                        [id*="comp-"] {
+                            animation: scrollLeftToRight 3s linear infinite !important;
+                            will-change: transform;
+                        }
+
+                        /* Alternate items scroll in opposite direction */
+                        img:nth-of-type(even),
+                        [data-mesh-id] div:nth-child(even),
+                        section > div:nth-child(even) {
+                            animation: scrollRightToLeft 3s linear infinite !important;
+                        }
+
+                        /* Pause animation on hover */
+                        img:hover,
+                        [data-mesh-id] div:hover {
+                            animation-play-state: paused !important;
+                        }
+
+                        /* Ensure containers allow scrolling */
+                        body, #SITE_CONTAINER, #site-root, #PAGES_CONTAINER {
+                            overflow-x: hidden !important;
+                        }
+                    `;
+
+                    // Append the style to iframe head
+                    iframeDoc.head.appendChild(style);
+
+                    console.log('Custom scroll CSS injected successfully!');
+                } catch (e) {
+                    console.error('Could not inject CSS into iframe:', e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

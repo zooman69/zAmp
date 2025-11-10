@@ -1,0 +1,52 @@
+/* Custom Left-to-Right Auto Scroll Animation */
+
+@keyframes scrollLeftToRight {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes scrollRightToLeft {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Apply scroll to gallery items, images, and content containers */
+[data-mesh-id*="gallery"] > *,
+[class*="gallery"] > *,
+[class*="strip"] > *,
+section > div > div > img,
+[data-mesh-id*="WRichText"] {
+    animation: scrollLeftToRight 15s linear infinite;
+}
+
+/* Alternate rows scroll in opposite direction */
+[data-mesh-id*="gallery"] > *:nth-child(even),
+[class*="gallery"] > *:nth-child(even) {
+    animation: scrollRightToLeft 15s linear infinite;
+}
+
+/* Pause animation on hover */
+[data-mesh-id*="gallery"] > *:hover,
+[class*="gallery"] > *:hover,
+section > div > div > img:hover {
+    animation-play-state: paused;
+}
+
+/* Make sure overflow is visible for scrolling effect */
+body {
+    overflow-x: hidden;
+}
+
+#PAGES_CONTAINER,
+#SITE_PAGES,
+section {
+    overflow-x: hidden;
+}

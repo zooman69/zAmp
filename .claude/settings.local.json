@@ -21,7 +21,12 @@
       "Bash(git rm:*)",
       "Bash(powershell:*)",
       "Bash(start \"\" \"c:\\WhisperProject\\zAmp\\Templates\\zAmp and USB Cable Verification - ENGLISH.msg\")",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "Bash(python clone-site.py:*)",
+      "Bash(start \"\" \"http://localhost:8082/viewer.html\")",
+      "Bash(start \"\" \"http://localhost:8082/index.html\")",
+      "Bash(start \"\" \"http://localhost:8082/zAmp.html\")",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []

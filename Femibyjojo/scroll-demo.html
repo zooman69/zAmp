@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling Demo - FemibyJojo Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .scroll-section {
+            margin: 40px 0;
+            overflow: hidden;
+            position: relative;
+            height: 300px;
+        }
+
+        .scroll-items {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .item {
+            min-width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .item:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .item:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .item:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .item:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        /* Scrolling Animation - Continuous Loop */
+        @keyframes scrollLeft {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes scrollRight {
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Duplicate items for seamless loop */
+        .scroll-left .scroll-items {
+            animation: scrollLeft 10s linear infinite;
+            width: max-content;
+        }
+
+        .scroll-right .scroll-items {
+            animation: scrollRight 10s linear infinite;
+            width: max-content;
+        }
+
+        .scroll-items:hover {
+            animation-play-state: paused;
+        }
+
+        /* Make boxes themselves move */
+        .item {
+            animation: none !important;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 0 10px;
+            font-size: 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        .speed-control {
+            margin: 20px 0;
+        }
+
+        .speed-control label {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .speed-control input {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Auto-Scrolling Content Demo</h1>
+
+        <div class="controls">
+            <div class="speed-control">
+                <label for="speed">Scroll Speed (seconds): <span id="speedValue">10</span></label>
+                <input type="range" id="speed" min="2" max="30" value="10">
+            </div>
+            <button onclick="location.reload()">Reset</button>
+        </div>
+
+        <h2 style="text-align: center; margin: 20px 0; color: #666;">Scrolling Left ←</h2>
+        <div class="scroll-section scroll-left">
+            <div class="scroll-items">
+                <div class="item">Item 1</div>
+                <div class="item">Item 2</div>
+                <div class="item">Item 3</div>
+                <div class="item">Item 4</div>
+                <div class="item">Item 5</div>
+                <div class="item">Item 1</div>
+                <div class="item">Item 2</div>
+                <div class="item">Item 3</div>
+            </div>
+        </div>
+
+        <h2 style="text-align: center; margin: 20px 0; color: #666;">Scrolling Right →</h2>
+        <div class="scroll-section scroll-right">
+            <div class="scroll-items">
+                <div class="item">Item A</div>
+                <div class="item">Item B</div>
+                <div class="item">Item C</div>
+                <div class="item">Item D</div>
+                <div class="item">Item E</div>
+                <div class="item">Item A</div>
+                <div class="item">Item B</div>
+                <div class="item">Item C</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f0f0f0; border-radius: 10px;">
+            <p style="font-size: 14px; color: #666;">
+                ℹ️ Hover over items to pause the animation<br>
+                This demonstrates the left-to-right scrolling effect you can apply to your FemibyJojo site
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const speedSlider = document.getElementById('speed');
+        const speedValue = document.getElementById('speedValue');
+        const scrollSections = document.querySelectorAll('.scroll-items');
+
+        speedSlider.addEventListener('input', function() {
+            const speed = this.value;
+            speedValue.textContent = speed;
+
+            scrollSections.forEach(section => {
+                section.style.animationDuration = speed + 's';
+            });
+        });
+    </script>
+</body>
+</html>
