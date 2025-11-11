@@ -764,13 +764,14 @@
                             <input type="text" name="full_name" required>
                         </div>
                         <div class="form-group">
-                            <label>Error code<span class="required">*</span></label>
+                            <label>Description<span class="required">*</span></label>
                             <select name="description" required>
                                 <option value="">Select Error Code</option>
-                                <option value="12001 - zAmp Not Detected">12001 - zAmp Not Detected</option>
-                                <option value="12002 - zAmp Connection Lost (Session)">12002 - zAmp Connection Lost (Session)</option>
-                                <option value="12004 - zAmp Connection Lost (during Device Tests)">12004 - zAmp Connection Lost (during Device Tests)</option>
-                                <option value="Other - See Notes">Other - See Notes</option>
+                                <option value="12001 - Disconnected">12001 - Disconnected</option>
+                                <option value="12002 - Connection Lost">12002 - Connection Lost</option>
+                                <option value="12003 - No Response">12003 - No Response</option>
+                                <option value="12004 - Communication Error">12004 - Communication Error</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                     </div>
@@ -1249,7 +1250,7 @@
                         <!-- Sample Images Grid -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/null.png"
+                                <img src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/zAmp%20verification"
                                      alt="Sample zAmp Verification"
                                      style="width: 100%; height: auto; border-radius: 4px; display: block;">
                                 <div style="text-align: center; margin-top: 8px; font-size: 11px; color: #64748b; font-weight: 600;">
@@ -2579,7 +2580,7 @@ Loaners & Exchanges | Zengar Institute Inc.
             const technician = document.querySelector('select[name="technician"]').value;
             
             if (!fullName) errors.push('• Full Name');
-            if (!description) errors.push('• Error code');
+            if (!description) errors.push('• Description of Issue');
             if (!email) errors.push('• Email');
             if (!warrantyDate) errors.push('• Warranty Expiration Date');
             if (!originDate) errors.push('• Origin Date');
@@ -3318,7 +3319,7 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
         function demoAutoFill() {
             // Auto-fill all client information fields with test data
             document.querySelector('input[name="full_name"]').value = 'John Anderson';
-            document.querySelector('select[name="description"]').value = '12001 - zAmp Not Detected';
+            document.querySelector('select[name="description"]').value = '12001 - Disconnected';
             document.querySelector('input[name="email"]').value = 'john.anderson@example.com';
             document.querySelector('input[name="warranty_date"]').value = '2025-12-31';
             document.querySelector('input[name="origin_date"]').value = '2024-10-15';
