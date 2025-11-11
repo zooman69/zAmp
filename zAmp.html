@@ -505,13 +505,12 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
             animation: fadeIn 0.3s;
+            align-items: center;
+            justify-content: center;
         }
 
         .image-modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
             padding: 0;
             width: 90%;
             max-width: 800px;
@@ -571,10 +570,12 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease;
+            align-items: center;
+            justify-content: center;
         }
 
         .language-modal.show {
-            display: block;
+            display: flex;
         }
 
         @keyframes fadeIn {
@@ -584,10 +585,7 @@
 
         .language-modal-content {
             background-color: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
             padding: 0;
             border-radius: 12px;
             width: 90%;
@@ -599,11 +597,11 @@
 
         @keyframes slideIn {
             from {
-                transform: translate(-50%, calc(-50% - 50px));
+                transform: translateY(-50px);
                 opacity: 0;
             }
             to {
-                transform: translate(-50%, -50%);
+                transform: translateY(0);
                 opacity: 1;
             }
         }
@@ -1969,7 +1967,7 @@
             surfaceUsbYesCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     if (this.checked) {
-                        document.getElementById('surfaceUsbModal').style.display = 'block';
+                        document.getElementById('surfaceUsbModal').style.display = 'flex';
                     }
                 });
             });
