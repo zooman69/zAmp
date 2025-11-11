@@ -877,6 +877,24 @@
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
+                            <!-- Surface Book 2 Setup Image -->
+                            <div id="sb2-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Book 2 Setup Guide</h4>
+                                <img id="sb2-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/SB2.jpg"
+                                     alt="Surface Book 2 Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
+                            <!-- ASUS ExpertBook Setup Image -->
+                            <div id="eb3-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">ASUS ExpertBook Setup Guide</h4>
+                                <img id="eb3-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/EB3.jpg"
+                                     alt="ASUS ExpertBook Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1575,6 +1593,8 @@
             const slg3SetupImage = document.getElementById('slg3-setup-image');
             const asusSetupImage = document.getElementById('asus-setup-image');
             const surfaceSetupImage = document.getElementById('surface-setup-image');
+            const sb2SetupImage = document.getElementById('sb2-setup-image');
+            const eb3SetupImage = document.getElementById('eb3-setup-image');
 
             function updateVisibility() {
                 const selectedValue = systemModelSelect.value;
@@ -1643,6 +1663,30 @@
                         surfaceSetupImage.style.display = 'block';
                     } else {
                         surfaceSetupImage.style.display = 'none';
+                    }
+                }
+
+                // Surface Book 2 Setup Image visibility
+                if (sb2SetupImage) {
+                    const sb2ModelsForImage = [
+                        'Surface Book 2 i5 8GB',
+                        'Surface Book 2.5 i5 8GB',
+                        'Surface Book 2.5 i7 8GB'
+                    ];
+
+                    if (sb2ModelsForImage.includes(selectedValue)) {
+                        sb2SetupImage.style.display = 'block';
+                    } else {
+                        sb2SetupImage.style.display = 'none';
+                    }
+                }
+
+                // ASUS ExpertBook Setup Image visibility
+                if (eb3SetupImage) {
+                    if (selectedValue === 'ASUS EXPERTBOOK B3402FVA') {
+                        eb3SetupImage.style.display = 'block';
+                    } else {
+                        eb3SetupImage.style.display = 'none';
                     }
                 }
 
@@ -1829,6 +1873,28 @@
                 if (surfaceImage) {
                     surfaceImage.style.cursor = 'pointer';
                     surfaceImage.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                }
+            }
+
+            // Add click handler for Surface Book 2 setup image
+            if (sb2SetupImage) {
+                const sb2Image = document.getElementById('sb2-image');
+                if (sb2Image) {
+                    sb2Image.style.cursor = 'pointer';
+                    sb2Image.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                }
+            }
+
+            // Add click handler for ASUS ExpertBook setup image
+            if (eb3SetupImage) {
+                const eb3Image = document.getElementById('eb3-image');
+                if (eb3Image) {
+                    eb3Image.style.cursor = 'pointer';
+                    eb3Image.addEventListener('click', function() {
                         window.open(this.src, '_blank');
                     });
                 }
