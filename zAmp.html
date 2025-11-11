@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>zAmp Checklist & Exchange Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -62,6 +65,7 @@
             color: white;
             font-size: 32pt;
             font-weight: normal;
+            font-family: 'Open Sans', sans-serif;
             margin-bottom: 15px;
             position: relative;
             z-index: 1;
@@ -855,6 +859,15 @@
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
+                            <!-- ASUS Setup Image -->
+                            <div id="asus-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">ASUS System Setup Guide</h4>
+                                <img id="asus-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/ASUS.jpg"
+                                     alt="ASUS System Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1551,6 +1564,7 @@
             const replacementEligibilityTable = document.querySelector('.replacement-eligibility');
             const sp9SetupImage = document.getElementById('sp9-setup-image');
             const slg3SetupImage = document.getElementById('slg3-setup-image');
+            const asusSetupImage = document.getElementById('asus-setup-image');
 
             function updateVisibility() {
                 const selectedValue = systemModelSelect.value;
@@ -1570,6 +1584,30 @@
                         slg3SetupImage.style.display = 'block';
                     } else {
                         slg3SetupImage.style.display = 'none';
+                    }
+                }
+
+                // ASUS Setup Image visibility (all ASUS models except EXPERTBOOK)
+                if (asusSetupImage) {
+                    const asusModelsForImage = [
+                        'ASUS S500CA-DS51T-CA',
+                        'ASUS S500CA-DS71T-CA',
+                        'ASUS S550CA-QW51-CB',
+                        'ASUS S551LA-DS51T-CA',
+                        'ASUS S551LA-QS52T-CB',
+                        'ASUS TP500LA-DB51T-CA',
+                        'ASUS TP500LA-WH51T(WX)',
+                        'ASUS TP500LA-WH71T (WX)',
+                        'ASUS TP500LN-DB51T-CA',
+                        'ASUS TP501UA-SS51T',
+                        'ASUS TP550LA-QB52T-CB',
+                        'ASUS Zen AiO Pro Z240'
+                    ];
+
+                    if (asusModelsForImage.includes(selectedValue)) {
+                        asusSetupImage.style.display = 'block';
+                    } else {
+                        asusSetupImage.style.display = 'none';
                     }
                 }
 
@@ -1734,6 +1772,17 @@
                 if (slg3Image) {
                     slg3Image.style.cursor = 'pointer';
                     slg3Image.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                }
+            }
+
+            // Add click handler for ASUS setup image
+            if (asusSetupImage) {
+                const asusImage = document.getElementById('asus-image');
+                if (asusImage) {
+                    asusImage.style.cursor = 'pointer';
+                    asusImage.addEventListener('click', function() {
                         window.open(this.src, '_blank');
                     });
                 }
