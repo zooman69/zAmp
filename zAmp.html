@@ -508,13 +508,13 @@
         }
 
         .image-modal-content {
-            position: relative;
-            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             padding: 0;
             width: 90%;
             max-width: 800px;
-            top: 50%;
-            transform: translateY(-50%);
         }
 
         .image-modal-image {
@@ -584,7 +584,10 @@
 
         .language-modal-content {
             background-color: white;
-            margin: 10% auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             padding: 0;
             border-radius: 12px;
             width: 90%;
@@ -596,11 +599,11 @@
 
         @keyframes slideIn {
             from {
-                transform: translateY(-50px);
+                transform: translate(-50%, calc(-50% - 50px));
                 opacity: 0;
             }
             to {
-                transform: translateY(0);
+                transform: translate(-50%, -50%);
                 opacity: 1;
             }
         }
