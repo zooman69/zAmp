@@ -868,6 +868,15 @@
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
+                            <!-- Surface Pro 3-7 Setup Image -->
+                            <div id="surface-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Pro Setup Guide</h4>
+                                <img id="surface-image"
+                                     src="https://raw.githubusercontent.com/zooman69/zAmp/main/Images/Surface.jpg"
+                                     alt="Surface Pro Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1565,6 +1574,7 @@
             const sp9SetupImage = document.getElementById('sp9-setup-image');
             const slg3SetupImage = document.getElementById('slg3-setup-image');
             const asusSetupImage = document.getElementById('asus-setup-image');
+            const surfaceSetupImage = document.getElementById('surface-setup-image');
 
             function updateVisibility() {
                 const selectedValue = systemModelSelect.value;
@@ -1608,6 +1618,31 @@
                         asusSetupImage.style.display = 'block';
                     } else {
                         asusSetupImage.style.display = 'none';
+                    }
+                }
+
+                // Surface Pro 3-7 Setup Image visibility
+                if (surfaceSetupImage) {
+                    const surfaceModelsForImage = [
+                        'Surface Pro 3 i5 8GB',
+                        'Surface Pro 4 i5 4GB',
+                        'Surface Pro 4 i5 8GB',
+                        'Surface Pro 4 i7 8GB',
+                        'Surface Pro 5 i5 4GB',
+                        'Surface Pro 5 i5 8GB',
+                        'Surface Pro 5 i7 8GB',
+                        'Surface Pro 6 i5 8GB',
+                        'Surface Pro 6 i7 8GB',
+                        'Surface Pro 7 i5 8GB',
+                        'Surface Pro 7 i7 16GB',
+                        'Surface Pro 7+ i5 8GB',
+                        'Surface Pro 7+ i7 16GB'
+                    ];
+
+                    if (surfaceModelsForImage.includes(selectedValue)) {
+                        surfaceSetupImage.style.display = 'block';
+                    } else {
+                        surfaceSetupImage.style.display = 'none';
                     }
                 }
 
@@ -1783,6 +1818,17 @@
                 if (asusImage) {
                     asusImage.style.cursor = 'pointer';
                     asusImage.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                }
+            }
+
+            // Add click handler for Surface Pro 3-7 setup image
+            if (surfaceSetupImage) {
+                const surfaceImage = document.getElementById('surface-image');
+                if (surfaceImage) {
+                    surfaceImage.style.cursor = 'pointer';
+                    surfaceImage.addEventListener('click', function() {
                         window.open(this.src, '_blank');
                     });
                 }
