@@ -709,12 +709,11 @@
                     <div id="clientEmailText" style="font-size: 14px; color: #18325B; font-weight: 600; word-break: break-all;"></div>
                 </div>
                 <select id="languageDropdown" class="language-dropdown">
-                    <option value="ENGLISH">🇬🇧 English</option>
-                    <option value="FRENCH">🇫🇷 Français</option>
-                    <option value="SPANISH">🇪🇸 Español</option>
-                    <option value="ITALIAN">🇮🇹 Italiano</option>
-                    <option value="PORTUGUESE">🇵🇹 Português</option>
-                    <option value="DUTCH">🇳🇱 Nederlands</option>
+                    <option value="ENGLISH">English</option>
+                    <option value="FRENCH">French</option>
+                    <option value="SPANISH">Spanish</option>
+                    <option value="ITALIAN">Italian</option>
+                    <option value="DUTCH">Dutch</option>
                 </select>
                 <div class="modal-buttons">
                     <button onclick="closeLanguageModal()" class="modal-cancel-btn">Cancel</button>
@@ -860,6 +859,15 @@
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
+                            <!-- Surface Laptop Setup Image -->
+                            <div id="surface-laptop-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
+                                <h4 style="margin: 0 0 10px 0; color: #18325B;">Surface Laptop Setup Guide</h4>
+                                <img id="surface-laptop-img"
+                                     src="Images/Surface Laptop.jpg"
+                                     alt="Surface Laptop Setup"
+                                     style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
+                            </div>
                             <!-- ASUS Setup Image -->
                             <div id="asus-setup-image" class="no-export" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border: 2px solid #4C799B; border-radius: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #18325B;">ASUS System Setup Guide</h4>
@@ -896,6 +904,20 @@
                                      style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                 <p style="margin-top: 10px; font-size: 9pt; color: #666; font-style: italic;">Click image to open in new tab</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Send Verification</label>
+                            <select id="verificationLanguageDropdown" onchange="sendVerificationEmailQuick(this.value); this.value='';">
+                                <option value="">Select Language</option>
+                                <option value="ENGLISH">English</option>
+                                <option value="FRENCH">French</option>
+                                <option value="SPANISH">Spanish</option>
+                                <option value="ITALIAN">Italian</option>
+                                <option value="DUTCH">Dutch</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1104,6 +1126,12 @@
                                 <td class="checkbox-cell"><input type="radio" name="question_11" value="yes"></td>
                                 <td class="checkbox-cell"><input type="radio" name="question_11" value="no"></td>
                                 <td class="checkbox-cell"><input type="radio" name="question_11" value="na"></td>
+                            </tr>
+                            <tr class="sp9-sp10-only" style="display: none;">
+                                <td class="description">Try spare add-on adapter?</td>
+                                <td class="checkbox-cell"><input type="radio" name="question_spare_adapter" value="yes"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_spare_adapter" value="no"></td>
+                                <td class="checkbox-cell"><input type="radio" name="question_spare_adapter" value="na"></td>
                             </tr>
                             <tr>
                                 <td class="description">Tried zAmp with another system?</td>
@@ -1409,11 +1437,12 @@
                         <tr>
                             <td>Emailed client about new zAmp Advanced Exchange policy<span class="required">*</span></td>
                             <td class="checkbox-cell"><input type="checkbox" name="emailed_advanced_exchange"></td>
-                            <td style="width: 150px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendAdvancedExchangeEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendAdvancedExchangeEmail('french')">FRENCH</button>
-                                </div>
+                            <td style="width: 200px;">
+                                <select onchange="if(this.value) {sendAdvancedExchangeEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1456,11 +1485,12 @@
                         <tr>
                             <td>Within First 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-90days"></td>
-                            <td style="width: 150px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendWithin90DaysEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendWithin90DaysEmail('french')">FRENCH</button>
-                                </div>
+                            <td style="width: 200px;">
+                                <select onchange="if(this.value) {sendWithin90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1469,11 +1499,12 @@
                         <tr>
                             <td>After 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
-                            <td style="width: 150px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendAfter90DaysEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendAfter90DaysEmail('french')">FRENCH</button>
-                                </div>
+                            <td style="width: 200px;">
+                                <select onchange="if(this.value) {sendAfter90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1482,11 +1513,12 @@
                         <tr>
                             <td>After 90 days Expired zAmp warranty - System covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
-                            <td style="width: 150px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendPASSCoveredEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendPASSCoveredEmail('french')">FRENCH</button>
-                                </div>
+                            <td style="width: 200px;">
+                                <select onchange="if(this.value) {sendPASSCoveredEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1495,11 +1527,12 @@
                         <tr>
                             <td>Expired zAmp warranty - System NOT covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-not-covered"></td>
-                            <td style="width: 150px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendOutOfWarrantyEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendOutOfWarrantyEmail('french')">FRENCH</button>
-                                </div>
+                            <td style="width: 200px;">
+                                <select onchange="if(this.value) {sendOutOfWarrantyEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1602,10 +1635,12 @@
             const addonAdapterContainer = document.querySelector('.checkbox-label:has(input[name="addon_adapter"])');
             const sb2Rows = document.querySelectorAll('.sb2-only');
             const asusRows = document.querySelectorAll('.asus-only');
+            const sp9Sp10Rows = document.querySelectorAll('.sp9-sp10-only');
             const originDateInput = document.querySelector('input[name="origin_date"]');
             const replacementEligibilityTable = document.querySelector('.replacement-eligibility');
             const sp9SetupImage = document.getElementById('sp9-setup-image');
             const slg3SetupImage = document.getElementById('slg3-setup-image');
+            const surfaceLaptopSetupImage = document.getElementById('surface-laptop-image');
             const asusSetupImage = document.getElementById('asus-setup-image');
             const surfaceSetupImage = document.getElementById('surface-setup-image');
             const sb2SetupImage = document.getElementById('sb2-setup-image');
@@ -1629,6 +1664,15 @@
                         slg3SetupImage.style.display = 'block';
                     } else {
                         slg3SetupImage.style.display = 'none';
+                    }
+                }
+
+                // Surface Laptop Setup Image visibility
+                if (surfaceLaptopSetupImage) {
+                    if (selectedValue === 'Surface Laptop i7 8GB') {
+                        surfaceLaptopSetupImage.style.display = 'block';
+                    } else {
+                        surfaceLaptopSetupImage.style.display = 'none';
                     }
                 }
 
@@ -1766,6 +1810,22 @@
                     }
                 });
 
+                // SP9/SP10 rows visibility
+                const sp9Sp10Models = [
+                    'Surface Pro 9 i5 8GB',
+                    'Surface Pro 10 CU5 8GB'
+                ];
+
+                sp9Sp10Rows.forEach(row => {
+                    if (sp9Sp10Models.includes(selectedValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                        // Uncheck radio buttons when hidden
+                        row.querySelectorAll('input[type="radio"]').forEach(rb => rb.checked = false);
+                    }
+                });
+
                 // Hide all rows containing "surface" when ASUS is selected
                 const allChecklistRows = document.querySelectorAll('.checklist-table tbody tr');
                 allChecklistRows.forEach(row => {
@@ -1841,12 +1901,28 @@
             }
             
             if (originDateInput) {
+                const usbAgeInput = document.querySelector('input[name="usb_age"]');
+
+                // Function to sync USB age with origin date
+                function syncUsbAge() {
+                    if (usbAgeInput && originDateInput.value && !usbAgeInput.value) {
+                        usbAgeInput.value = originDateInput.value;
+                    }
+                }
+
                 // Set up event listener for origin date changes
-                originDateInput.addEventListener('change', checkOriginDate);
-                originDateInput.addEventListener('input', checkOriginDate);
+                originDateInput.addEventListener('change', function() {
+                    checkOriginDate();
+                    syncUsbAge();
+                });
+                originDateInput.addEventListener('input', function() {
+                    checkOriginDate();
+                    syncUsbAge();
+                });
 
                 // Run initial check
                 checkOriginDate();
+                syncUsbAge();
             }
 
             // Add click handler for SP9 setup image
@@ -1866,6 +1942,17 @@
                 if (slg3Image) {
                     slg3Image.style.cursor = 'pointer';
                     slg3Image.addEventListener('click', function() {
+                        window.open(this.src, '_blank');
+                    });
+                }
+            }
+
+            // Add click handler for Surface Laptop setup image
+            if (surfaceLaptopSetupImage) {
+                const surfaceLaptopImg = document.getElementById('surface-laptop-img');
+                if (surfaceLaptopImg) {
+                    surfaceLaptopImg.style.cursor = 'pointer';
+                    surfaceLaptopImg.addEventListener('click', function() {
                         window.open(this.src, '_blank');
                     });
                 }
@@ -2364,11 +2451,87 @@ Loaners & Exchanges | Zengar Institute Inc.
             // Get language name for display
             const languageNames = {
                 'ENGLISH': 'English',
-                'FRENCH': 'Français',
-                'SPANISH': 'Español',
-                'ITALIAN': 'Italiano',
-                'PORTUGUESE': 'Português',
-                'DUTCH': 'Nederlands'
+                'FRENCH': 'French',
+                'SPANISH': 'Spanish',
+                'ITALIAN': 'Italian',
+                'DUTCH': 'Dutch'
+            };
+
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
+
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+
+                    // Trigger download
+                    link.click();
+
+                    // Clean up
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    }, 100);
+
+                    // Show instructions
+                    setTimeout(() => {
+                        alert(`📧 Email Template Downloaded!\n\n` +
+                              `Language: ${languageNames[language]}\n` +
+                              `Client Email: ${clientEmail}\n\n` +
+                              `The template has been downloaded to your Downloads folder.\n\n` +
+                              `Next Steps:\n` +
+                              `1. Go to your Downloads folder\n` +
+                              `2. Double-click: ${templateFileName}\n` +
+                              `3. Classic Outlook will open with the template\n` +
+                              `4. Add the client email to the "To" field\n` +
+                              `5. Review and click Send\n\n` +
+                              `Note: The file opens in Classic Outlook, not New Outlook.`);
+                    }, 200);
+                })
+                .catch(error => {
+                    alert(`⚠️ Error Downloading Template\n\n` +
+                          `Could not download ${languageNames[language]} template from GitHub.\n\n` +
+                          `Error: ${error.message}\n\n` +
+                          `Please check your internet connection or contact support.`);
+                    console.error('Template download error:', error);
+                });
+        }
+
+        // Function to send verification email directly from dropdown (quick send)
+        function sendVerificationEmailQuick(language) {
+            if (!language) return; // Don't do anything if "Select Language" is chosen
+
+            // Get the email from the form
+            const clientEmail = document.querySelector('input[name="email"]').value.trim();
+
+            if (!clientEmail) {
+                alert('⚠️ Please enter the client email address first.');
+                return;
+            }
+
+            // Map language to template filename
+            const templateFileName = `zAmp and USB Cable Verification - ${language}.msg`;
+
+            // Get language name for display
+            const languageNames = {
+                'ENGLISH': 'English',
+                'FRENCH': 'French',
+                'SPANISH': 'Spanish',
+                'ITALIAN': 'Italian',
+                'DUTCH': 'Dutch'
             };
 
             // Download template from GitHub repository with cache busting
@@ -2653,7 +2816,7 @@ Loaners & Exchanges | Zengar Institute Inc.
                 scripts.forEach(script => script.remove());
 
                 // Add minimal script for warranty email buttons and approver submit to work in exported HTML
-                const newScript = clonedDoc.createElement('script');
+                const newScript = document.createElement('script');
                 newScript.textContent =
                     'function sendWithin90DaysEmail(language) {' +
                     '    const templateFileName = language === "french" ? "Within first 90 days  - FRENCH.msg" : "Within first 90 days  - ENGLISH.msg";' +
@@ -2821,7 +2984,7 @@ Description of issue: ${description}
                 
             } catch (error) {
                 console.error('Error generating HTML:', error);
-                alert('❌ Error generating HTML file. Please try again or contact support.');
+                alert('❌ Error generating HTML file:\n\n' + error.message + '\n\nStack: ' + error.stack + '\n\nPlease try again or contact support.');
             }
         }
         
@@ -2949,7 +3112,7 @@ Description of issue: ${description}
                 scripts.forEach(script => script.remove());
 
                 // Add minimal script for warranty email buttons and approver submit to work in exported HTML
-                const newScript = clonedDoc.createElement('script');
+                const newScript = document.createElement('script');
                 newScript.textContent =
                     'function sendWithin90DaysEmail(language) {' +
                     '    const templateFileName = language === "french" ? "Within first 90 days  - FRENCH.msg" : "Within first 90 days  - ENGLISH.msg";' +
@@ -3113,7 +3276,7 @@ Description of issue: ${description || 'N/A'}
                 
             } catch (error) {
                 console.error('Error generating HTML:', error);
-                alert('❌ Error generating HTML file. Please try again or contact support.');
+                alert('❌ Error generating HTML file:\n\n' + error.message + '\n\nStack: ' + error.stack + '\n\nPlease try again or contact support.');
             } finally {
                 // Restore button
                 originalButton.disabled = false;
@@ -3315,7 +3478,7 @@ zAmp# ${zampNumber} is ready. Please send waybill. Thanks.`;
 
             } catch (error) {
                 console.error('Error generating HTML:', error);
-                alert('❌ Error generating HTML file. Please try again or contact support.');
+                alert('❌ Error generating HTML file:\n\n' + error.message + '\n\nStack: ' + error.stack + '\n\nPlease try again or contact support.');
             }
         }
 

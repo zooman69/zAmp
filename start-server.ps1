@@ -1,5 +1,5 @@
 # Simple HTTP Server for zAmp
-$port = 8000
+$port = 5000
 $url = "http://localhost:$port/zAmp.html"
 
 Write-Host "Starting web server on port $port..." -ForegroundColor Green
