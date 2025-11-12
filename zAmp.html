@@ -2639,9 +2639,14 @@ Loaners & Exchanges | Zengar Institute Inc.
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone
+                // Remove all buttons from clone except warranty scenario buttons
                 const buttons = clonedDoc.querySelectorAll('button');
-                buttons.forEach(btn => btn.remove());
+                buttons.forEach(btn => {
+                    // Keep warranty scenario language buttons (btn-lang class)
+                    if (!btn.classList.contains('btn-lang')) {
+                        btn.remove();
+                    }
+                });
 
                 // Remove all scripts from clone to prevent functionality
                 const scripts = clonedDoc.querySelectorAll('script');
@@ -2867,9 +2872,14 @@ Description of issue: ${description}
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone
+                // Remove all buttons from clone except warranty scenario buttons
                 const buttons = clonedDoc.querySelectorAll('button');
-                buttons.forEach(btn => btn.remove());
+                buttons.forEach(btn => {
+                    // Keep warranty scenario language buttons (btn-lang class)
+                    if (!btn.classList.contains('btn-lang')) {
+                        btn.remove();
+                    }
+                });
 
                 // Remove all scripts from clone to prevent functionality
                 const scripts = clonedDoc.querySelectorAll('script');
@@ -3071,9 +3081,14 @@ Description of issue: ${description || 'N/A'}
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone
+                // Remove all buttons from clone except warranty scenario buttons
                 const buttons = clonedDoc.querySelectorAll('button');
-                buttons.forEach(btn => btn.remove());
+                buttons.forEach(btn => {
+                    // Keep warranty scenario language buttons (btn-lang class)
+                    if (!btn.classList.contains('btn-lang')) {
+                        btn.remove();
+                    }
+                });
 
                 // Remove all scripts from clone
                 const scripts = clonedDoc.querySelectorAll('script');
