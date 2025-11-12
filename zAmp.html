@@ -1505,7 +1505,7 @@
                     </table>
 
                     <div class="button-group">
-                        <button class="btn btn-primary" type="button" onclick="approverSubmit()" style="background: #4C799B; border-color: #4C799B;">Approver Submit</button>
+                        <button class="btn btn-primary btn-approver-submit" type="button" onclick="approverSubmit()" style="background: #4C799B; border-color: #4C799B;">Approver Submit</button>
                     </div>
                 </div>
 
@@ -2639,11 +2639,11 @@ Loaners & Exchanges | Zengar Institute Inc.
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone except warranty scenario buttons
+                // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class)
-                    if (!btn.classList.contains('btn-lang')) {
+                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
                         btn.remove();
                     }
                 });
@@ -2872,11 +2872,11 @@ Description of issue: ${description}
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone except warranty scenario buttons
+                // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class)
-                    if (!btn.classList.contains('btn-lang')) {
+                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
                         btn.remove();
                     }
                 });
@@ -3081,11 +3081,11 @@ Description of issue: ${description || 'N/A'}
                     if (demoSection) demoSection.remove();
                 }
 
-                // Remove all buttons from clone except warranty scenario buttons
+                // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class)
-                    if (!btn.classList.contains('btn-lang')) {
+                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
                         btn.remove();
                     }
                 });
