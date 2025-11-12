@@ -2148,322 +2148,170 @@ Loaners & Exchanges | Zengar Institute Inc.
         
         // Function to send Within 90 Days email
         function sendWithin90DaysEmail(language) {
-            // Get client information
-            const fullName = document.querySelector('input[name="full_name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
-            
-            if (!fullName || !email) {
-                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
-                return;
-            }
-            
-            if (!zampNumber) {
-                alert('Please fill in the zAmp# field in the Client Information section.');
-                return;
-            }
-            
-            // Remind user to check From address
-            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
-            
-            // Extract first name (everything before the first space)
-            const firstName = fullName.split(' ')[0];
-            
-            let subject, body;
-            
-            if (language === 'french') {
-                // French email
-                subject = `zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp dans les 90 jours`;
-                
-                body = `Bonjour ${firstName},
+            // Map language to template filename
+            const templateFileName = language === 'french'
+                ? 'Within first 90 days  - FRENCH.msg'
+                : 'Within first 90 days  - ENGLISH.msg';
 
-Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans les 90 premiers jours de garantie. Vous êtes donc éligible à un remplacement neuf gratuit Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
 
-Le lien ci-dessous contient toutes les instructions et les éléments nécessaires pour compléter votre demande.
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
 
-Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+                    // Trigger download
+                    link.click();
 
-Cordialement,
-L'équipe Zengar
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
 
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-                
-            } else {
-                // English email
-                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement Within 90 Days`;
-                
-                body = `Hello ${firstName},
-
-Good news! Your zAmp# ${zampNumber} is still within the first 90 days of warranty, you're eligible for a brand-new replacement. Please click on this link to link for detailed instructions and everything you need to initiate the exchange: Advanced Exchange Program.
-
-If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
-
-Kind regards,
-The Zengar® Team
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
-
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-            }
-            
-            // BCC addresses
-            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
-            
-            // Create mailto link with BCC
-            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
-            
-            // Open default email client
-            window.location.href = mailtoLink;
+                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
+                })
+                .catch(error => {
+                    console.error('Error downloading template:', error);
+                    alert('Error downloading email template. Please try again or contact support.');
+                });
         }
         
         // Function to send After 90 Days email
         function sendAfter90DaysEmail(language) {
-            // Get client information
-            const fullName = document.querySelector('input[name="full_name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
-            
-            if (!fullName || !email) {
-                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
-                return;
-            }
-            
-            if (!zampNumber) {
-                alert('Please fill in the zAmp# field in the Client Information section.');
-                return;
-            }
-            
-            // Remind user to check From address
-            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
-            
-            // Extract first name (everything before the first space)
-            const firstName = fullName.split(' ')[0];
-            
-            let subject, body;
-            
-            if (language === 'french') {
-                // French email
-                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp après 90 jours et dans la période de garantie originale`;
-                
-                body = `Bonjour ${firstName},
+            // Map language to template filename
+            const templateFileName = language === 'french'
+                ? 'After 90 Days - FRENCH.msg'
+                : 'After 90 Days - ENGLISH.msg';
 
-Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans sa période de garantie originale. Vous êtes donc éligible à un remplacement par un zAmp remis à neuf certifié. Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
 
-Le lien ci-dessous contient des instructions détaillées ainsi que tout ce dont vous avez besoin pour soumettre votre demande d'échange.
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
 
-Cordialement,
-L'équipe Zengar
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
+                    // Trigger download
+                    link.click();
 
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-                
-            } else {
-                // English email
-                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement after 90 days and within original warranty`;
-                
-                body = `Hello ${firstName},
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
 
-Good news! Your zAmp# ${zampNumber} is still within its warranty period, making you eligible for a Certified Restored zAmp replacement. Please click on this link to start the process: Advanced Exchange Program.
-
-The link includes detailed instructions and everything you need to complete your exchange request.
-
-If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
-
-Kind regards,
-The Zengar® Team
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
-
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-            }
-            
-            // BCC addresses
-            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
-            
-            // Create mailto link with BCC
-            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
-            
-            // Open default email client
-            window.location.href = mailtoLink;
+                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
+                })
+                .catch(error => {
+                    console.error('Error downloading template:', error);
+                    alert('Error downloading email template. Please try again or contact support.');
+                });
         }
         
         // Function to send PASS Covered email
         function sendPASSCoveredEmail(language) {
-            // Get client information
-            const fullName = document.querySelector('input[name="full_name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
-            
-            if (!fullName || !email) {
-                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
-                return;
-            }
-            
-            if (!zampNumber) {
-                alert('Please fill in the zAmp# field in the Client Information section.');
-                return;
-            }
-            
-            // Remind user to check From address
-            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
-            
-            // Extract first name (everything before the first space)
-            const firstName = fullName.split(' ')[0];
-            
-            let subject, body;
-            
-            if (language === 'french') {
-                // French email
-                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : Remplacement de zAmp - Garantie PASS prolongée`;
-                
-                body = `Bonjour ${firstName},
+            // Map language to template filename
+            const templateFileName = language === 'french'
+                ? 'Expired zAmp warranty- system covered under PASS - FRENCH.msg'
+                : 'Expired zAmp warranty- system covered under PASS - ENGLISH.msg';
 
-Bonne nouvelle ! Comme votre système est couvert par PASS, le zAmp# ${zampNumber} associé reste sous garantie tant qu'il est couvert par un abonnement PASS actif. Vous êtes donc admissible à un remplacement par un zAmp remis à neuf et certifié, offert dans le cadre. Veuillez cliquer sur ce lien pour commencer le processus: programme d'échange anticipé.
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
 
-Ce lien contient toutes les instructions détaillées pour finaliser votre demande d'échange. Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
 
-Cordialement,
-L'équipe Zengar
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
+                    // Trigger download
+                    link.click();
 
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-                
-            } else {
-                // English email
-                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement - PASS Extended Warranty`;
-                
-                body = `Hello ${firstName},
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
 
-Good news! Since your system is covered under PASS, the associated zAmp# ${zampNumber} remains under warranty as long as it is covered by an active PASS membership. This means you are eligible for a replacement with a Certified Restored zAmp. Please click on this link to start the process: Advanced Exchange Program.
-
-This link includes detailed instructions and everything you need to complete your exchange request.
-
-If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
-
-Kind regards,
-The Zengar® Team
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
-
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-            }
-            
-            // BCC addresses
-            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
-            
-            // Create mailto link with BCC
-            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
-            
-            // Open default email client
-            window.location.href = mailtoLink;
+                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
+                })
+                .catch(error => {
+                    console.error('Error downloading template:', error);
+                    alert('Error downloading email template. Please try again or contact support.');
+                });
         }
         
         // Function to send Out of Warranty email
         function sendOutOfWarrantyEmail(language) {
-            // Get client information
-            const fullName = document.querySelector('input[name="full_name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
-            
-            if (!fullName || !email) {
-                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
-                return;
-            }
-            
-            if (!zampNumber) {
-                alert('Please fill in the zAmp# field in the Client Information section.');
-                return;
-            }
-            
-            // Remind user to check From address
-            alert('REMINDER: Please ensure the email is being sent FROM: Loaners-Exchanges@neuroptimal.com\n\nThe email draft will open momentarily.');
-            
-            // Extract first name (everything before the first space)
-            const firstName = fullName.split(' ')[0];
-            
-            let subject, body;
-            
-            if (language === 'french') {
-                // French email
-                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : zAmp hors garantie - Options de remplacement`;
-                
-                body = `Bonjour ${firstName},
+            // Map language to template filename
+            const templateFileName = language === 'french'
+                ? 'Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg'
+                : 'Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg';
 
-Votre zAmp# ${zampNumber} n'est plus sous garantie. Voici vos trois options de remplacement. Veuillez cliquer sur le lien approprié ci-dessous pour commencer le processus :
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
 
-1. Adhérez à PASS sur le système associé au zAmp défectueux pour bénéficier d'avantages exclusifs, y compris la couverture prolongée de votre zAmp, le rendant admissible à notre programme d'échange anticipé. Le zAmp reste sous garantie tant qu'il est couvert par une adhésion PASS active.
+            // Fetch from GitHub and trigger download
+            fetch(githubUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Template not found on GitHub');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = templateFileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
 
-2. Échange hors garantie – 799 $ US
-   Recevez un zAmp remis à neuf certifié via notre programme d'échange anticipé. Des frais d'expédition aller-retour s'appliquent. Vous devez retourner votre zAmp d'origine dans un délai de 15 jours. Une étiquette de retour est incluse. Des frais supplémentaires peuvent s'appliquer si le zAmp n'est pas retourné.
+                    // Trigger download
+                    link.click();
 
-3. Achat d'un zAmp neuf – 1 950 $ US
-   Si vous préférez un nouvel appareil, vous pouvez acheter un remplacement.
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
 
-Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
-
-Cordialement,
-L'équipe Zengar
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
-
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-                
-            } else {
-                // English email
-                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: Out of Warranty zAmp - Replacement Options`;
-                
-                body = `Hello ${firstName},
-
-Your zAmp# ${zampNumber} is no longer under warranty. Here are your three options for replacement.
-
-Please click on the appropriate link below to start the process:
-
-1. Join PASS on the system associated with the defective zAmp, to access exclusive benefits, including extended warranty coverage on your zAmp, making it eligible for our Advanced Exchange Program. Your zAmp remains under warranty for as long as it remains covered by an active PASS membership.
-
-2. Out-of-Warranty Exchange – $799 USD
-   Receive a Certified Restored zAmp through our Advanced Exchange Program. Round-trip shipping costs apply. You must return your original zAmp within 15 days. Includes a return label. Additional charges may apply if the original zAmp is not returned.
-
-3. Purchase a Brand-New zAmp – $1,950 USD
-   If you prefer a new device, you can purchase a replacement.
-
-If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
-
-Kind regards,
-The Zengar® Team
-loaners-exchanges@neuroptimal.com
-Monday – Friday: 9 AM - 5 PM EST
-(866) 990-6784 Ext. 780
-
-Loaners & Exchanges | Zengar Institute Inc.
-866.990.Optimal (6784) | www.neuroptimal.com | loaners-repairs@neuroptimal.com`;
-            }
-            
-            // BCC addresses
-            const bcc = 'Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com';
-            
-            // Create mailto link with BCC
-            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent(bcc)}&from=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com')}`;
-            
-            // Open default email client
-            window.location.href = mailtoLink;
+                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
+                })
+                .catch(error => {
+                    console.error('Error downloading template:', error);
+                    alert('Error downloading email template. Please try again or contact support.');
+                });
         }
 
         // Function to open language selection modal
