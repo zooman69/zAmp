@@ -2523,8 +2523,8 @@ Loaners & Exchanges | Zengar Institute Inc.
                 'DUTCH': 'Nederlands'
             };
 
-            // Download template from GitHub repository
-            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}`;
+            // Download template from GitHub repository with cache busting
+            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
 
             // Fetch from GitHub and trigger download
             fetch(githubUrl)
