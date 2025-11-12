@@ -2654,75 +2654,62 @@ Loaners & Exchanges | Zengar Institute Inc.
 
                 // Add minimal script for warranty email buttons and approver submit to work in exported HTML
                 const newScript = clonedDoc.createElement('script');
-                newScript.textContent = `
-                    function sendWithin90DaysEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Within first 90 days  - FRENCH.msg'
-                            : 'Within first 90 days  - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendAfter90DaysEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'After 90 Days - FRENCH.msg'
-                            : 'After 90 Days - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendPASSCoveredEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Expired zAmp warranty- system covered under PASS - FRENCH.msg'
-                            : 'Expired zAmp warranty- system covered under PASS - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendOutOfWarrantyEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg'
-                            : 'Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function approverSubmit() {
-                        alert('Approver Submit: This function requires the full application. Please open the original form to submit.');
-                    }
-                `;
+                newScript.textContent =
+                    'function sendWithin90DaysEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Within first 90 days  - FRENCH.msg" : "Within first 90 days  - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendAfter90DaysEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "After 90 Days - FRENCH.msg" : "After 90 Days - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendPASSCoveredEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Expired zAmp warranty- system covered under PASS - FRENCH.msg" : "Expired zAmp warranty- system covered under PASS - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendOutOfWarrantyEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg" : "Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function approverSubmit() {' +
+                    '    alert("Approver Submit: This function requires the full application. Please open the original form to submit.");' +
+                    '}';
                 const head = clonedDoc.querySelector('head');
                 if (head) {
                     head.appendChild(newScript);
@@ -2963,75 +2950,62 @@ Description of issue: ${description}
 
                 // Add minimal script for warranty email buttons and approver submit to work in exported HTML
                 const newScript = clonedDoc.createElement('script');
-                newScript.textContent = `
-                    function sendWithin90DaysEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Within first 90 days  - FRENCH.msg'
-                            : 'Within first 90 days  - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendAfter90DaysEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'After 90 Days - FRENCH.msg'
-                            : 'After 90 Days - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendPASSCoveredEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Expired zAmp warranty- system covered under PASS - FRENCH.msg'
-                            : 'Expired zAmp warranty- system covered under PASS - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function sendOutOfWarrantyEmail(language) {
-                        const templateFileName = language === 'french'
-                            ? 'Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg'
-                            : 'Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg';
-                        const githubUrl = \`https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/\${encodeURIComponent(templateFileName)}?cache=\${Date.now()}\`;
-                        fetch(githubUrl).then(r => r.blob()).then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = templateFileName;
-                            link.click();
-                            window.URL.revokeObjectURL(url);
-                            alert('Email template downloaded!');
-                        });
-                    }
-
-                    function approverSubmit() {
-                        alert('Approver Submit: This function requires the full application. Please open the original form to submit.');
-                    }
-                `;
+                newScript.textContent =
+                    'function sendWithin90DaysEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Within first 90 days  - FRENCH.msg" : "Within first 90 days  - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendAfter90DaysEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "After 90 Days - FRENCH.msg" : "After 90 Days - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendPASSCoveredEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Expired zAmp warranty- system covered under PASS - FRENCH.msg" : "Expired zAmp warranty- system covered under PASS - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function sendOutOfWarrantyEmail(language) {' +
+                    '    const templateFileName = language === "french" ? "Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg" : "Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg";' +
+                    '    const githubUrl = "https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/" + encodeURIComponent(templateFileName) + "?cache=" + Date.now();' +
+                    '    fetch(githubUrl).then(r => r.blob()).then(blob => {' +
+                    '        const url = window.URL.createObjectURL(blob);' +
+                    '        const link = document.createElement("a");' +
+                    '        link.href = url;' +
+                    '        link.download = templateFileName;' +
+                    '        link.click();' +
+                    '        window.URL.revokeObjectURL(url);' +
+                    '        alert("Email template downloaded!");' +
+                    '    });' +
+                    '}' +
+                    'function approverSubmit() {' +
+                    '    alert("Approver Submit: This function requires the full application. Please open the original form to submit.");' +
+                    '}';
                 const head = clonedDoc.querySelector('head');
                 if (head) {
                     head.appendChild(newScript);
