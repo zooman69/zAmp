@@ -1929,17 +1929,30 @@
                 if (!passCoveredTable) return;
 
                 const originDate = originDateInput ? originDateInput.value : null;
+                const warrantyDateInput = document.querySelector('input[name="warranty_date"]');
+                const warrantyDate = warrantyDateInput ? warrantyDateInput.value : null;
                 const passStatusRadio = document.querySelector('input[name="pass_status"]:checked');
                 const passStatus = passStatusRadio ? passStatusRadio.value : null;
 
-                // Show only if Origin Date > 90 days AND PASS Status is pass_reg or pass_ent
-                if (originDate) {
-                    const selectedDate = new Date(originDate);
+                // Show only if:
+                // 1. Origin Date > 90 days
+                // 2. zAmp Warranty Expiration Date is within 2 years (730 days) of current date
+                // 3. PASS Status is pass_reg or pass_ent
+                if (originDate && warrantyDate) {
+                    const originSelectedDate = new Date(originDate);
+                    const warrantySelectedDate = new Date(warrantyDate);
                     const today = new Date();
-                    const diffTime = today - selectedDate;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    if (diffDays > 90 && (passStatus === 'pass_reg' || passStatus === 'pass_ent')) {
+                    const originDiffTime = today - originSelectedDate;
+                    const originDiffDays = Math.ceil(originDiffTime / (1000 * 60 * 60 * 24));
+
+                    const warrantyDiffTime = warrantySelectedDate - today;
+                    const warrantyDiffDays = Math.ceil(warrantyDiffTime / (1000 * 60 * 60 * 24));
+
+                    // Check all three conditions
+                    if (originDiffDays > 90 &&
+                        warrantyDiffDays <= 730 && warrantyDiffDays >= 0 &&
+                        (passStatus === 'pass_reg' || passStatus === 'pass_ent')) {
                         passCoveredTable.style.display = '';
                     } else {
                         passCoveredTable.style.display = 'none';
@@ -2023,6 +2036,17 @@
                 // Run initial check
                 checkOriginDate();
                 syncUsbAge();
+            }
+
+            // Set up event listener for warranty date changes
+            const warrantyDateInput = document.querySelector('input[name="warranty_date"]');
+            if (warrantyDateInput) {
+                warrantyDateInput.addEventListener('change', function() {
+                    checkPASSCoveredEligibility();
+                });
+                warrantyDateInput.addEventListener('input', function() {
+                    checkPASSCoveredEligibility();
+                });
             }
 
             // Set up event listeners for PASS Status radio buttons
