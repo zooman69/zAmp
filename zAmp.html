@@ -2235,170 +2235,253 @@ Loaners & Exchanges | Zengar Institute Inc.
         
         // Function to send Within 90 Days email
         function sendWithin90DaysEmail(language) {
-            // Map language to template filename
-            const templateFileName = language === 'french'
-                ? 'Within first 90 days  - FRENCH.msg'
-                : 'Within first 90 days  - ENGLISH.msg';
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
 
-            // Download template from GitHub repository with cache busting
-            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
 
-            // Fetch from GitHub and trigger download
-            fetch(githubUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Template not found on GitHub');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    // Create download link
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = templateFileName;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
 
-                    // Trigger download
-                    link.click();
+            // Extract first name
+            const firstName = fullName.split(' ')[0];
 
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(link);
+            let subject, body;
 
-                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
-                })
-                .catch(error => {
-                    console.error('Error downloading template:', error);
-                    alert('Error downloading email template. Please try again or contact support.');
-                });
+            if (language === 'french') {
+                subject = `zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp dans les 90 jours`;
+
+                body = `Bonjour ${firstName},
+
+Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans les 90 premiers jours de garantie. Vous êtes donc éligible à un remplacement neuf gratuit
+
+Veuillez cliquer sur ce lien pour commencer le processus:
+programme d'échange anticipé.
+
+Le lien ci-dessous contient toutes les instructions et les éléments nécessaires pour compléter votre demande.
+
+Si vous avez des questions, nous sommes là pour vous aider. Nous nous engageons à rendre le processus d'échange simple et sans tracas.
+
+Cordialement,
+
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else {
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement Within 90 Days`;
+
+                body = `Hello ${firstName},
+
+Good news! Your zAmp# ${zampNumber} is still within the first 90 days of warranty, you're eligible for a brand-new replacement.
+
+Please click on this link to link for detailed instructions and everything you need to initiate the exchange: Advanced Exchange Program.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+            }
+
+            // Create mailto link
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com')}`;
+
+            // Open default email client
+            window.location.href = mailtoLink;
         }
         
         // Function to send After 90 Days email
         function sendAfter90DaysEmail(language) {
-            // Map language to template filename
-            const templateFileName = language === 'french'
-                ? 'After 90 Days - FRENCH.msg'
-                : 'After 90 Days - ENGLISH.msg';
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
 
-            // Download template from GitHub repository with cache busting
-            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section first.');
+                return;
+            }
 
-            // Fetch from GitHub and trigger download
-            fetch(githubUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Template not found on GitHub');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    // Create download link
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = templateFileName;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
+            if (!zampNumber) {
+                alert('Please fill in the zAmp# field in the Client Information section.');
+                return;
+            }
 
-                    // Trigger download
-                    link.click();
+            // Extract first name
+            const firstName = fullName.split(' ')[0];
 
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(link);
+            let subject, body;
 
-                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
-                })
-                .catch(error => {
-                    console.error('Error downloading template:', error);
-                    alert('Error downloading email template. Please try again or contact support.');
-                });
+            if (language === 'french') {
+                subject = `ACTION REQUISE: zAmp# ${zampNumber} - Prochaines étapes : Remplacement de votre zAmp après 90 jours et dans la période de garantie originale`;
+
+                body = `Bonjour ${firstName},
+
+Bonne nouvelle ! Votre zAmp# ${zampNumber} est encore dans sa période de garantie originale. Vous êtes donc éligible à un remplacement par un zAmp remis à neuf certifié.
+
+Veuillez cliquer sur ce lien pour commencer le processus:
+programme d'échange anticipé.
+
+Le lien ci-dessous contient des instructions détaillées ainsi que tout ce dont vous avez besoin pour soumettre votre demande d'échange.
+
+Cordialement,
+
+L'équipe Zengar
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else {
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement after 90 days and within original warranty`;
+
+                body = `Hello ${firstName},
+
+Good news! Your zAmp# ${zampNumber} is still within its warranty period, making you eligible for a Certified Restored zAmp replacement.
+
+Please click on this link to start the process:
+Advanced Exchange Program.
+
+The link includes detailed instructions and everything you need to complete your exchange request.
+
+If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+Kind regards,
+
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+            }
+
+            // Create mailto link
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com')}`;
+
+            // Open default email client
+            window.location.href = mailtoLink;
         }
         
         // Function to send PASS Covered email
         function sendPASSCoveredEmail(language) {
-            // Map language to template filename
-            const templateFileName = language === 'french'
-                ? 'Expired zAmp warranty- system covered under PASS - FRENCH.msg'
-                : 'Expired zAmp warranty- system covered under PASS - ENGLISH.msg';
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
 
-            // Download template from GitHub repository with cache busting
-            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
+            // Validate required fields
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section.');
+                return;
+            }
 
-            // Fetch from GitHub and trigger download
-            fetch(githubUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Template not found on GitHub');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    // Create download link
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = templateFileName;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
+            // Extract first name from full name
+            const firstName = fullName.split(' ')[0];
 
-                    // Trigger download
-                    link.click();
+            // Set subject and body based on language
+            let subject, body;
 
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(link);
+            if (language === 'french') {
+                subject = `zAmp# ${zampNumber} - Prochaines étapes...`;
+                body = `Bonjour ${firstName},
 
-                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
-                })
-                .catch(error => {
-                    console.error('Error downloading template:', error);
-                    alert('Error downloading email template. Please try again or contact support.');
-                });
+Bonne nouvelle ! Comme votre système est couvert par PASS, le zAmp# ${zampNumber} associé reste sous garantie et sera réparé sans frais.
+
+Prochaines étapes :
+1. Nous enverrons le zAmp de remplacement à l'adresse de livraison que vous avez fournie.
+2. Une fois que vous recevrez le zAmp de remplacement, veuillez retourner le zAmp défectueux en utilisant l'étiquette de retour prépayée incluse.
+
+Si vous avez des questions, n'hésitez pas à nous contacter.
+
+Cordialement,
+L'équipe NeurOptimal`;
+            } else {
+                subject = `zAmp# ${zampNumber} - Next Steps...`;
+                body = `Hello ${firstName},
+
+Good news! Since your system is covered under PASS, the associated zAmp# ${zampNumber} remains under warranty and will be repaired at no charge.
+
+Next Steps:
+1. We will ship the replacement zAmp to the shipping address you provided.
+2. Once you receive the replacement zAmp, please return the defective zAmp using the prepaid return label included.
+
+If you have any questions, please don't hesitate to contact us.
+
+Best regards,
+The NeurOptimal Team`;
+            }
+
+            // Create mailto link with BCC to both addresses
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com')}`;
+
+            // Open email client
+            window.location.href = mailtoLink;
         }
         
         // Function to send Out of Warranty email
         function sendOutOfWarrantyEmail(language) {
-            // Map language to template filename
-            const templateFileName = language === 'french'
-                ? 'Expired zAmp warranty, system NOT covered under PASS  - FRENCH.msg'
-                : 'Expired zAmp warranty, system NOT covered under PASS  - ENGLISH.msg';
+            // Get client information
+            const fullName = document.querySelector('input[name="full_name"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
 
-            // Download template from GitHub repository with cache busting
-            const githubUrl = `https://raw.githubusercontent.com/zooman69/zAmp/main/Templates/${encodeURIComponent(templateFileName)}?cache=${Date.now()}`;
+            // Validate required fields
+            if (!fullName || !email) {
+                alert('Please fill in the Full Name and Email fields in the Client Information section.');
+                return;
+            }
 
-            // Fetch from GitHub and trigger download
-            fetch(githubUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Template not found on GitHub');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    // Create download link
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = templateFileName;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
+            // Extract first name from full name
+            const firstName = fullName.split(' ')[0];
 
-                    // Trigger download
-                    link.click();
+            // Set subject and body based on language
+            let subject, body;
 
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(link);
+            if (language === 'french') {
+                subject = `zAmp# ${zampNumber} - Options de réparation`;
+                body = `Bonjour ${firstName},
 
-                    alert('Email template downloaded! Please open it, fill in the recipient details, and send.');
-                })
-                .catch(error => {
-                    console.error('Error downloading template:', error);
-                    alert('Error downloading email template. Please try again or contact support.');
-                });
+Nous avons examiné votre demande concernant le zAmp# ${zampNumber}. Malheureusement, ce zAmp n'est plus sous garantie et votre système n'est pas couvert par PASS.
+
+Options disponibles :
+1. Réparation payante : Nous pouvons réparer votre zAmp moyennant des frais de 150 $ US plus les frais d'expédition.
+2. Achat d'un nouveau zAmp : Vous pouvez acheter un nouveau zAmp au prix régulier.
+
+Si vous souhaitez procéder à l'une de ces options, veuillez nous faire savoir et nous vous fournirons les détails supplémentaires.
+
+Cordialement,
+L'équipe NeurOptimal`;
+            } else {
+                subject = `zAmp# ${zampNumber} - Repair Options`;
+                body = `Hello ${firstName},
+
+We have reviewed your request regarding zAmp# ${zampNumber}. Unfortunately, this zAmp is no longer under warranty and your system is not covered under PASS.
+
+Available options:
+1. Paid repair: We can repair your zAmp for a fee of $150 USD plus shipping costs.
+2. Purchase a new zAmp: You can purchase a new zAmp at regular price.
+
+If you would like to proceed with either of these options, please let us know and we will provide you with additional details.
+
+Best regards,
+The NeurOptimal Team`;
+            }
+
+            // Create mailto link with BCC to both addresses
+            const mailtoLink = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${encodeURIComponent('Loaners-Exchanges@neuroptimal.com,orders@neuroptimal.com')}`;
+
+            // Open email client
+            window.location.href = mailtoLink;
         }
 
         // Function to open language selection modal
