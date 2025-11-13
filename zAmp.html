@@ -1515,7 +1515,7 @@
                         </tr>
                     </table>
 
-                    <table class="approval-table">
+                    <table class="approval-table" id="pass-covered-table">
                         <tr>
                             <td>After 90 days Expired zAmp warranty - System covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
@@ -1908,6 +1908,41 @@
                     // Show the "Within First 90 days" option on Repair Approval page when more than 104 days
                     if (within90DaysTable) within90DaysTable.style.display = '';
                 }
+
+                // Check PASS covered eligibility
+                checkPASSCoveredEligibility();
+            }
+
+            // Check if PASS Covered option should be shown
+            function checkPASSCoveredEligibility() {
+                const passCoveredTable = document.getElementById('pass-covered-table');
+                if (!passCoveredTable) return;
+
+                const originDate = originDateInput ? originDateInput.value : null;
+                const passStatusRadio = document.querySelector('input[name="pass_status"]:checked');
+                const passStatus = passStatusRadio ? passStatusRadio.value : null;
+
+                // Show only if Origin Date > 90 days AND PASS Status is pass_reg or pass_ent
+                if (originDate) {
+                    const selectedDate = new Date(originDate);
+                    const today = new Date();
+                    const diffTime = today - selectedDate;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays > 90 && (passStatus === 'pass_reg' || passStatus === 'pass_ent')) {
+                        passCoveredTable.style.display = '';
+                    } else {
+                        passCoveredTable.style.display = 'none';
+                        // Uncheck checkbox when hidden
+                        const checkbox = document.getElementById('approval-pass-covered');
+                        if (checkbox) checkbox.checked = false;
+                    }
+                } else {
+                    // No date selected, hide the option
+                    passCoveredTable.style.display = 'none';
+                    const checkbox = document.getElementById('approval-pass-covered');
+                    if (checkbox) checkbox.checked = false;
+                }
             }
             
             if (systemModelSelect) {
@@ -1947,6 +1982,14 @@
                 checkOriginDate();
                 syncUsbAge();
             }
+
+            // Set up event listeners for PASS Status radio buttons
+            const passStatusRadios = document.querySelectorAll('input[name="pass_status"]');
+            passStatusRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    checkPASSCoveredEligibility();
+                });
+            });
 
             // Add click handler for SP9 setup image
             if (sp9SetupImage) {
