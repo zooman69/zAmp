@@ -1481,7 +1481,7 @@
                         </table>
                     </div>
 
-                    <table class="approval-table">
+                    <table class="approval-table" id="within-90-days-table">
                         <tr>
                             <td>Within First 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-90days"></td>
@@ -1861,6 +1861,7 @@
             // Check Origin Date and show/hide Replacement Eligibility
             function checkOriginDate() {
                 const zamp90daysRow = document.getElementById('zamp-90days-row');
+                const within90DaysTable = document.getElementById('within-90-days-table');
 
                 if (!originDateInput) return;
 
@@ -1869,6 +1870,7 @@
                     // If no date selected, hide the sections
                     if (replacementEligibilityTable) replacementEligibilityTable.style.display = 'none';
                     if (zamp90daysRow) zamp90daysRow.style.display = '';
+                    if (within90DaysTable) within90DaysTable.style.display = '';
                     return;
                 }
 
@@ -1884,6 +1886,8 @@
                     if (replacementEligibilityTable) replacementEligibilityTable.style.display = '';
                     // Show the 90-day question when within 104 days
                     if (zamp90daysRow) zamp90daysRow.style.display = '';
+                    // Show the "Within First 90 days" option on Repair Approval page
+                    if (within90DaysTable) within90DaysTable.style.display = '';
                 } else {
                     if (replacementEligibilityTable) {
                         replacementEligibilityTable.style.display = 'none';
@@ -1895,6 +1899,13 @@
                         zamp90daysRow.style.display = 'none';
                         // Uncheck radio buttons when hidden
                         document.querySelectorAll('input[name="zamp_90days"]').forEach(rb => rb.checked = false);
+                    }
+                    // Hide the "Within First 90 days" option on Repair Approval page
+                    if (within90DaysTable) {
+                        within90DaysTable.style.display = 'none';
+                        // Uncheck checkbox when hidden
+                        const checkbox = document.getElementById('approval-90days');
+                        if (checkbox) checkbox.checked = false;
                     }
                 }
             }
