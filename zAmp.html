@@ -1490,6 +1490,9 @@
                                     <option value="">Select Language</option>
                                     <option value="english">English</option>
                                     <option value="french">French</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="italian">Italian</option>
+                                    <option value="dutch">Dutch</option>
                                 </select>
                             </td>
                         </tr>
@@ -1504,6 +1507,9 @@
                                     <option value="">Select Language</option>
                                     <option value="english">English</option>
                                     <option value="french">French</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="italian">Italian</option>
+                                    <option value="dutch">Dutch</option>
                                 </select>
                             </td>
                         </tr>
@@ -1518,6 +1524,9 @@
                                     <option value="">Select Language</option>
                                     <option value="english">English</option>
                                     <option value="french">French</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="italian">Italian</option>
+                                    <option value="dutch">Dutch</option>
                                 </select>
                             </td>
                         </tr>
@@ -1532,6 +1541,9 @@
                                     <option value="">Select Language</option>
                                     <option value="english">English</option>
                                     <option value="french">French</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="italian">Italian</option>
+                                    <option value="dutch">Dutch</option>
                                 </select>
                             </td>
                         </tr>
@@ -2276,6 +2288,60 @@ loaners-exchanges@neuroptimal.com
 Monday – Friday: 9 AM - 5 PM EST
 (866) 990-6784 Ext. 780`;
 
+            } else if (language === 'spanish') {
+                subject = `ACCIÓN REQUERIDA: zAmp# ${zampNumber} - Próximos pasos: Reemplazo de zAmp dentro de 90 días`;
+
+                body = `Hola ${firstName},
+
+¡Buenas noticias! Su zAmp# ${zampNumber} todavía está dentro de los primeros 90 días de garantía, por lo que es elegible para un reemplazo completamente nuevo.
+
+Haga clic en este enlace para obtener instrucciones detalladas y todo lo que necesita para iniciar el intercambio: Programa de Intercambio Anticipado.
+
+Si tiene alguna pregunta, estamos aquí para ayudarlo. Estamos comprometidos a hacer que el proceso de intercambio sea simple y sin complicaciones.
+
+Saludos cordiales,
+
+El equipo Zengar®
+loaners-exchanges@neuroptimal.com
+Lunes – Viernes: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else if (language === 'italian') {
+                subject = `AZIONE RICHIESTA: zAmp# ${zampNumber} - Prossimi passi: Sostituzione zAmp entro 90 giorni`;
+
+                body = `Ciao ${firstName},
+
+Buone notizie! Il tuo zAmp# ${zampNumber} è ancora entro i primi 90 giorni di garanzia, quindi hai diritto a una sostituzione completamente nuova.
+
+Clicca su questo link per istruzioni dettagliate e tutto ciò di cui hai bisogno per avviare lo scambio: Programma di Scambio Anticipato.
+
+Se hai domande, siamo qui per supportarti. Ci impegniamo a rendere il processo di scambio semplice e senza problemi.
+
+Cordiali saluti,
+
+Il team Zengar®
+loaners-exchanges@neuroptimal.com
+Lunedì – Venerdì: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else if (language === 'dutch') {
+                subject = `ACTIE VEREIST: zAmp# ${zampNumber} - Volgende stappen: zAmp vervanging binnen 90 dagen`;
+
+                body = `Hallo ${firstName},
+
+Goed nieuws! Uw zAmp# ${zampNumber} valt nog binnen de eerste 90 dagen van garantie, dus komt u in aanmerking voor een gloednieuwe vervanging.
+
+Klik op deze link voor gedetailleerde instructies en alles wat u nodig heeft om de uitwisseling te starten: Geavanceerd Uitwisselingsprogramma.
+
+Als u vragen heeft, staan wij klaar om u te helpen. We zijn toegewijd om het uitwisselingsproces soepel en probleemloos te maken.
+
+Met vriendelijke groet,
+
+Het Zengar® Team
+loaners-exchanges@neuroptimal.com
+Maandag – Vrijdag: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
             } else {
                 subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement Within 90 Days`;
 
@@ -2343,6 +2409,69 @@ loaners-exchanges@neuroptimal.com
 Monday – Friday: 9 AM - 5 PM EST
 (866) 990-6784 Ext. 780`;
 
+            } else if (language === 'spanish') {
+                subject = `ACCIÓN REQUERIDA: zAmp# ${zampNumber} - Próximos pasos: Reemplazo de zAmp después de 90 días y dentro de la garantía original`;
+
+                body = `Hola ${firstName},
+
+¡Buenas noticias! Su zAmp# ${zampNumber} todavía está dentro de su período de garantía, lo que lo hace elegible para un reemplazo de zAmp Restaurado Certificado.
+
+Haga clic en este enlace para comenzar el proceso:
+Programa de Intercambio Anticipado.
+
+El enlace incluye instrucciones detalladas y todo lo que necesita para completar su solicitud de intercambio.
+
+Si tiene alguna pregunta, estamos aquí para ayudarlo. Estamos comprometidos a hacer que el proceso de intercambio sea simple y sin complicaciones.
+
+Saludos cordiales,
+
+El equipo Zengar®
+loaners-exchanges@neuroptimal.com
+Lunes – Viernes: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else if (language === 'italian') {
+                subject = `AZIONE RICHIESTA: zAmp# ${zampNumber} - Prossimi passi: Sostituzione zAmp dopo 90 giorni e entro la garanzia originale`;
+
+                body = `Ciao ${firstName},
+
+Buone notizie! Il tuo zAmp# ${zampNumber} è ancora entro il periodo di garanzia, il che ti rende idoneo per una sostituzione zAmp Restaurato Certificato.
+
+Clicca su questo link per avviare il processo:
+Programma di Scambio Anticipato.
+
+Il link include istruzioni dettagliate e tutto ciò di cui hai bisogno per completare la tua richiesta di scambio.
+
+Se hai domande, siamo qui per supportarti. Ci impegniamo a rendere il processo di scambio semplice e senza problemi.
+
+Cordiali saluti,
+
+Il team Zengar®
+loaners-exchanges@neuroptimal.com
+Lunedì – Venerdì: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
+            } else if (language === 'dutch') {
+                subject = `ACTIE VEREIST: zAmp# ${zampNumber} - Volgende stappen: zAmp vervanging na 90 dagen en binnen originele garantie`;
+
+                body = `Hallo ${firstName},
+
+Goed nieuws! Uw zAmp# ${zampNumber} valt nog binnen de garantieperiode, waardoor u in aanmerking komt voor een Gecertificeerd Gerestaureerde zAmp vervanging.
+
+Klik op deze link om het proces te starten:
+Geavanceerd Uitwisselingsprogramma.
+
+De link bevat gedetailleerde instructies en alles wat u nodig heeft om uw uitwisselingsverzoek te voltooien.
+
+Als u vragen heeft, staan wij klaar om u te helpen. We zijn toegewijd om het uitwisselingsproces soepel en probleemloos te maken.
+
+Met vriendelijke groet,
+
+Het Zengar® Team
+loaners-exchanges@neuroptimal.com
+Maandag – Vrijdag: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
+
             } else {
                 subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement after 90 days and within original warranty`;
 
@@ -2405,6 +2534,48 @@ Si vous avez des questions, n'hésitez pas à nous contacter.
 
 Cordialement,
 L'équipe NeurOptimal`;
+            } else if (language === 'spanish') {
+                subject = `zAmp# ${zampNumber} - Próximos pasos...`;
+                body = `Hola ${firstName},
+
+¡Buenas noticias! Dado que su sistema está cubierto por PASS, el zAmp# ${zampNumber} asociado permanece bajo garantía y será reparado sin cargo.
+
+Próximos pasos:
+1. Enviaremos el zAmp de reemplazo a la dirección de envío que proporcionó.
+2. Una vez que reciba el zAmp de reemplazo, devuelva el zAmp defectuoso utilizando la etiqueta de devolución prepaga incluida.
+
+Si tiene alguna pregunta, no dude en contactarnos.
+
+Saludos cordiales,
+El equipo NeurOptimal`;
+            } else if (language === 'italian') {
+                subject = `zAmp# ${zampNumber} - Prossimi passi...`;
+                body = `Ciao ${firstName},
+
+Buone notizie! Poiché il tuo sistema è coperto da PASS, il zAmp# ${zampNumber} associato rimane in garanzia e verrà riparato gratuitamente.
+
+Prossimi passi:
+1. Spediremo il zAmp sostitutivo all'indirizzo di spedizione che hai fornito.
+2. Una volta ricevuto il zAmp sostitutivo, restituisci il zAmp difettoso utilizzando l'etichetta di reso prepagata inclusa.
+
+Se hai domande, non esitare a contattarci.
+
+Cordiali saluti,
+Il team NeurOptimal`;
+            } else if (language === 'dutch') {
+                subject = `zAmp# ${zampNumber} - Volgende stappen...`;
+                body = `Hallo ${firstName},
+
+Goed nieuws! Omdat uw systeem onder PASS valt, blijft de bijbehorende zAmp# ${zampNumber} onder garantie en wordt deze kosteloos gerepareerd.
+
+Volgende stappen:
+1. We verzenden de vervangende zAmp naar het door u opgegeven verzendadres.
+2. Zodra u de vervangende zAmp heeft ontvangen, stuurt u de defecte zAmp terug met het meegeleverde vooruitbetaalde retourlabel.
+
+Als u vragen heeft, aarzel dan niet om contact met ons op te nemen.
+
+Met vriendelijke groet,
+Het NeurOptimal Team`;
             } else {
                 subject = `zAmp# ${zampNumber} - Next Steps...`;
                 body = `Hello ${firstName},
@@ -2461,6 +2632,48 @@ Si vous souhaitez procéder à l'une de ces options, veuillez nous faire savoir 
 
 Cordialement,
 L'équipe NeurOptimal`;
+            } else if (language === 'spanish') {
+                subject = `zAmp# ${zampNumber} - Opciones de reparación`;
+                body = `Hola ${firstName},
+
+Hemos revisado su solicitud con respecto al zAmp# ${zampNumber}. Desafortunadamente, este zAmp ya no está bajo garantía y su sistema no está cubierto por PASS.
+
+Opciones disponibles:
+1. Reparación pagada: Podemos reparar su zAmp por una tarifa de $150 USD más los costos de envío.
+2. Comprar un nuevo zAmp: Puede comprar un nuevo zAmp a precio regular.
+
+Si desea proceder con cualquiera de estas opciones, háganos saber y le proporcionaremos detalles adicionales.
+
+Saludos cordiales,
+El equipo NeurOptimal`;
+            } else if (language === 'italian') {
+                subject = `zAmp# ${zampNumber} - Opzioni di riparazione`;
+                body = `Ciao ${firstName},
+
+Abbiamo esaminato la tua richiesta riguardante il zAmp# ${zampNumber}. Sfortunatamente, questo zAmp non è più in garanzia e il tuo sistema non è coperto da PASS.
+
+Opzioni disponibili:
+1. Riparazione a pagamento: Possiamo riparare il tuo zAmp per una tariffa di $150 USD più i costi di spedizione.
+2. Acquisto di un nuovo zAmp: Puoi acquistare un nuovo zAmp a prezzo regolare.
+
+Se desideri procedere con una di queste opzioni, faccelo sapere e ti forniremo ulteriori dettagli.
+
+Cordiali saluti,
+Il team NeurOptimal`;
+            } else if (language === 'dutch') {
+                subject = `zAmp# ${zampNumber} - Reparatieopties`;
+                body = `Hallo ${firstName},
+
+We hebben uw verzoek met betrekking tot zAmp# ${zampNumber} beoordeeld. Helaas valt deze zAmp niet meer onder de garantie en is uw systeem niet gedekt door PASS.
+
+Beschikbare opties:
+1. Betaalde reparatie: We kunnen uw zAmp repareren voor een vergoeding van $150 USD plus verzendkosten.
+2. Koop een nieuwe zAmp: U kunt een nieuwe zAmp kopen tegen de normale prijs.
+
+Als u wilt doorgaan met een van deze opties, laat het ons weten en we zullen u aanvullende details verstrekken.
+
+Met vriendelijke groet,
+Het NeurOptimal Team`;
             } else {
                 subject = `zAmp# ${zampNumber} - Repair Options`;
                 body = `Hello ${firstName},
