@@ -1886,8 +1886,13 @@
                     if (replacementEligibilityTable) replacementEligibilityTable.style.display = '';
                     // Show the 90-day question when within 104 days
                     if (zamp90daysRow) zamp90daysRow.style.display = '';
-                    // Show the "Within First 90 days" option on Repair Approval page
-                    if (within90DaysTable) within90DaysTable.style.display = '';
+                    // Hide the "Within First 90 days" option on Repair Approval page when less than 104 days
+                    if (within90DaysTable) {
+                        within90DaysTable.style.display = 'none';
+                        // Uncheck checkbox when hidden
+                        const checkbox = document.getElementById('approval-90days');
+                        if (checkbox) checkbox.checked = false;
+                    }
                 } else {
                     if (replacementEligibilityTable) {
                         replacementEligibilityTable.style.display = 'none';
@@ -1900,13 +1905,8 @@
                         // Uncheck radio buttons when hidden
                         document.querySelectorAll('input[name="zamp_90days"]').forEach(rb => rb.checked = false);
                     }
-                    // Hide the "Within First 90 days" option on Repair Approval page
-                    if (within90DaysTable) {
-                        within90DaysTable.style.display = 'none';
-                        // Uncheck checkbox when hidden
-                        const checkbox = document.getElementById('approval-90days');
-                        if (checkbox) checkbox.checked = false;
-                    }
+                    // Show the "Within First 90 days" option on Repair Approval page when more than 104 days
+                    if (within90DaysTable) within90DaysTable.style.display = '';
                 }
             }
             
