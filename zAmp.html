@@ -1486,10 +1486,11 @@
                             <td>Within First 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-90days"></td>
                             <td style="width: 200px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendWithin90DaysEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendWithin90DaysEmail('french')">FRENCH</button>
-                                </div>
+                                <select onchange="if(this.value) {sendWithin90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1499,10 +1500,11 @@
                             <td>After 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
                             <td style="width: 200px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendAfter90DaysEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendAfter90DaysEmail('french')">FRENCH</button>
-                                </div>
+                                <select onchange="if(this.value) {sendAfter90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1512,10 +1514,11 @@
                             <td>After 90 days Expired zAmp warranty - System covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
                             <td style="width: 200px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendPASSCoveredEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendPASSCoveredEmail('french')">FRENCH</button>
-                                </div>
+                                <select onchange="if(this.value) {sendPASSCoveredEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
@@ -1525,10 +1528,11 @@
                             <td>Expired zAmp warranty - System NOT covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-not-covered"></td>
                             <td style="width: 200px;">
-                                <div class="language-buttons">
-                                    <button class="btn-lang btn-english" type="button" onclick="sendOutOfWarrantyEmail('english')">ENGLISH</button>
-                                    <button class="btn-lang btn-french" type="button" onclick="sendOutOfWarrantyEmail('french')">FRENCH</button>
-                                </div>
+                                <select onchange="if(this.value) {sendOutOfWarrantyEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="">Select Language</option>
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
                             </td>
                         </tr>
                     </table>
