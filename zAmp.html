@@ -1500,7 +1500,7 @@
 
                     <table class="approval-table" id="after-90-days-table">
                         <tr>
-                            <td>After 90 days zAmp under warranty - System covered under PASS</td>
+                            <td>After 90 days zAmp under warranty</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendAfter90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
@@ -1517,7 +1517,7 @@
 
                     <table class="approval-table" id="pass-covered-table">
                         <tr>
-                            <td>After 90 days Expired zAmp warranty - System covered under PASS</td>
+                            <td>Expired zAmp warranty - System covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendPASSCoveredEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
@@ -1914,19 +1914,14 @@
                         const checkbox = document.getElementById('approval-90days');
                         if (checkbox) checkbox.checked = false;
                     }
-                    // Show "After 90 days" option when > 104 days
-                    if (after90DaysTable) after90DaysTable.style.display = '';
                 }
-
-                // Check PASS covered and NOT covered eligibility
-                checkPASSCoveredEligibility();
-                checkNotCoveredEligibility();
             }
 
-            // Check if PASS Covered option should be shown
-            function checkPASSCoveredEligibility() {
+            // Check warranty options eligibility based on dates and PASS status
+            function checkWarrantyOptionsEligibility() {
+                const after90DaysTable = document.getElementById('after-90-days-table');
                 const passCoveredTable = document.getElementById('pass-covered-table');
-                if (!passCoveredTable) return;
+                const notCoveredTable = document.getElementById('not-covered-table');
 
                 const originDate = originDateInput ? originDateInput.value : null;
                 const warrantyDateInput = document.querySelector('input[name="warranty_date"]');
@@ -1934,72 +1929,68 @@
                 const passStatusRadio = document.querySelector('input[name="pass_status"]:checked');
                 const passStatus = passStatusRadio ? passStatusRadio.value : null;
 
-                // Show only if:
-                // 1. Origin Date > 90 days
-                // 2. zAmp Warranty Expiration Date is within 2 years (730 days) of current date
-                // 3. PASS Status is pass_reg or pass_ent
-                if (originDate && warrantyDate) {
-                    const originSelectedDate = new Date(originDate);
-                    const warrantySelectedDate = new Date(warrantyDate);
-                    const today = new Date();
+                if (!originDate || !warrantyDate || !passStatus) {
+                    // If any required field is missing, hide all three options
+                    if (after90DaysTable) after90DaysTable.style.display = 'none';
+                    if (passCoveredTable) passCoveredTable.style.display = 'none';
+                    if (notCoveredTable) notCoveredTable.style.display = 'none';
+                    return;
+                }
 
-                    const originDiffTime = today - originSelectedDate;
-                    const originDiffDays = Math.ceil(originDiffTime / (1000 * 60 * 60 * 24));
+                const originSelectedDate = new Date(originDate);
+                const warrantySelectedDate = new Date(warrantyDate);
+                const today = new Date();
 
-                    const warrantyDiffTime = warrantySelectedDate - today;
-                    const warrantyDiffDays = Math.ceil(warrantyDiffTime / (1000 * 60 * 60 * 24));
+                // Calculate days from origin date
+                const originDiffTime = today - originSelectedDate;
+                const originDiffDays = Math.ceil(originDiffTime / (1000 * 60 * 60 * 24));
 
-                    // Check all three conditions
-                    if (originDiffDays > 90 &&
-                        warrantyDiffDays <= 730 && warrantyDiffDays >= 0 &&
-                        (passStatus === 'pass_reg' || passStatus === 'pass_ent')) {
+                // Calculate days until/since warranty expiration
+                const warrantyDiffTime = warrantySelectedDate - today;
+                const warrantyDiffDays = Math.ceil(warrantyDiffTime / (1000 * 60 * 60 * 24));
+
+                const warrantyIsActive = warrantyDiffDays >= 0;
+                const warrantyExpired = warrantyDiffDays < 0;
+                const isPassStatus = (passStatus === 'pass_reg' || passStatus === 'pass_ent');
+                const isNonPass = (passStatus === 'non_pass');
+
+                // Option 1: After 90 days zAmp under warranty
+                // Show when: Origin > 104 days, warranty still active, ANY PASS Status (Reg/Ent/Non-PASS)
+                if (after90DaysTable) {
+                    if (originDiffDays > 104 && warrantyIsActive) {
+                        after90DaysTable.style.display = '';
+                    } else {
+                        after90DaysTable.style.display = 'none';
+                        const checkbox = document.getElementById('approval-after90');
+                        if (checkbox) checkbox.checked = false;
+                    }
+                }
+
+                // Option 2: Expired zAmp warranty - System covered under PASS
+                // Show when: Origin > 104 days, warranty expired, PASS Status = Reg/Ent
+                if (passCoveredTable) {
+                    if (originDiffDays > 104 && warrantyExpired && isPassStatus) {
                         passCoveredTable.style.display = '';
                     } else {
                         passCoveredTable.style.display = 'none';
-                        // Uncheck checkbox when hidden
                         const checkbox = document.getElementById('approval-pass-covered');
                         if (checkbox) checkbox.checked = false;
                     }
-                } else {
-                    // No date selected, hide the option
-                    passCoveredTable.style.display = 'none';
-                    const checkbox = document.getElementById('approval-pass-covered');
-                    if (checkbox) checkbox.checked = false;
                 }
-            }
 
-            // Check if NOT Covered option should be shown
-            function checkNotCoveredEligibility() {
-                const notCoveredTable = document.getElementById('not-covered-table');
-                if (!notCoveredTable) return;
-
-                const originDate = originDateInput ? originDateInput.value : null;
-                const passStatusRadio = document.querySelector('input[name="pass_status"]:checked');
-                const passStatus = passStatusRadio ? passStatusRadio.value : null;
-
-                // Show only if Origin Date > 2 years (730 days) AND PASS Status is non_pass
-                if (originDate) {
-                    const selectedDate = new Date(originDate);
-                    const today = new Date();
-                    const diffTime = today - selectedDate;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (diffDays > 730 && passStatus === 'non_pass') {
+                // Option 3: Expired zAmp warranty - System NOT covered under PASS
+                // Show when: Origin > 104 days, warranty expired, PASS Status = Non-PASS
+                if (notCoveredTable) {
+                    if (originDiffDays > 104 && warrantyExpired && isNonPass) {
                         notCoveredTable.style.display = '';
                     } else {
                         notCoveredTable.style.display = 'none';
-                        // Uncheck checkbox when hidden
                         const checkbox = document.getElementById('approval-not-covered');
                         if (checkbox) checkbox.checked = false;
                     }
-                } else {
-                    // No date selected, hide the option
-                    notCoveredTable.style.display = 'none';
-                    const checkbox = document.getElementById('approval-not-covered');
-                    if (checkbox) checkbox.checked = false;
                 }
             }
-            
+
             if (systemModelSelect) {
                 // Initially hide AddOn Adapter
                 if (addonAdapterContainer) {
@@ -2027,25 +2018,28 @@
                 originDateInput.addEventListener('change', function() {
                     checkOriginDate();
                     syncUsbAge();
+                    checkWarrantyOptionsEligibility();
                 });
                 originDateInput.addEventListener('input', function() {
                     checkOriginDate();
                     syncUsbAge();
+                    checkWarrantyOptionsEligibility();
                 });
 
                 // Run initial check
                 checkOriginDate();
                 syncUsbAge();
+                checkWarrantyOptionsEligibility();
             }
 
             // Set up event listener for warranty date changes
             const warrantyDateInput = document.querySelector('input[name="warranty_date"]');
             if (warrantyDateInput) {
                 warrantyDateInput.addEventListener('change', function() {
-                    checkPASSCoveredEligibility();
+                    checkWarrantyOptionsEligibility();
                 });
                 warrantyDateInput.addEventListener('input', function() {
-                    checkPASSCoveredEligibility();
+                    checkWarrantyOptionsEligibility();
                 });
             }
 
@@ -2053,8 +2047,7 @@
             const passStatusRadios = document.querySelectorAll('input[name="pass_status"]');
             passStatusRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
-                    checkPASSCoveredEligibility();
-                    checkNotCoveredEligibility();
+                    checkWarrantyOptionsEligibility();
                 });
             });
 
@@ -2698,19 +2691,29 @@ Als u vragen heeft, aarzel dan niet om contact met ons op te nemen.
 Met vriendelijke groet,
 Het NeurOptimal Team`;
             } else {
-                subject = `zAmp# ${zampNumber} - Next Steps...`;
+                subject = `ACTION REQUIRED: zAmp# ${zampNumber} - Next Steps: zAmp Replacement - PASS Extended Warranty`;
                 body = `Hello ${firstName},
 
-Good news! Since your system is covered under PASS, the associated zAmp# ${zampNumber} remains under warranty and will be repaired at no charge.
 
-Next Steps:
-1. We will ship the replacement zAmp to the shipping address you provided.
-2. Once you receive the replacement zAmp, please return the defective zAmp using the prepaid return label included.
+Good news! Since your system is covered under PASS, the associated zAmp# ${zampNumber} remains under warranty as long as it is covered by an active PASS membership. This means you are eligible for a replacement with a Certified Restored zAmp.
 
-If you have any questions, please don't hesitate to contact us.
+Please click on this link to start the process:
+Advanced Exchange Program.
 
-Best regards,
-The NeurOptimal Team`;
+
+This link includes detailed instructions and everything you need to complete your exchange request. If you have any questions, we are here to support you. We're committed to making the exchange process smooth and hassle-free.
+
+
+
+
+
+Kind regards,
+
+
+The Zengar® Team
+loaners-exchanges@neuroptimal.com
+Monday – Friday: 9 AM - 5 PM EST
+(866) 990-6784 Ext. 780`;
             }
 
             // Create mailto link with BCC to both addresses
