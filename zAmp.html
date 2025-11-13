@@ -2486,19 +2486,36 @@ Loaners & Exchanges | Zengar Institute Inc.
                         window.URL.revokeObjectURL(url);
                     }, 100);
 
-                    // Show instructions
+                    // Copy email to clipboard and show instructions
                     setTimeout(() => {
-                        alert(`📧 Email Template Downloaded!\n\n` +
-                              `Language: ${languageNames[language]}\n` +
-                              `Client Email: ${clientEmail}\n\n` +
-                              `The template has been downloaded to your Downloads folder.\n\n` +
-                              `Next Steps:\n` +
-                              `1. Go to your Downloads folder\n` +
-                              `2. Double-click: ${templateFileName}\n` +
-                              `3. Classic Outlook will open with the template\n` +
-                              `4. Add the client email to the "To" field\n` +
-                              `5. Review and click Send\n\n` +
-                              `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        // Copy client email to clipboard
+                        navigator.clipboard.writeText(clientEmail).then(() => {
+                            alert(`📧 Email Template Downloaded!\n\n` +
+                                  `Language: ${languageNames[language]}\n` +
+                                  `Client Email: ${clientEmail}\n` +
+                                  `✓ Email copied to clipboard!\n\n` +
+                                  `The template has been downloaded to your Downloads folder.\n\n` +
+                                  `Next Steps:\n` +
+                                  `1. Go to your Downloads folder\n` +
+                                  `2. Double-click: ${templateFileName}\n` +
+                                  `3. Classic Outlook will open with the template\n` +
+                                  `4. Paste the client email (Ctrl+V) to the "To" field\n` +
+                                  `5. Review and click Send\n\n` +
+                                  `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        }).catch(() => {
+                            // If clipboard fails, show without copy confirmation
+                            alert(`📧 Email Template Downloaded!\n\n` +
+                                  `Language: ${languageNames[language]}\n` +
+                                  `Client Email: ${clientEmail}\n\n` +
+                                  `The template has been downloaded to your Downloads folder.\n\n` +
+                                  `Next Steps:\n` +
+                                  `1. Go to your Downloads folder\n` +
+                                  `2. Double-click: ${templateFileName}\n` +
+                                  `3. Classic Outlook will open with the template\n` +
+                                  `4. Add the client email to the "To" field\n` +
+                                  `5. Review and click Send\n\n` +
+                                  `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        });
                     }, 200);
                 })
                 .catch(error => {
@@ -2563,19 +2580,36 @@ Loaners & Exchanges | Zengar Institute Inc.
                         window.URL.revokeObjectURL(url);
                     }, 100);
 
-                    // Show instructions
+                    // Copy email to clipboard and show instructions
                     setTimeout(() => {
-                        alert(`📧 Email Template Downloaded!\n\n` +
-                              `Language: ${languageNames[language]}\n` +
-                              `Client Email: ${clientEmail}\n\n` +
-                              `The template has been downloaded to your Downloads folder.\n\n` +
-                              `Next Steps:\n` +
-                              `1. Go to your Downloads folder\n` +
-                              `2. Double-click: ${templateFileName}\n` +
-                              `3. Classic Outlook will open with the template\n` +
-                              `4. Add the client email to the "To" field\n` +
-                              `5. Review and click Send\n\n` +
-                              `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        // Copy client email to clipboard
+                        navigator.clipboard.writeText(clientEmail).then(() => {
+                            alert(`📧 Email Template Downloaded!\n\n` +
+                                  `Language: ${languageNames[language]}\n` +
+                                  `Client Email: ${clientEmail}\n` +
+                                  `✓ Email copied to clipboard!\n\n` +
+                                  `The template has been downloaded to your Downloads folder.\n\n` +
+                                  `Next Steps:\n` +
+                                  `1. Go to your Downloads folder\n` +
+                                  `2. Double-click: ${templateFileName}\n` +
+                                  `3. Classic Outlook will open with the template\n` +
+                                  `4. Paste the client email (Ctrl+V) to the "To" field\n` +
+                                  `5. Review and click Send\n\n` +
+                                  `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        }).catch(() => {
+                            // If clipboard fails, show without copy confirmation
+                            alert(`📧 Email Template Downloaded!\n\n` +
+                                  `Language: ${languageNames[language]}\n` +
+                                  `Client Email: ${clientEmail}\n\n` +
+                                  `The template has been downloaded to your Downloads folder.\n\n` +
+                                  `Next Steps:\n` +
+                                  `1. Go to your Downloads folder\n` +
+                                  `2. Double-click: ${templateFileName}\n` +
+                                  `3. Classic Outlook will open with the template\n` +
+                                  `4. Add the client email to the "To" field\n` +
+                                  `5. Review and click Send\n\n` +
+                                  `Note: The file opens in Classic Outlook, not New Outlook.`);
+                        });
                     }, 200);
                 })
                 .catch(error => {
