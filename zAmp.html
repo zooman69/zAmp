@@ -1498,7 +1498,7 @@
                         </tr>
                     </table>
 
-                    <table class="approval-table">
+                    <table class="approval-table" id="after-90-days-table">
                         <tr>
                             <td>After 90 days</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
@@ -1862,15 +1862,17 @@
             function checkOriginDate() {
                 const zamp90daysRow = document.getElementById('zamp-90days-row');
                 const within90DaysTable = document.getElementById('within-90-days-table');
+                const after90DaysTable = document.getElementById('after-90-days-table');
 
                 if (!originDateInput) return;
 
                 const originDate = originDateInput.value;
                 if (!originDate) {
-                    // If no date selected, hide the sections
+                    // If no date selected, show all options
                     if (replacementEligibilityTable) replacementEligibilityTable.style.display = 'none';
                     if (zamp90daysRow) zamp90daysRow.style.display = '';
                     if (within90DaysTable) within90DaysTable.style.display = '';
+                    if (after90DaysTable) after90DaysTable.style.display = '';
                     return;
                 }
 
@@ -1886,11 +1888,12 @@
                     if (replacementEligibilityTable) replacementEligibilityTable.style.display = '';
                     // Show the 90-day question when within 104 days
                     if (zamp90daysRow) zamp90daysRow.style.display = '';
-                    // Hide the "Within First 90 days" option on Repair Approval page when less than 104 days
-                    if (within90DaysTable) {
-                        within90DaysTable.style.display = 'none';
-                        // Uncheck checkbox when hidden
-                        const checkbox = document.getElementById('approval-90days');
+                    // Show "Within First 90 days" option when ≤ 104 days (recent devices)
+                    if (within90DaysTable) within90DaysTable.style.display = '';
+                    // Hide "After 90 days" option when ≤ 104 days
+                    if (after90DaysTable) {
+                        after90DaysTable.style.display = 'none';
+                        const checkbox = document.getElementById('approval-after90');
                         if (checkbox) checkbox.checked = false;
                     }
                 } else {
@@ -1905,8 +1908,14 @@
                         // Uncheck radio buttons when hidden
                         document.querySelectorAll('input[name="zamp_90days"]').forEach(rb => rb.checked = false);
                     }
-                    // Show the "Within First 90 days" option on Repair Approval page when more than 104 days
-                    if (within90DaysTable) within90DaysTable.style.display = '';
+                    // Hide "Within First 90 days" option when > 104 days (older devices)
+                    if (within90DaysTable) {
+                        within90DaysTable.style.display = 'none';
+                        const checkbox = document.getElementById('approval-90days');
+                        if (checkbox) checkbox.checked = false;
+                    }
+                    // Show "After 90 days" option when > 104 days
+                    if (after90DaysTable) after90DaysTable.style.display = '';
                 }
 
                 // Check PASS covered and NOT covered eligibility
