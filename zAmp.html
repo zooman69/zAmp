@@ -1532,7 +1532,7 @@
                         </tr>
                     </table>
 
-                    <table class="approval-table">
+                    <table class="approval-table" id="not-covered-table">
                         <tr>
                             <td>Expired zAmp warranty - System NOT covered under PASS</td>
                             <td class="checkbox-cell"><input type="checkbox" id="approval-not-covered"></td>
@@ -1909,8 +1909,9 @@
                     if (within90DaysTable) within90DaysTable.style.display = '';
                 }
 
-                // Check PASS covered eligibility
+                // Check PASS covered and NOT covered eligibility
                 checkPASSCoveredEligibility();
+                checkNotCoveredEligibility();
             }
 
             // Check if PASS Covered option should be shown
@@ -1941,6 +1942,38 @@
                     // No date selected, hide the option
                     passCoveredTable.style.display = 'none';
                     const checkbox = document.getElementById('approval-pass-covered');
+                    if (checkbox) checkbox.checked = false;
+                }
+            }
+
+            // Check if NOT Covered option should be shown
+            function checkNotCoveredEligibility() {
+                const notCoveredTable = document.getElementById('not-covered-table');
+                if (!notCoveredTable) return;
+
+                const originDate = originDateInput ? originDateInput.value : null;
+                const passStatusRadio = document.querySelector('input[name="pass_status"]:checked');
+                const passStatus = passStatusRadio ? passStatusRadio.value : null;
+
+                // Show only if Origin Date > 2 years (730 days) AND PASS Status is non_pass
+                if (originDate) {
+                    const selectedDate = new Date(originDate);
+                    const today = new Date();
+                    const diffTime = today - selectedDate;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays > 730 && passStatus === 'non_pass') {
+                        notCoveredTable.style.display = '';
+                    } else {
+                        notCoveredTable.style.display = 'none';
+                        // Uncheck checkbox when hidden
+                        const checkbox = document.getElementById('approval-not-covered');
+                        if (checkbox) checkbox.checked = false;
+                    }
+                } else {
+                    // No date selected, hide the option
+                    notCoveredTable.style.display = 'none';
+                    const checkbox = document.getElementById('approval-not-covered');
                     if (checkbox) checkbox.checked = false;
                 }
             }
@@ -1988,6 +2021,7 @@
             passStatusRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     checkPASSCoveredEligibility();
+                    checkNotCoveredEligibility();
                 });
             });
 
