@@ -1,10 +1,29 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cp:*)",
-      "Bash(git remote set-url:*)",
+      "Bash(dir:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File:*)",
+      "Bash(python -m http.server:*)",
+      "Bash(curl:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd ASUS setup image functionality and Open Sans font\n\n- Added ASUS system setup image display for all ASUS models except EXPERTBOOK\n- Implemented image click handler to open in new tab\n- Changed header font to Open Sans while maintaining 32pt size\n- Added Google Fonts link for Open Sans\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)",
+      "Bash(git revert:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rm:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"\n$outlook = New-Object -ComObject Outlook.Application\n$mailItem = $outlook.CreateItemFromTemplate(''Y:\\Coding\\Whisperproject\\Templates\\zAmp and USB Cable Verification - ENGLISH.msg'')\n$body = $mailItem.HTMLBody\n$mailItem = $null\n[System.Runtime.Interopservices.Marshal]::ReleaseComObject($outlook) | Out-Null\n$outlook = $null\nWrite-Output $body\n\")",
+      "Bash(\"zAmp and USB Cable Verification - FRENCH_restored.msg\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"\nStart-Sleep -Seconds 2\nRemove-Item ''Y:\\Coding\\Whisperproject\\Templates\\zAmp and USB Cable Verification - FRENCH.msg'' -Force\nMove-Item ''Y:\\Coding\\Whisperproject\\Templates\\zAmp and USB Cable Verification - FRENCH_restored.msg'' ''Y:\\Coding\\Whisperproject\\Templates\\zAmp and USB Cable Verification - FRENCH.msg''\nWrite-Host ''French template restored successfully!'' -ForegroundColor Green\n\")",
+      "Bash(python create_warranty_templates.py:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(Select-String -Pattern \"Within First 90|After 90|PASS\" -Context 2,2)",
+      "Bash(powershell -Command:*)",
+      "Bash(timeout /t 2)",
+      "Bash(ping:*)",
+      "Bash(nul)",
+      "Bash(git config --global --add safe.directory '%(prefix)///192.168.69.120/Hank/Coding/Whisperproject')"
     ],
     "deny": [],
     "ask": []

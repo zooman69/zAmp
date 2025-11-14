@@ -1467,8 +1467,8 @@
                     </p>
 
                     <div class="form-group" style="margin: 30px 0;">
-                        <label>Approval Date:</label>
-                        <input type="date" name="approval_date" style="max-width: 300px;">
+                        <label>Approval Date<span class="required">*</span></label>
+                        <input type="date" name="approval_date" style="max-width: 300px;" required>
                     </div>
 
                     <div class="form-group" style="margin: 30px 0;">
@@ -1485,10 +1485,12 @@
                         </table>
                     </div>
 
+                    <h3 style="margin-top: 20px; margin-bottom: 10px; color: #18325B;">Select items that apply:</h3>
+
                     <table class="approval-table" id="within-90-days-table">
                         <tr>
                             <td>Within First 90 days</td>
-                            <td class="checkbox-cell"><input type="checkbox" id="approval-90days"></td>
+                            <td class="checkbox-cell"><input type="radio" name="warranty_approval" id="approval-90days" value="within_90_days" required></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendWithin90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
                                     <option value="">Select Language</option>
@@ -1505,7 +1507,7 @@
                     <table class="approval-table" id="after-90-days-table">
                         <tr>
                             <td>After 90 days zAmp under warranty</td>
-                            <td class="checkbox-cell"><input type="checkbox" id="approval-after90"></td>
+                            <td class="checkbox-cell"><input type="radio" name="warranty_approval" id="approval-after90" value="after_90_days" required></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendAfter90DaysEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
                                     <option value="">Select Language</option>
@@ -1522,7 +1524,7 @@
                     <table class="approval-table" id="pass-covered-table">
                         <tr>
                             <td>Expired zAmp warranty - System covered under PASS</td>
-                            <td class="checkbox-cell"><input type="checkbox" id="approval-pass-covered"></td>
+                            <td class="checkbox-cell"><input type="radio" name="warranty_approval" id="approval-pass-covered" value="pass_covered" required></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendPASSCoveredEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
                                     <option value="">Select Language</option>
@@ -1539,7 +1541,7 @@
                     <table class="approval-table" id="not-covered-table">
                         <tr>
                             <td>Expired zAmp warranty - System NOT covered under PASS</td>
-                            <td class="checkbox-cell"><input type="checkbox" id="approval-not-covered"></td>
+                            <td class="checkbox-cell"><input type="radio" name="warranty_approval" id="approval-not-covered" value="not_covered" required></td>
                             <td style="width: 200px;">
                                 <select onchange="if(this.value) {sendOutOfWarrantyEmail(this.value); this.value='';}" style="width: 100%; padding: 8px; font-size: 10pt; border: 1px solid #ccc; border-radius: 4px;">
                                     <option value="">Select Language</option>
@@ -1554,7 +1556,7 @@
                     </table>
 
                     <div class="button-group">
-                        <button class="btn btn-primary btn-approver-submit" type="button" onclick="approverSubmit()" style="background: #4C799B; border-color: #4C799B;">Approver Submit</button>
+                        <button class="btn btn-primary btn-approver-submit" type="button" onclick="approverSubmit(event)" style="background: #4C799B; border-color: #4C799B;">Approver Submit</button>
                     </div>
                 </div>
 
@@ -3436,6 +3438,32 @@ The NeurOptimal Team`;
                     if (demoSection) demoSection.remove();
                 }
 
+                // Remove Send Verification dropdown from clone
+                const verificationDropdown = clonedDoc.querySelector('#verificationLanguageDropdown');
+                if (verificationDropdown) {
+                    const verificationRow = verificationDropdown.closest('.form-row');
+                    if (verificationRow) verificationRow.remove();
+                }
+
+                // Make all form fields read-only except Micro PCB section
+                const microPcbSection = clonedDoc.querySelector('#micro-pcb');
+                const allInputs = clonedDoc.querySelectorAll('input, textarea, select');
+                allInputs.forEach(input => {
+                    // Check if the input is within the Micro PCB section
+                    const isInMicroPcb = microPcbSection && microPcbSection.contains(input);
+
+                    if (!isInMicroPcb) {
+                        // Make all non-Micro PCB fields read-only/disabled
+                        if (input.tagName === 'SELECT') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else if (input.type === 'radio' || input.type === 'checkbox') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else {
+                            input.setAttribute('readonly', 'readonly');
+                        }
+                    }
+                });
+
                 // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
@@ -3623,15 +3651,20 @@ Description of issue: ${description}
         }
         
         // Function to handle Approver Submit
-        async function approverSubmit() {
-            // Check if at least one approval option is checked
-            const approval90days = document.getElementById('approval-90days').checked;
-            const approvalAfter90 = document.getElementById('approval-after90').checked;
-            const approvalPassCovered = document.getElementById('approval-pass-covered').checked;
-            const approvalNotCovered = document.getElementById('approval-not-covered').checked;
+        async function approverSubmit(event) {
+            // Check if Approval Date is filled
+            const approvalDate = document.querySelector('input[name="approval_date"]').value;
 
-            if (!approval90days && !approvalAfter90 && !approvalPassCovered && !approvalNotCovered) {
-                alert('⚠️ APPROVAL REQUIRED\n\nPlease check one of the following approval options before submitting:\n\n• Within First 90 days\n• After 90 days zAmp under warranty - System covered under PASS\n• After 90 days Expired zAmp warranty - System covered under PASS\n• Expired zAmp warranty - System NOT covered under PASS');
+            if (!approvalDate) {
+                alert('⚠️ APPROVAL DATE REQUIRED\n\nPlease enter the Approval Date before submitting.');
+                return;
+            }
+
+            // Check if a warranty approval option is selected (radio button)
+            const warrantyApproval = document.querySelector('input[name="warranty_approval"]:checked');
+
+            if (!warrantyApproval) {
+                alert('⚠️ APPROVAL REQUIRED\n\nPlease select one warranty approval option before submitting.');
                 return;
             }
 
@@ -3643,31 +3676,28 @@ Description of issue: ${description}
                 alert('⚠️ APPROVER REQUIRED\n\nPlease select at least one approver:\n\n• Hank Johnson\n• John Plevritis');
                 return;
             }
-            
+
             // Get client information
-            const fullName = document.querySelector('input[name="full_name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const zampNumber = document.querySelector('input[name="zamp_number"]').value;
-            const description = document.querySelector('input[name="description"]').value;
-            const systemId = document.querySelector('input[name="system_id"]').value;
-            const techTicket = document.querySelector('input[name="tech_ticket"]').value;
-            
-            if (!fullName || !email || !zampNumber) {
-                alert('Please fill in Full Name, Email, and zAmp# fields before submitting.');
-                return;
-            }
-            
+            const fullName = document.querySelector('input[name="full_name"]').value || 'Unknown';
+            const email = document.querySelector('input[name="email"]').value || '';
+            const zampNumber = document.querySelector('input[name="zamp_number"]').value || '';
+            const description = document.querySelector('select[name="description"]').value || '';
+            const systemId = document.querySelector('input[name="system_id"]').value || '';
+            const techTicket = document.querySelector('input[name="tech_ticket"]').value || '';
+
             // Show processing message
-            const originalButton = event.target;
-            originalButton.disabled = true;
-            originalButton.textContent = 'Generating PDF...';
-            
+            const originalButton = event ? event.target : document.querySelector('.btn-approver-submit');
+            if (originalButton) {
+                originalButton.disabled = true;
+                originalButton.textContent = 'Processing...';
+            }
+
             try {
                 // Generate HTML filename
                 const ticketNum = techTicket ? `TS${techTicket}` : 'NoTicket';
                 const sanitizedName = fullName.replace(/[^a-zA-Z0-9]/g, '_');
                 const htmlFilename = `zAmp_Checklist_${ticketNum}_${sanitizedName}.html`;
-                
+
                 // Clone the entire document
                 const clonedDoc = document.documentElement.cloneNode(true);
                 
@@ -3731,6 +3761,32 @@ Description of issue: ${description}
                     const demoSection = demoButton.closest('div');
                     if (demoSection) demoSection.remove();
                 }
+
+                // Remove Send Verification dropdown from clone
+                const verificationDropdown = clonedDoc.querySelector('#verificationLanguageDropdown');
+                if (verificationDropdown) {
+                    const verificationRow = verificationDropdown.closest('.form-row');
+                    if (verificationRow) verificationRow.remove();
+                }
+
+                // Make all form fields read-only except Micro PCB section
+                const microPcbSection = clonedDoc.querySelector('#micro-pcb');
+                const allInputs = clonedDoc.querySelectorAll('input, textarea, select');
+                allInputs.forEach(input => {
+                    // Check if the input is within the Micro PCB section
+                    const isInMicroPcb = microPcbSection && microPcbSection.contains(input);
+
+                    if (!isInMicroPcb) {
+                        // Make all non-Micro PCB fields read-only/disabled
+                        if (input.tagName === 'SELECT') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else if (input.type === 'radio' || input.type === 'checkbox') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else {
+                            input.setAttribute('readonly', 'readonly');
+                        }
+                    }
+                });
 
                 // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
@@ -3885,7 +3941,11 @@ Description of issue: ${description}
                 
                 // Wait a moment for download
                 await new Promise(resolve => setTimeout(resolve, 500));
-                
+
+                // Get the selected warranty approval option
+                const warrantyApprovalRadio = document.querySelector('input[name="warranty_approval"]:checked');
+                const warrantyApprovalText = warrantyApprovalRadio ? warrantyApprovalRadio.parentElement.parentElement.querySelector('td:first-child').textContent.trim() : 'N/A';
+
                 // Prepare email
                 const emailSubject = `Approved zAmp Repair: ${systemId || 'N/A'} | zAmp# ${zampNumber} | ${ticketNum}`;
                 const emailBody = `Hi Loaners & Exchanges Team,
@@ -3897,14 +3957,19 @@ Client Email: ${email}
 zAmp#: ${zampNumber}
 Description of issue: ${description || 'N/A'}
 
+Warranty Approval Option: ${warrantyApprovalText}
+
 --------------------------------------------`;
-                
+
+                // Show reminder to attach HTML file
+                alert(`⚠️ REMINDER\n\nPlease attach the HTML file from your Downloads folder to the email.\n\nFile: ${htmlFilename}`);
+
                 // Create mailto link
                 const mailtoLink = `mailto:loaners-exchanges@neuroptimal.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-                
+
                 // Open email client
                 window.location.href = mailtoLink;
-                
+
                 // Show success message
                 alert(`✅ HTML file generated successfully!\n\nFile: ${htmlFilename}\n\nIMPORTANT: The HTML file has been downloaded to your computer. Please attach it to the email that is opening.\n\nThe recipient can open this file in any web browser.`);
                 
@@ -4003,6 +4068,32 @@ Description of issue: ${description || 'N/A'}
                     const demoSection = demoButton.closest('div');
                     if (demoSection) demoSection.remove();
                 }
+
+                // Remove Send Verification dropdown from clone
+                const verificationDropdown = clonedDoc.querySelector('#verificationLanguageDropdown');
+                if (verificationDropdown) {
+                    const verificationRow = verificationDropdown.closest('.form-row');
+                    if (verificationRow) verificationRow.remove();
+                }
+
+                // Make all form fields read-only except Micro PCB section
+                const microPcbSection = clonedDoc.querySelector('#micro-pcb');
+                const allInputs = clonedDoc.querySelectorAll('input, textarea, select');
+                allInputs.forEach(input => {
+                    // Check if the input is within the Micro PCB section
+                    const isInMicroPcb = microPcbSection && microPcbSection.contains(input);
+
+                    if (!isInMicroPcb) {
+                        // Make all non-Micro PCB fields read-only/disabled
+                        if (input.tagName === 'SELECT') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else if (input.type === 'radio' || input.type === 'checkbox') {
+                            input.setAttribute('disabled', 'disabled');
+                        } else {
+                            input.setAttribute('readonly', 'readonly');
+                        }
+                    }
+                });
 
                 // Remove all buttons from clone except warranty scenario buttons and approver submit
                 const buttons = clonedDoc.querySelectorAll('button');
