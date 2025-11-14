@@ -32,7 +32,10 @@
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #18325B 0%, #465B7C 50%, #48667A 100%);
+            background-image: url('Images/WebBanner-Backgrounds-v2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 30px 40px;
             position: fixed;
             top: 0;
@@ -47,12 +50,11 @@
         .header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 60%;
-            height: 200%;
-            background: linear-gradient(135deg, transparent 0%, rgba(232, 145, 124, 0.3) 50%, rgba(232, 145, 124, 0.5) 100%);
-            transform: skewY(-10deg);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
         }
 
         .logo {
@@ -1598,7 +1600,7 @@
                     </div>
 
                     <div class="button-group">
-                        <button class="btn btn-success" type="button" onclick="microPcbSubmit()">MicroPCB Submit</button>
+                        <button class="btn btn-success btn-micro-pcb-submit" type="button" onclick="microPcbSubmit()" style="background: #4C799B; border-color: #4C799B;">MicroPCB Submit</button>
                     </div>
                 </div>
             </div>
@@ -3464,11 +3466,11 @@ The NeurOptimal Team`;
                     }
                 });
 
-                // Remove all buttons from clone except warranty scenario buttons and approver submit
+                // Remove all buttons from clone except warranty scenario buttons, approver submit, and micro pcb submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
-                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
+                    // Keep warranty scenario language buttons (btn-lang class), approver submit button, and micro pcb submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit') && !btn.classList.contains('btn-micro-pcb-submit')) {
                         btn.remove();
                     }
                 });
@@ -3534,6 +3536,66 @@ The NeurOptimal Team`;
                     '}' +
                     'function approverSubmit() {' +
                     '    alert("Approver Submit: This function requires the full application. Please open the original form to submit.");' +
+                    '}' +
+                    'function microPcbSubmit() {' +
+                    '    try {' +
+                    '        const errors = [];' +
+                    '        const zampNumberEl = document.querySelector("input[name=\\"zamp_number\\"]");' +
+                    '        const systemIdEl = document.querySelector("input[name=\\"system_id\\"]");' +
+                    '        const fullNameEl = document.querySelector("input[name=\\"full_name\\"]");' +
+                    '        const emailEl = document.querySelector("input[name=\\"email\\"]");' +
+                    '        const ticketNumEl = document.querySelector("input[name=\\"tech_ticket\\"]");' +
+                    '        const zampNumber = zampNumberEl ? zampNumberEl.value.trim() : "";' +
+                    '        const systemId = systemIdEl ? systemIdEl.value.trim() : "";' +
+                    '        const fullName = fullNameEl ? fullNameEl.value.trim() : "";' +
+                    '        const email = emailEl ? emailEl.value.trim() : "";' +
+                    '        const ticketNum = ticketNumEl ? ticketNumEl.value.trim() : "";' +
+                    '        if (!zampNumber) errors.push("• zAmp# (in Client Information section)");' +
+                    '        const repairDateEl = document.querySelector("input[name=\\"repair_date\\"]");' +
+                    '        const repairDate = repairDateEl ? repairDateEl.value : "";' +
+                    '        const microWarranty = document.querySelector("input[name=\\"micro_warranty\\"]:checked");' +
+                    '        const componentsChangedEl = document.querySelector("textarea[name=\\"components_changed\\"]");' +
+                    '        const microNotesEl = document.querySelector("textarea[name=\\"micro_notes\\"]");' +
+                    '        const componentsChanged = componentsChangedEl ? componentsChangedEl.value.trim() : "";' +
+                    '        const microNotes = microNotesEl ? microNotesEl.value.trim() : "";' +
+                    '        if (!repairDate) errors.push("• Date of Repair");' +
+                    '        if (!microWarranty) errors.push("• MicroPCB Warranty (must select YES or NO)");' +
+                    '        if (errors.length > 0) {' +
+                    '            alert("⚠️ REQUIRED FIELDS MISSING\\n\\nPlease complete the following required fields:\\n\\n" + errors.join("\\n"));' +
+                    '            return;' +
+                    '        }' +
+                    '        const sanitizedSystemId = systemId ? systemId.replace(/[^a-zA-Z0-9]/g, "_") : "NoSystemID";' +
+                    '        const htmlFilename = "zAmp_MicroPCB_Repair_" + sanitizedSystemId + "_zAmp" + zampNumber + ".html";' +
+                    '        const htmlContent = "<!DOCTYPE html>\\n" + document.documentElement.outerHTML;' +
+                    '        const blob = new Blob([htmlContent], { type: "text/html" });' +
+                    '        const url = URL.createObjectURL(blob);' +
+                    '        const a = document.createElement("a");' +
+                    '        a.href = url;' +
+                    '        a.download = htmlFilename;' +
+                    '        a.click();' +
+                    '        URL.revokeObjectURL(url);' +
+                    '        const warrantyText = microWarranty.value === "yes" ? "YES" : "NO";' +
+                    '        const emailSubject = "MicroPCB Repair Completed: " + systemId + " | zAmp# " + zampNumber + " | " + ticketNum;' +
+                    '        const emailBody = "Hi Team,\\n\\n" +' +
+                    '            "The MicroPCB repair has been completed for this zAmp. Please see details below:\\n\\n" +' +
+                    '            "Client Name: " + fullName + "\\n" +' +
+                    '            "Client Email: " + email + "\\n" +' +
+                    '            "System ID: " + systemId + "\\n" +' +
+                    '            "zAmp#: " + zampNumber + "\\n" +' +
+                    '            "FM Ticket #: " + ticketNum + "\\n\\n" +' +
+                    '            "Date of Repair: " + repairDate + "\\n" +' +
+                    '            "Components Changed: " + (componentsChanged || "N/A") + "\\n" +' +
+                    '            "MicroPCB Warranty: " + warrantyText + "\\n" +' +
+                    '            "Notes: " + (microNotes || "N/A") + "\\n\\n" +' +
+                    '            "zAmp# " + zampNumber + " is ready. Please send waybill. Thanks.";' +
+                    '        const mailtoLink = "mailto:Loaners-Exchanges@neuroptimal.com?subject=" + encodeURIComponent(emailSubject) + "&body=" + encodeURIComponent(emailBody);' +
+                    '        window.location.href = mailtoLink;' +
+                    '        setTimeout(function() {' +
+                    '            alert("📎 REMINDER\\n\\nPlease attach the exported file to your email:\\n\\n" + htmlFilename + "\\n\\nThe file has been downloaded to your Downloads folder.");' +
+                    '        }, 500);' +
+                    '    } catch (error) {' +
+                    '        alert("Error: " + error.message);' +
+                    '    }' +
                     '}';
                 const head = clonedDoc.querySelector('head');
                 if (head) {
@@ -3788,11 +3850,11 @@ Description of issue: ${description}
                     }
                 });
 
-                // Remove all buttons from clone except warranty scenario buttons and approver submit
+                // Remove all buttons from clone except warranty scenario buttons, approver submit, and micro pcb submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
-                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
+                    // Keep warranty scenario language buttons (btn-lang class), approver submit button, and micro pcb submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit') && !btn.classList.contains('btn-micro-pcb-submit')) {
                         btn.remove();
                     }
                 });
@@ -3858,6 +3920,66 @@ Description of issue: ${description}
                     '}' +
                     'function approverSubmit() {' +
                     '    alert("Approver Submit: This function requires the full application. Please open the original form to submit.");' +
+                    '}' +
+                    'function microPcbSubmit() {' +
+                    '    try {' +
+                    '        const errors = [];' +
+                    '        const zampNumberEl = document.querySelector("input[name=\\"zamp_number\\"]");' +
+                    '        const systemIdEl = document.querySelector("input[name=\\"system_id\\"]");' +
+                    '        const fullNameEl = document.querySelector("input[name=\\"full_name\\"]");' +
+                    '        const emailEl = document.querySelector("input[name=\\"email\\"]");' +
+                    '        const ticketNumEl = document.querySelector("input[name=\\"tech_ticket\\"]");' +
+                    '        const zampNumber = zampNumberEl ? zampNumberEl.value.trim() : "";' +
+                    '        const systemId = systemIdEl ? systemIdEl.value.trim() : "";' +
+                    '        const fullName = fullNameEl ? fullNameEl.value.trim() : "";' +
+                    '        const email = emailEl ? emailEl.value.trim() : "";' +
+                    '        const ticketNum = ticketNumEl ? ticketNumEl.value.trim() : "";' +
+                    '        if (!zampNumber) errors.push("• zAmp# (in Client Information section)");' +
+                    '        const repairDateEl = document.querySelector("input[name=\\"repair_date\\"]");' +
+                    '        const repairDate = repairDateEl ? repairDateEl.value : "";' +
+                    '        const microWarranty = document.querySelector("input[name=\\"micro_warranty\\"]:checked");' +
+                    '        const componentsChangedEl = document.querySelector("textarea[name=\\"components_changed\\"]");' +
+                    '        const microNotesEl = document.querySelector("textarea[name=\\"micro_notes\\"]");' +
+                    '        const componentsChanged = componentsChangedEl ? componentsChangedEl.value.trim() : "";' +
+                    '        const microNotes = microNotesEl ? microNotesEl.value.trim() : "";' +
+                    '        if (!repairDate) errors.push("• Date of Repair");' +
+                    '        if (!microWarranty) errors.push("• MicroPCB Warranty (must select YES or NO)");' +
+                    '        if (errors.length > 0) {' +
+                    '            alert("⚠️ REQUIRED FIELDS MISSING\\n\\nPlease complete the following required fields:\\n\\n" + errors.join("\\n"));' +
+                    '            return;' +
+                    '        }' +
+                    '        const sanitizedSystemId = systemId ? systemId.replace(/[^a-zA-Z0-9]/g, "_") : "NoSystemID";' +
+                    '        const htmlFilename = "zAmp_MicroPCB_Repair_" + sanitizedSystemId + "_zAmp" + zampNumber + ".html";' +
+                    '        const htmlContent = "<!DOCTYPE html>\\n" + document.documentElement.outerHTML;' +
+                    '        const blob = new Blob([htmlContent], { type: "text/html" });' +
+                    '        const url = URL.createObjectURL(blob);' +
+                    '        const a = document.createElement("a");' +
+                    '        a.href = url;' +
+                    '        a.download = htmlFilename;' +
+                    '        a.click();' +
+                    '        URL.revokeObjectURL(url);' +
+                    '        const warrantyText = microWarranty.value === "yes" ? "YES" : "NO";' +
+                    '        const emailSubject = "MicroPCB Repair Completed: " + systemId + " | zAmp# " + zampNumber + " | " + ticketNum;' +
+                    '        const emailBody = "Hi Team,\\n\\n" +' +
+                    '            "The MicroPCB repair has been completed for this zAmp. Please see details below:\\n\\n" +' +
+                    '            "Client Name: " + fullName + "\\n" +' +
+                    '            "Client Email: " + email + "\\n" +' +
+                    '            "System ID: " + systemId + "\\n" +' +
+                    '            "zAmp#: " + zampNumber + "\\n" +' +
+                    '            "FM Ticket #: " + ticketNum + "\\n\\n" +' +
+                    '            "Date of Repair: " + repairDate + "\\n" +' +
+                    '            "Components Changed: " + (componentsChanged || "N/A") + "\\n" +' +
+                    '            "MicroPCB Warranty: " + warrantyText + "\\n" +' +
+                    '            "Notes: " + (microNotes || "N/A") + "\\n\\n" +' +
+                    '            "zAmp# " + zampNumber + " is ready. Please send waybill. Thanks.";' +
+                    '        const mailtoLink = "mailto:Loaners-Exchanges@neuroptimal.com?subject=" + encodeURIComponent(emailSubject) + "&body=" + encodeURIComponent(emailBody);' +
+                    '        window.location.href = mailtoLink;' +
+                    '        setTimeout(function() {' +
+                    '            alert("📎 REMINDER\\n\\nPlease attach the exported file to your email:\\n\\n" + htmlFilename + "\\n\\nThe file has been downloaded to your Downloads folder.");' +
+                    '        }, 500);' +
+                    '    } catch (error) {' +
+                    '        alert("Error: " + error.message);' +
+                    '    }' +
                     '}';
                 const head = clonedDoc.querySelector('head');
                 if (head) {
@@ -4095,11 +4217,11 @@ Warranty Approval Option: ${warrantyApprovalText}
                     }
                 });
 
-                // Remove all buttons from clone except warranty scenario buttons and approver submit
+                // Remove all buttons from clone except warranty scenario buttons, approver submit, and micro pcb submit
                 const buttons = clonedDoc.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    // Keep warranty scenario language buttons (btn-lang class) and approver submit button
-                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit')) {
+                    // Keep warranty scenario language buttons (btn-lang class), approver submit button, and micro pcb submit button
+                    if (!btn.classList.contains('btn-lang') && !btn.classList.contains('btn-approver-submit') && !btn.classList.contains('btn-micro-pcb-submit')) {
                         btn.remove();
                     }
                 });
